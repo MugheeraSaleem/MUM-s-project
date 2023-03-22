@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "858648636645",
+    "project_id": "mum-s-7cd6c",
+    "storage_bucket": "mum-s-7cd6c.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:858648636645:android:5ac434ac2f2217ba0a380c",
+        "android_client_info": {
+          "package_name": "mum.s.mum_s"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "858648636645-5aks48et5n4fbvb015n0a8mavb2vr362.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAJniHnaM890tH9uhZyQ8akKRHmxGG6iZc"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "858648636645-5aks48et5n4fbvb015n0a8mavb2vr362.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

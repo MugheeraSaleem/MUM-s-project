@@ -1,0 +1,60 @@
+name: mum_s
+description: maternity helper app.
+publish_to: 'none' # Remove this line if you wish to publish to pub.dev
+
+
+environment:
+  sdk: '>=2.19.2 <3.0.0'
+
+dependencies:
+  flutter:
+    sdk: flutter
+
+  cupertino_icons: ^1.0.2
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+
+  flutter_lints: ^2.0.0
+
+  font_awesome_flutter: '>= 4.7.0'
+  chart_sparkline: ^1.0.13
+  flutter_staggered_grid_view: ^0.4.0
+  firebase_auth: ^4.2.10
+  google_maps_flutter: ^2.2.4
+  sleek_circular_slider : ^2.0.1
+  cloud_firestore: ^4.4.4
+  firebase_core: ^2.7.1
+  connectivity_plus: ^3.0.3
+  app_settings: 4.2.0
+  internet_connection_checker: ^1.0.0+1
+
+flutter:
+
+  uses-material-design: true
+
+  assets:
+    - assets/img/
+    - assets/images/
+    - assets/
+
+  fonts:
+    - family: WorkSansSemiBold
+      fonts:
+        - asset: assets/fonts/Work_Sans/WorkSans-SemiBold.ttf
+
+    - family: WorkSansBold
+      fonts:
+        - asset: assets/fonts/Work_Sans/WorkSans-Bold.ttf
+
+    - family: WorkSansMedium
+      fonts:
+        - asset: assets/fonts/Work_Sans/WorkSans-Medium.ttf
+    - family: Nexa
+      fonts:
+        - asset: assets/Nexa-Bold.otf
+
+    - family: NexaLight
+      fonts:
+        - asset: assets/Nexa-Light.otf
