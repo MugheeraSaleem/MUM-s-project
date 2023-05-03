@@ -138,7 +138,7 @@ class MapPageState extends State<MapPage> {
                   width: 180,
                   height: 200,
                   child: ClipRRect(
-                    borderRadius: new BorderRadius.circular(24.0),
+                    borderRadius: BorderRadius.circular(24.0),
                     child: Image(
                       fit: BoxFit.fill,
                       image: NetworkImage(_image),

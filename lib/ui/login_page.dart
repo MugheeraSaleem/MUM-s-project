@@ -1,3 +1,5 @@
+// ignore_for_file: use_build_context_synchronously
+
 import 'dart:async';
 import 'package:mum_s/pages/dashboard.dart';
 import 'package:flutter/material.dart';
@@ -8,11 +10,8 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart'
 import 'package:mum_s/style/theme.dart' as Theme;
 import 'package:mum_s/utils/bubble_indication_painter.dart';
 import 'package:mum_s/utils/connectivity.dart';
-import 'package:connectivity_plus/connectivity_plus.dart'
-    show Connectivity, ConnectivityResult;
-import "package:app_settings/app_settings.dart" show AppSettings;
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:internet_connection_checker/internet_connection_checker.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({Key? key}) : super(key: key);
@@ -32,8 +31,18 @@ class _LoginPageState extends State<LoginPage>
   final FocusNode myFocusNodeEmail = FocusNode();
   final FocusNode myFocusNodeName = FocusNode();
 
+  final db = FirebaseFirestore.instance;
+  final _auth = FirebaseAuth.instance;
+
+  late String email;
+  late String password;
+
   TextEditingController loginEmailController = TextEditingController();
   TextEditingController loginPasswordController = TextEditingController();
+
+  // get hold of the value of the controller using my_controller.text
+
+  ConnectivityClass c_class = ConnectivityClass();
 
   bool _obscureTextLogin = true;
   bool _obscureTextSignup = true;
@@ -49,48 +58,6 @@ class _LoginPageState extends State<LoginPage>
 
   Color left = Colors.black;
   Color right = Colors.white;
-
-  late StreamSubscription subscription;
-  bool isDeviceConnected = false;
-  bool isAlertSet = false;
-  bool _tryAgain = false;
-
-  void checkInternet() async {
-    // the method below returns a Future
-    var connectivityResult = await (Connectivity().checkConnectivity());
-    bool connectedToInternet =
-        (connectivityResult == ConnectivityResult.mobile ||
-            connectivityResult == ConnectivityResult.wifi);
-    if (!connectedToInternet) {
-      showAlert(context);
-    }
-    if (_tryAgain != !connectedToInternet) {
-      setState(() => _tryAgain = !connectedToInternet);
-    }
-  }
-
-  void showAlert(BuildContext context) {
-    showDialog(
-      context: context,
-      builder: (context) => AlertDialog(
-        title: const Text("No Internet"),
-        content: const Text("Internet not detected. Please activate it."),
-        actions: <Widget>[
-          TextButton(
-            onPressed: () => Navigator.pop(context, 'Cancel'),
-            child: const Text('Cancel'),
-          ),
-          TextButton(
-            onPressed: () {
-              Navigator.pop(context, 'OK');
-              AppSettings.openWIFISettings();
-            },
-            child: const Text('OK'),
-          ),
-        ],
-      ),
-    );
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -172,40 +139,29 @@ class _LoginPageState extends State<LoginPage>
   }
 
   @override
-  void dispose() {
-    myFocusNodePassword.dispose();
-    myFocusNodeEmail.dispose();
-    myFocusNodeName.dispose();
-    _pageController.dispose();
-    subscription.cancel();
-    super.dispose();
-  }
-
-  @override
   void initState() {
     super.initState();
-    getConnectivity();
+    c_class.getConnectivity(context);
     SystemChrome.setPreferredOrientations([
       DeviceOrientation.portraitUp,
       DeviceOrientation.portraitDown,
     ]);
 
     _pageController = PageController();
-    checkInternet();
+    c_class.checkInternet(context);
   }
 
-  getConnectivity() =>
-      subscription = Connectivity().onConnectivityChanged.listen(
-        (ConnectivityResult result) async {
-          isDeviceConnected = await InternetConnectionChecker().hasConnection;
-          if (!isDeviceConnected && isAlertSet == false) {
-            checkInternet();
-            setState(() => isAlertSet = true);
-          }
-        },
-      );
+  @override
+  void dispose() {
+    myFocusNodePassword.dispose();
+    myFocusNodeEmail.dispose();
+    myFocusNodeName.dispose();
+    _pageController.dispose();
+    c_class.subscription.cancel();
+    super.dispose();
+  }
 
-  void showInSnackBar(String value) {
+  void showInSnackBar(String value, Color color) {
     FocusScope.of(context).requestFocus(
       FocusNode(),
     );
@@ -226,7 +182,7 @@ class _LoginPageState extends State<LoginPage>
               fontSize: 16.0,
               fontFamily: "WorkSansSemiBold"),
         ),
-        backgroundColor: Colors.blue,
+        backgroundColor: color,
         duration: const Duration(seconds: 3),
       ),
     );
@@ -413,7 +369,8 @@ class _LoginPageState extends State<LoginPage>
                       ),
                     ),
                     onPressed: () async {
-                      Future<bool> networkStatus = checkconnection();
+                      Future<bool> networkStatus =
+                          c_class.checkInternet(context);
                       await networkStatus
                           ? Navigator.push(
                               context,
@@ -421,14 +378,7 @@ class _LoginPageState extends State<LoginPage>
                                 builder: (context) => MainPage(),
                               ),
                             )
-                          :
-                          // : Navigator.push(
-                          //     context,
-                          //     prefix0.MaterialPageRoute(
-                          //       builder: (context) => DialogExample(),
-                          //     ),
-                          //   );
-                          checkInternet();
+                          : c_class.checkInternet(context);
                     }
 /*                     onPressed: () {
                       String email_id = 'sjha200000@gmail.com';
@@ -519,7 +469,9 @@ class _LoginPageState extends State<LoginPage>
               Padding(
                 padding: const EdgeInsets.only(top: 10.0, right: 40.0),
                 child: GestureDetector(
-                  onTap: () => showInSnackBar("Facebook button pressed"),
+                  onTap: () {
+                    showInSnackBar("Facebook button pressed", Colors.blue);
+                  },
                   child: Container(
                     padding: const EdgeInsets.all(15.0),
                     decoration: const BoxDecoration(
@@ -536,7 +488,9 @@ class _LoginPageState extends State<LoginPage>
               Padding(
                 padding: const EdgeInsets.only(top: 10.0),
                 child: GestureDetector(
-                  onTap: () => showInSnackBar("Google button pressed"),
+                  onTap: () {
+                    showInSnackBar("Google button pressed", Colors.blue);
+                  },
                   child: Container(
                     padding: const EdgeInsets.all(15.0),
                     decoration: const BoxDecoration(
@@ -750,22 +704,56 @@ class _LoginPageState extends State<LoginPage>
                     ),
                   ),
                   onPressed: () async {
-                    Future<bool> networkStatus = checkconnection();
-                    await networkStatus
-                        ? Navigator.push(
-                            context,
-                            prefix0.MaterialPageRoute(
-                              builder: (context) => MainPage(),
-                            ),
-                          )
-                        :
-                        // Navigator.push(
-                        //         context,
-                        //         prefix0.MaterialPageRoute(
-                        //           builder: (context) => const DialogExample(),
-                        //         ),
-                        //       );
-                        checkInternet();
+                    c_class.checkInternet(context);
+
+                    // print(signupConfirmPasswordController.text);
+                    // print(signupPasswordController.text);
+                    // print(signupEmailController.text);
+                    // print(signupNameController.text);
+
+                    if (signupPasswordController.text !=
+                        signupConfirmPasswordController.text) {
+                      showInSnackBar(
+                          'Passwords in both fields must match!', Colors.red);
+                    } else {
+                      try {
+                        final new_user =
+                            await _auth.createUserWithEmailAndPassword(
+                          email: signupEmailController.text,
+                          password: signupPasswordController.text,
+                        );
+                        if (new_user != null) {
+                          Future<bool> networkStatus =
+                              c_class.checkInternet(context);
+                          if (await networkStatus == true) {
+                            showInSnackBar(
+                                'User Created Successfully!', Colors.green);
+                            Navigator.push(
+                              context,
+                              prefix0.MaterialPageRoute(
+                                builder: (context) => MainPage(),
+                              ),
+                            );
+                          }
+                        }
+                        // here
+                      } on FirebaseAuthException catch (e) {
+                        if (e.code == 'invalid-email') {
+                          showInSnackBar(
+                              'Please provide a valid email', Colors.red);
+                        }
+                        if (e.code == 'weak-password') {
+                          showInSnackBar(
+                              'The password provided is too weak.', Colors.red);
+                        } else if (e.code == 'email-already-in-use') {
+                          showInSnackBar(
+                              'An account already exists for this email.',
+                              Colors.red);
+                        }
+                      } catch (e) {
+                        print(e);
+                      }
+                    }
                   },
                 ),
               ),
@@ -778,12 +766,12 @@ class _LoginPageState extends State<LoginPage>
 
   void _onSignInButtonPress() {
     _pageController.animateToPage(0,
-        duration: const Duration(milliseconds: 500), curve: Curves.decelerate);
+        duration: const Duration(milliseconds: 600), curve: Curves.decelerate);
   }
 
   void _onSignUpButtonPress() {
     _pageController.animateToPage(1,
-        duration: const Duration(milliseconds: 500), curve: Curves.decelerate);
+        duration: const Duration(milliseconds: 600), curve: Curves.decelerate);
   }
 
   void _toggleLogin() {

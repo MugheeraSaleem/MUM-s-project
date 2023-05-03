@@ -24,7 +24,7 @@ dev_dependencies:
   firebase_auth: ^4.2.10
   google_maps_flutter: ^2.2.4
   sleek_circular_slider : ^2.0.1
-  cloud_firestore: ^4.4.4
+  cloud_firestore: ^4.5.3
   firebase_core: ^2.7.1
   connectivity_plus: ^3.0.3
   app_settings: 4.2.0

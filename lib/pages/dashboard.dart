@@ -5,6 +5,7 @@ import 'package:mum_s/profile_page.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:mum_s/ui/login_page.dart';
+import 'package:mum_s/utils/connectivity.dart';
 
 class MainPage extends StatefulWidget {
   @override
@@ -19,6 +20,21 @@ class _MainPageState extends State<MainPage> {
   ];
   String actualDropdown = chartDropdownItems[0];
   int actualChart = 0;
+
+  ConnectivityClass c_class = ConnectivityClass();
+
+  @override
+  void initState() {
+    c_class.getConnectivity(context);
+    c_class.checkInternet(context);
+    super.initState();
+  }
+
+  @override
+  void dispose() {
+    c_class.subscription.cancel();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -58,6 +74,7 @@ class _MainPageState extends State<MainPage> {
                         builder: (context) => ProfilePage(),
                       ),
                     );
+                    c_class.checkInternet(context);
                   },
                 )
               ],
