@@ -260,69 +260,78 @@ class _LoginPageState extends State<LoginPage>
                   height: 190.0,
                   child: Column(
                     children: <Widget>[
-                      Padding(
-                        padding: const EdgeInsets.only(
-                            top: 20.0, bottom: 20.0, left: 25.0, right: 25.0),
-                        child: TextField(
-                          focusNode: myFocusNodeEmailLogin,
-                          controller: loginEmailController,
-                          keyboardType: TextInputType.emailAddress,
-                          style: const TextStyle(
-                              fontFamily: "WorkSansSemiBold",
-                              fontSize: 16.0,
-                              color: Colors.black),
-                          decoration: const InputDecoration(
-                            border: InputBorder.none,
-                            icon: Icon(
-                              FontAwesomeIcons.envelope,
-                              color: Colors.black,
-                              size: 22.0,
-                            ),
-                            hintText: "Email Address",
-                            hintStyle: TextStyle(
-                                fontFamily: "WorkSansSemiBold", fontSize: 17.0),
+                      TextEntryWidget(
+                          showtext: false,
+                          simple_icon: const Icon(
+                            FontAwesomeIcons.envelope,
+                            color: Colors.black,
+                            size: 22.0,
                           ),
-                        ),
-                      ),
+                          trailing_icon: null,
+                          displaytext: "Email Address",
+                          myFocusNode: myFocusNodeEmailLogin,
+                          controller: loginEmailController),
                       Container(
                         width: 250.0,
                         height: 1.0,
                         color: Colors.grey[400],
                       ),
-                      Padding(
-                        padding: const EdgeInsets.only(
-                            top: 20.0, bottom: 20.0, left: 25.0, right: 25.0),
-                        child: TextField(
-                          focusNode: myFocusNodePasswordLogin,
-                          controller: loginPasswordController,
-                          obscureText: _obscureTextLogin,
-                          style: const TextStyle(
-                              fontFamily: "WorkSansSemiBold",
-                              fontSize: 16.0,
-                              color: Colors.black),
-                          decoration: InputDecoration(
-                            border: InputBorder.none,
-                            icon: const Icon(
-                              FontAwesomeIcons.lock,
-                              size: 22.0,
-                              color: Colors.black,
-                            ),
-                            hintText: "Password",
-                            hintStyle: const TextStyle(
-                                fontFamily: "WorkSansSemiBold", fontSize: 17.0),
-                            suffixIcon: GestureDetector(
-                              onTap: _toggleLogin,
-                              child: Icon(
-                                _obscureTextLogin
-                                    ? FontAwesomeIcons.eye
-                                    : FontAwesomeIcons.eyeSlash,
-                                size: 15.0,
-                                color: Colors.black,
-                              ),
-                            ),
+                      TextEntryWidget(
+                        showtext: _obscureTextLogin,
+                        myFocusNode: myFocusNodePasswordLogin,
+                        controller: loginPasswordController,
+                        displaytext: "Password",
+                        trailing_icon: GestureDetector(
+                          onTap: _toggleLogin,
+                          child: Icon(
+                            _obscureTextLogin
+                                ? FontAwesomeIcons.eye
+                                : FontAwesomeIcons.eyeSlash,
+                            size: 15.0,
+                            color: Colors.black,
                           ),
                         ),
-                      ),
+                        simple_icon: const Icon(
+                          FontAwesomeIcons.lock,
+                          size: 22.0,
+                          color: Colors.black,
+                        ),
+                      )
+                      //       )
+                      // Padding(
+                      //   padding: const EdgeInsets.only(
+                      //       top: 20.0, bottom: 20.0, left: 25.0, right: 25.0),
+                      //   child: TextField(
+                      //     focusNode: myFocusNodePasswordLogin,
+                      //     controller: loginPasswordController,
+                      //     obscureText: _obscureTextLogin,
+                      //     style: const TextStyle(
+                      //         fontFamily: "WorkSansSemiBold",
+                      //         fontSize: 16.0,
+                      //         color: Colors.black),
+                      //     decoration: InputDecoration(
+                      //       border: InputBorder.none,
+                      //       icon: const Icon(
+                      //         FontAwesomeIcons.lock,
+                      //         size: 22.0,
+                      //         color: Colors.black,
+                      //       ),
+                      //       hintText: "Password",
+                      //       hintStyle: const TextStyle(
+                      //           fontFamily: "WorkSansSemiBold", fontSize: 17.0),
+                      //       suffixIcon: GestureDetector(
+                      //         onTap: _toggleLogin,
+                      //         child: Icon(
+                      //           _obscureTextLogin
+                      //               ? FontAwesomeIcons.eye
+                      //               : FontAwesomeIcons.eyeSlash,
+                      //           size: 15.0,
+                      //           color: Colors.black,
+                      //         ),
+                      //       ),
+                      //     ),
+                      //   ),
+                      // ),
                     ],
                   ),
                 ),
@@ -354,31 +363,29 @@ class _LoginPageState extends State<LoginPage>
                       tileMode: TileMode.clamp),
                 ),
                 child: MaterialButton(
-                    highlightColor: Colors.transparent,
-                    splashColor: Theme.Colors.loginGradientEnd,
-                    //shape: RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(5.0))),
-                    child: const Padding(
-                      padding: EdgeInsets.symmetric(
-                          vertical: 10.0, horizontal: 42.0),
-                      child: Text(
-                        "LOGIN",
-                        style: TextStyle(
-                            color: Colors.white,
-                            fontSize: 25.0,
-                            fontFamily: "WorkSansBold"),
-                      ),
+                  highlightColor: Colors.transparent,
+                  splashColor: Theme.Colors.loginGradientEnd,
+                  //shape: RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(5.0))),
+                  child: const Padding(
+                    padding:
+                        EdgeInsets.symmetric(vertical: 10.0, horizontal: 42.0),
+                    child: Text(
+                      "LOGIN",
+                      style: TextStyle(
+                          color: Colors.white,
+                          fontSize: 25.0,
+                          fontFamily: "WorkSansBold"),
                     ),
-                    onPressed: () async {
-                      Future<bool> networkStatus =
-                          c_class.checkInternet(context);
-                      await networkStatus
-                          ? Navigator.push(
-                              context,
-                              prefix0.MaterialPageRoute(
-                                builder: (context) => MainPage(),
-                              ),
-                            )
-                          : c_class.checkInternet(context);
+                  ),
+                  onPressed: () async {
+                    Future<bool> networkStatus = c_class.checkInternet(context);
+                    if (await networkStatus == true) {
+                      var push = Navigator.push(
+                        context,
+                        prefix0.MaterialPageRoute(
+                          builder: (context) => MainPage(),
+                        ),
+                      );
                     }
 /*                     onPressed: () {
                       String email_id = 'sjha200000@gmail.com';
@@ -396,8 +403,8 @@ class _LoginPageState extends State<LoginPage>
                             builder: (context) => ProfilePage(),
                           ) )
                           )); */
-
-                    ),
+                  },
+                ),
               )
             ],
           ),
@@ -713,16 +720,15 @@ class _LoginPageState extends State<LoginPage>
 
                     if (signupPasswordController.text !=
                         signupConfirmPasswordController.text) {
-                      showInSnackBar(
-                          'Passwords in both fields must match!', Colors.red);
+                      showInSnackBar('Passwords must match!', Colors.red);
                     } else {
                       try {
-                        final new_user =
+                        final newUser =
                             await _auth.createUserWithEmailAndPassword(
                           email: signupEmailController.text,
                           password: signupPasswordController.text,
                         );
-                        if (new_user != null) {
+                        if (newUser != null) {
                           Future<bool> networkStatus =
                               c_class.checkInternet(context);
                           if (await networkStatus == true) {
@@ -790,5 +796,49 @@ class _LoginPageState extends State<LoginPage>
     setState(() {
       _obscureTextSignupConfirm = !_obscureTextSignupConfirm;
     });
+  }
+}
+
+class TextEntryWidget extends StatelessWidget {
+  const TextEntryWidget(
+      {super.key,
+      required this.myFocusNode,
+      required this.controller,
+      required this.displaytext,
+      required this.trailing_icon,
+      required this.simple_icon,
+      required this.showtext});
+
+  final FocusNode myFocusNode;
+  final TextEditingController controller;
+  final String displaytext;
+  final trailing_icon;
+  final simple_icon;
+  final showtext;
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.only(
+          top: 20.0, bottom: 20.0, left: 25.0, right: 25.0),
+      child: TextField(
+        obscureText: showtext,
+        focusNode: myFocusNode,
+        controller: controller,
+        keyboardType: TextInputType.emailAddress,
+        style: const TextStyle(
+            fontFamily: "WorkSansSemiBold",
+            fontSize: 16.0,
+            color: Colors.black),
+        decoration: InputDecoration(
+          icon: simple_icon,
+          suffixIcon: trailing_icon,
+          border: InputBorder.none,
+          hintStyle:
+              const TextStyle(fontFamily: "WorkSansSemiBold", fontSize: 17.0),
+          hintText: displaytext,
+        ),
+      ),
+    );
   }
 }
