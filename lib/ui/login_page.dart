@@ -625,6 +625,13 @@ class _LoginPageState extends State<LoginPage>
                   ),
                   onPressed: () async {
                     c_class.checkInternet(context);
+                    if (signupNameController.text.length == 0 ||
+                        signupEmailController.text.length == 0 ||
+                        signupPasswordController.text.length == 0 ||
+                        signupConfirmPasswordController.text.length == 0) {
+                      showInSnackBar(
+                          'Please provide all the information!', Colors.red);
+                    }
 
                     if (signupPasswordController.text !=
                         signupConfirmPasswordController.text) {
