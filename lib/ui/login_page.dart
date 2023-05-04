@@ -12,6 +12,7 @@ import 'package:mum_s/utils/bubble_indication_painter.dart';
 import 'package:mum_s/utils/connectivity.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:mum_s/utils/TextEntryWidget.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({Key? key}) : super(key: key);
@@ -261,7 +262,7 @@ class _LoginPageState extends State<LoginPage>
                   child: Column(
                     children: <Widget>[
                       TextEntryWidget(
-                          showtext: false,
+                          hidetext: false,
                           simple_icon: const Icon(
                             FontAwesomeIcons.envelope,
                             color: Colors.black,
@@ -277,7 +278,7 @@ class _LoginPageState extends State<LoginPage>
                         color: Colors.grey[400],
                       ),
                       TextEntryWidget(
-                        showtext: _obscureTextLogin,
+                        hidetext: _obscureTextLogin,
                         myFocusNode: myFocusNodePasswordLogin,
                         controller: loginPasswordController,
                         displaytext: "Password",
@@ -297,41 +298,6 @@ class _LoginPageState extends State<LoginPage>
                           color: Colors.black,
                         ),
                       )
-                      //       )
-                      // Padding(
-                      //   padding: const EdgeInsets.only(
-                      //       top: 20.0, bottom: 20.0, left: 25.0, right: 25.0),
-                      //   child: TextField(
-                      //     focusNode: myFocusNodePasswordLogin,
-                      //     controller: loginPasswordController,
-                      //     obscureText: _obscureTextLogin,
-                      //     style: const TextStyle(
-                      //         fontFamily: "WorkSansSemiBold",
-                      //         fontSize: 16.0,
-                      //         color: Colors.black),
-                      //     decoration: InputDecoration(
-                      //       border: InputBorder.none,
-                      //       icon: const Icon(
-                      //         FontAwesomeIcons.lock,
-                      //         size: 22.0,
-                      //         color: Colors.black,
-                      //       ),
-                      //       hintText: "Password",
-                      //       hintStyle: const TextStyle(
-                      //           fontFamily: "WorkSansSemiBold", fontSize: 17.0),
-                      //       suffixIcon: GestureDetector(
-                      //         onTap: _toggleLogin,
-                      //         child: Icon(
-                      //           _obscureTextLogin
-                      //               ? FontAwesomeIcons.eye
-                      //               : FontAwesomeIcons.eyeSlash,
-                      //           size: 15.0,
-                      //           color: Colors.black,
-                      //         ),
-                      //       ),
-                      //     ),
-                      //   ),
-                      // ),
                     ],
                   ),
                 ),
@@ -380,7 +346,7 @@ class _LoginPageState extends State<LoginPage>
                   onPressed: () async {
                     Future<bool> networkStatus = c_class.checkInternet(context);
                     if (await networkStatus == true) {
-                      var push = Navigator.push(
+                      Navigator.push(
                         context,
                         prefix0.MaterialPageRoute(
                           builder: (context) => MainPage(),
@@ -538,133 +504,80 @@ class _LoginPageState extends State<LoginPage>
                   height: 360.0,
                   child: Column(
                     children: <Widget>[
-                      Padding(
-                        padding: const EdgeInsets.only(
-                            top: 20.0, bottom: 20.0, left: 25.0, right: 25.0),
-                        child: TextField(
-                          focusNode: myFocusNodeName,
+                      TextEntryWidget(
+                          myFocusNode: myFocusNodeName,
                           controller: signupNameController,
-                          keyboardType: TextInputType.text,
-                          textCapitalization: TextCapitalization.words,
-                          style: const TextStyle(
-                              fontFamily: "WorkSansSemiBold",
-                              fontSize: 16.0,
-                              color: Colors.black),
-                          decoration: const InputDecoration(
-                            border: InputBorder.none,
-                            icon: Icon(
-                              FontAwesomeIcons.user,
-                              color: Colors.black,
-                            ),
-                            hintText: "Name",
-                            hintStyle: TextStyle(
-                                fontFamily: "WorkSansSemiBold", fontSize: 16.0),
+                          displaytext: "Name",
+                          trailing_icon: null,
+                          simple_icon: const Icon(
+                            FontAwesomeIcons.user,
+                            color: Colors.black,
                           ),
+                          hidetext: false),
+                      Container(
+                        width: 250.0,
+                        height: 1.0,
+                        color: Colors.grey[400],
+                      ),
+                      TextEntryWidget(
+                        myFocusNode: myFocusNodeEmail,
+                        controller: signupEmailController,
+                        displaytext: "Email Address",
+                        trailing_icon: null,
+                        simple_icon: const Icon(
+                          FontAwesomeIcons.envelope,
+                          color: Colors.black,
                         ),
+                        hidetext: false,
                       ),
                       Container(
                         width: 250.0,
                         height: 1.0,
                         color: Colors.grey[400],
                       ),
-                      Padding(
-                        padding: const EdgeInsets.only(
-                            top: 20.0, bottom: 20.0, left: 25.0, right: 25.0),
-                        child: TextField(
-                          focusNode: myFocusNodeEmail,
-                          controller: signupEmailController,
-                          keyboardType: TextInputType.emailAddress,
-                          style: const TextStyle(
-                              fontFamily: "WorkSansSemiBold",
-                              fontSize: 16.0,
-                              color: Colors.black),
-                          decoration: const InputDecoration(
-                            border: InputBorder.none,
-                            icon: Icon(
-                              FontAwesomeIcons.envelope,
-                              color: Colors.black,
-                            ),
-                            hintText: "Email Address",
-                            hintStyle: TextStyle(
-                                fontFamily: "WorkSansSemiBold", fontSize: 16.0),
-                          ),
-                        ),
-                      ),
-                      Container(
-                        width: 250.0,
-                        height: 1.0,
-                        color: Colors.grey[400],
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.only(
-                            top: 20.0, bottom: 20.0, left: 25.0, right: 25.0),
-                        child: TextField(
-                          focusNode: myFocusNodePassword,
+                      TextEntryWidget(
+                          myFocusNode: myFocusNodePassword,
                           controller: signupPasswordController,
-                          obscureText: _obscureTextSignup,
-                          style: const TextStyle(
-                              fontFamily: "WorkSansSemiBold",
-                              fontSize: 16.0,
-                              color: Colors.black),
-                          decoration: InputDecoration(
-                            border: InputBorder.none,
-                            icon: const Icon(
-                              FontAwesomeIcons.lock,
+                          displaytext: "Password",
+                          trailing_icon: GestureDetector(
+                            onTap: _toggleSignup,
+                            child: Icon(
+                              _obscureTextSignup
+                                  ? FontAwesomeIcons.eye
+                                  : FontAwesomeIcons.eyeSlash,
+                              size: 15.0,
                               color: Colors.black,
                             ),
-                            hintText: "Password",
-                            hintStyle: const TextStyle(
-                                fontFamily: "WorkSansSemiBold", fontSize: 16.0),
-                            suffixIcon: GestureDetector(
-                              onTap: _toggleSignup,
-                              child: Icon(
-                                _obscureTextSignup
-                                    ? FontAwesomeIcons.eye
-                                    : FontAwesomeIcons.eyeSlash,
-                                size: 15.0,
-                                color: Colors.black,
-                              ),
-                            ),
                           ),
-                        ),
-                      ),
+                          simple_icon: const Icon(
+                            FontAwesomeIcons.lock,
+                            color: Colors.black,
+                          ),
+                          hidetext: _obscureTextSignup),
                       Container(
                         width: 250.0,
                         height: 1.0,
                         color: Colors.grey[400],
                       ),
-                      Padding(
-                        padding: const EdgeInsets.only(
-                            top: 20.0, bottom: 20.0, left: 25.0, right: 25.0),
-                        child: TextField(
+                      TextEntryWidget(
+                          myFocusNode: null,
                           controller: signupConfirmPasswordController,
-                          obscureText: _obscureTextSignupConfirm,
-                          style: const TextStyle(
-                              fontFamily: "WorkSansSemiBold",
-                              fontSize: 16.0,
-                              color: Colors.black),
-                          decoration: InputDecoration(
-                            border: InputBorder.none,
-                            icon: const Icon(
-                              FontAwesomeIcons.lock,
+                          displaytext: "Confirmation",
+                          trailing_icon: GestureDetector(
+                            onTap: _toggleSignupConfirm,
+                            child: Icon(
+                              _obscureTextSignupConfirm
+                                  ? FontAwesomeIcons.eye
+                                  : FontAwesomeIcons.eyeSlash,
+                              size: 15.0,
                               color: Colors.black,
                             ),
-                            hintText: "Confirmation",
-                            hintStyle: const TextStyle(
-                                fontFamily: "WorkSansSemiBold", fontSize: 16.0),
-                            suffixIcon: GestureDetector(
-                              onTap: _toggleSignupConfirm,
-                              child: Icon(
-                                _obscureTextSignupConfirm
-                                    ? FontAwesomeIcons.eye
-                                    : FontAwesomeIcons.eyeSlash,
-                                size: 15.0,
-                                color: Colors.black,
-                              ),
-                            ),
                           ),
-                        ),
-                      ),
+                          simple_icon: const Icon(
+                            FontAwesomeIcons.lock,
+                            color: Colors.black,
+                          ),
+                          hidetext: _obscureTextSignupConfirm)
                     ],
                   ),
                 ),
@@ -712,11 +625,6 @@ class _LoginPageState extends State<LoginPage>
                   ),
                   onPressed: () async {
                     c_class.checkInternet(context);
-
-                    // print(signupConfirmPasswordController.text);
-                    // print(signupPasswordController.text);
-                    // print(signupEmailController.text);
-                    // print(signupNameController.text);
 
                     if (signupPasswordController.text !=
                         signupConfirmPasswordController.text) {
@@ -796,49 +704,5 @@ class _LoginPageState extends State<LoginPage>
     setState(() {
       _obscureTextSignupConfirm = !_obscureTextSignupConfirm;
     });
-  }
-}
-
-class TextEntryWidget extends StatelessWidget {
-  const TextEntryWidget(
-      {super.key,
-      required this.myFocusNode,
-      required this.controller,
-      required this.displaytext,
-      required this.trailing_icon,
-      required this.simple_icon,
-      required this.showtext});
-
-  final FocusNode myFocusNode;
-  final TextEditingController controller;
-  final String displaytext;
-  final trailing_icon;
-  final simple_icon;
-  final showtext;
-
-  @override
-  Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.only(
-          top: 20.0, bottom: 20.0, left: 25.0, right: 25.0),
-      child: TextField(
-        obscureText: showtext,
-        focusNode: myFocusNode,
-        controller: controller,
-        keyboardType: TextInputType.emailAddress,
-        style: const TextStyle(
-            fontFamily: "WorkSansSemiBold",
-            fontSize: 16.0,
-            color: Colors.black),
-        decoration: InputDecoration(
-          icon: simple_icon,
-          suffixIcon: trailing_icon,
-          border: InputBorder.none,
-          hintStyle:
-              const TextStyle(fontFamily: "WorkSansSemiBold", fontSize: 17.0),
-          hintText: displaytext,
-        ),
-      ),
-    );
   }
 }
