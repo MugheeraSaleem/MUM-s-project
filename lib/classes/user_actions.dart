@@ -18,6 +18,9 @@ Future<UserCredential> registerUser(
   UserCredential result = await auth.createUserWithEmailAndPassword(
       email: email, password: password);
 
+  User? user = result.user;
+  user!.updateDisplayName(username);
+
   //Create the user in firestore with the user data
   createUser(result.user!.uid, username, email);
   return result;
@@ -45,6 +48,7 @@ void getCurrentUser() async {
     final user = auth.currentUser;
     if (user != null) {
       final loggedInUser = user;
+      print(loggedInUser.displayName);
       print(loggedInUser.email);
     }
   } catch (e) {

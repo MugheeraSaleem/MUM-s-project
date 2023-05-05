@@ -7,6 +7,8 @@ import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:mum_s/ui/login_page.dart';
 import 'package:mum_s/utils/connectivity.dart';
 import 'package:mum_s/classes/user_actions.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:mum_s/utils/snack_bar.dart';
 
 class MainPage extends StatefulWidget {
   @override
@@ -19,10 +21,12 @@ class _MainPageState extends State<MainPage> {
     'Last month',
     'Last year'
   ];
+  final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
   String actualDropdown = chartDropdownItems[0];
   int actualChart = 0;
 
   ConnectivityClass c_class = ConnectivityClass();
+  final _auth = FirebaseAuth.instance;
 
   @override
   void initState() {
@@ -41,6 +45,7 @@ class _MainPageState extends State<MainPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      key: _scaffoldKey,
       backgroundColor: Color(0xFFf7418c),
       appBar: AppBar(
         elevation: 2.0,
@@ -53,6 +58,31 @@ class _MainPageState extends State<MainPage> {
                   fontSize: 30.0)),
         ),
         actions: <Widget>[
+          Container(
+            margin: const EdgeInsets.only(right: 8.0),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: <Widget>[
+                ElevatedButton(
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: Colors.white,
+                  ),
+                  child: const Icon(
+                    Icons.power_settings_new_sharp,
+                    color: Colors.black,
+                  ),
+                  onPressed: () {
+                    c_class.checkInternet(context);
+                    _auth.signOut();
+                    Navigator.pop(context);
+                    showInSnackBar('Logged out Successfully', Colors.green,
+                        context, _scaffoldKey.currentContext!);
+                  },
+                )
+              ],
+            ),
+          ),
           Container(
             margin: const EdgeInsets.only(right: 8.0),
             child: Row(

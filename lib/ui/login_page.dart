@@ -14,6 +14,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:mum_s/utils/TextEntryWidget.dart';
 import 'package:mum_s/classes/user_actions.dart';
+import 'package:mum_s/utils/snack_bar.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({Key? key}) : super(key: key);
@@ -162,33 +163,6 @@ class _LoginPageState extends State<LoginPage>
     _pageController.dispose();
     c_class.subscription.cancel();
     super.dispose();
-  }
-
-  void showInSnackBar(String value, Color color) {
-    FocusScope.of(context).requestFocus(
-      FocusNode(),
-    );
-    // _scaffoldKey.currentState!.removeCurrentSnackBar();
-
-    final scaffoldMessenger =
-        ScaffoldMessenger.of(_scaffoldKey.currentContext!);
-    scaffoldMessenger.removeCurrentSnackBar();
-
-    // _scaffoldKey.currentState?.showSnackBar(
-    scaffoldMessenger.showSnackBar(
-      SnackBar(
-        content: Text(
-          value,
-          textAlign: TextAlign.center,
-          style: const TextStyle(
-              color: Colors.white,
-              fontSize: 16.0,
-              fontFamily: "WorkSansSemiBold"),
-        ),
-        backgroundColor: color,
-        duration: const Duration(seconds: 3),
-      ),
-    );
   }
 
   Widget _buildMenuBar(BuildContext context) {
@@ -349,14 +323,15 @@ class _LoginPageState extends State<LoginPage>
                     Future<bool> networkStatus = c_class.checkInternet(context);
                     if (loginEmailController.text.isEmpty ||
                         loginPasswordController.text.isEmpty) {
-                      showInSnackBar(
-                          'Please provide all the information', Colors.red);
+                      showInSnackBar('Please provide all the information',
+                          Colors.red, context, _scaffoldKey.currentContext!);
                     }
                     try {
                       User user = await logIn(loginEmailController.text,
                           loginPasswordController.text);
                       if (await networkStatus == true && user != null) {
-                        showInSnackBar('Logged in Successfully', Colors.green);
+                        showInSnackBar('Logged in Successfully', Colors.green,
+                            context, _scaffoldKey.currentContext!);
                         Navigator.push(
                           context,
                           prefix0.MaterialPageRoute(
@@ -366,19 +341,20 @@ class _LoginPageState extends State<LoginPage>
                       }
                     } on FirebaseAuthException catch (e) {
                       if (e.code == 'invalid-email') {
-                        showInSnackBar(
-                            'Please provide a valid email', Colors.red);
+                        showInSnackBar('Please provide a valid email',
+                            Colors.red, context, _scaffoldKey.currentContext!);
                       }
                       if (e.code == 'wrong-password') {
-                        showInSnackBar(
-                            'Please type the correct Password', Colors.red);
+                        showInSnackBar('Please type the correct Password',
+                            Colors.red, context, _scaffoldKey.currentContext!);
                       }
                       if (e.code == 'user-not-found') {
-                        showInSnackBar(
-                            'Please signup before logging in', Colors.red);
+                        showInSnackBar('Please signup before logging in',
+                            Colors.red, context, _scaffoldKey.currentContext!);
                       }
                     } catch (e) {
-                      showInSnackBar('Unexpected error occurred', Colors.red);
+                      showInSnackBar('Unexpected error occurred', Colors.red,
+                          context, _scaffoldKey.currentContext!);
                       print(e);
                     }
                   },
@@ -455,7 +431,8 @@ class _LoginPageState extends State<LoginPage>
                 padding: const EdgeInsets.only(top: 10.0, right: 40.0),
                 child: GestureDetector(
                   onTap: () {
-                    showInSnackBar("Facebook button pressed", Colors.blue);
+                    showInSnackBar("Facebook button pressed", Colors.blue,
+                        context, _scaffoldKey.currentContext!);
                   },
                   child: Container(
                     padding: const EdgeInsets.all(15.0),
@@ -474,7 +451,8 @@ class _LoginPageState extends State<LoginPage>
                 padding: const EdgeInsets.only(top: 10.0),
                 child: GestureDetector(
                   onTap: () {
-                    showInSnackBar("Google button pressed", Colors.blue);
+                    showInSnackBar("Google button pressed", Colors.blue,
+                        context, _scaffoldKey.currentContext!);
                   },
                   child: Container(
                     padding: const EdgeInsets.all(15.0),
@@ -641,13 +619,14 @@ class _LoginPageState extends State<LoginPage>
                         signupEmailController.text.isEmpty ||
                         signupPasswordController.text.isEmpty ||
                         signupConfirmPasswordController.text.isEmpty) {
-                      showInSnackBar(
-                          'Please provide all the information', Colors.red);
+                      showInSnackBar('Please provide all the information',
+                          Colors.red, context, _scaffoldKey.currentContext!);
                     }
 
                     if (signupPasswordController.text !=
                         signupConfirmPasswordController.text) {
-                      showInSnackBar('Passwords must match', Colors.red);
+                      showInSnackBar('Passwords must match', Colors.red,
+                          context, _scaffoldKey.currentContext!);
                     } else {
                       try {
                         final newUser = registerUser(
@@ -660,7 +639,10 @@ class _LoginPageState extends State<LoginPage>
                               c_class.checkInternet(context);
                           if (await networkStatus == true) {
                             showInSnackBar(
-                                'User Created Successfully', Colors.green);
+                                'User Created Successfully',
+                                Colors.green,
+                                context,
+                                _scaffoldKey.currentContext!);
                             Navigator.push(
                               context,
                               prefix0.MaterialPageRoute(
@@ -673,18 +655,27 @@ class _LoginPageState extends State<LoginPage>
                       } on FirebaseAuthException catch (e) {
                         if (e.code == 'invalid-email') {
                           showInSnackBar(
-                              'Please provide a valid email', Colors.red);
+                              'Please provide a valid email',
+                              Colors.red,
+                              context,
+                              _scaffoldKey.currentContext!);
                         }
                         if (e.code == 'weak-password') {
                           showInSnackBar(
-                              'The password provided is too weak.', Colors.red);
+                              'The password provided is too weak.',
+                              Colors.red,
+                              context,
+                              _scaffoldKey.currentContext!);
                         } else if (e.code == 'email-already-in-use') {
                           showInSnackBar(
                               'An account already exists for this email.',
-                              Colors.red);
+                              Colors.red,
+                              context,
+                              _scaffoldKey.currentContext!);
                         }
                       } catch (e) {
-                        showInSnackBar('Unexpected error occured', Colors.red);
+                        showInSnackBar('Unexpected error occured', Colors.red,
+                            context, _scaffoldKey.currentContext!);
                         print(e);
                       }
                     }
