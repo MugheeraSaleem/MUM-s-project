@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:mum_s/ui/login_page.dart';
 import 'package:mum_s/utils/connectivity.dart';
+import 'package:mum_s/classes/user_actions.dart';
 
 class MainPage extends StatefulWidget {
   @override
@@ -27,6 +28,7 @@ class _MainPageState extends State<MainPage> {
   void initState() {
     c_class.getConnectivity(context);
     c_class.checkInternet(context);
+    getCurrentUser();
     super.initState();
   }
 

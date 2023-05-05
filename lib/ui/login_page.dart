@@ -13,6 +13,7 @@ import 'package:mum_s/utils/connectivity.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:mum_s/utils/TextEntryWidget.dart';
+import 'package:mum_s/classes/user_actions.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({Key? key}) : super(key: key);
@@ -37,6 +38,7 @@ class _LoginPageState extends State<LoginPage>
 
   late String email;
   late String password;
+  late String username;
 
   TextEditingController loginEmailController = TextEditingController();
   TextEditingController loginPasswordController = TextEditingController();
@@ -345,30 +347,40 @@ class _LoginPageState extends State<LoginPage>
                   ),
                   onPressed: () async {
                     Future<bool> networkStatus = c_class.checkInternet(context);
-                    if (await networkStatus == true) {
-                      Navigator.push(
-                        context,
-                        prefix0.MaterialPageRoute(
-                          builder: (context) => MainPage(),
-                        ),
-                      );
+                    if (loginEmailController.text.isEmpty ||
+                        loginPasswordController.text.isEmpty) {
+                      showInSnackBar(
+                          'Please provide all the information', Colors.red);
                     }
-/*                     onPressed: () {
-                      String email_id = 'sjha200000@gmail.com';
-                      String password_id = '12345678';
-                      FirebaseAuth.instance
-                        .signInWithEmailAndPassword(
-                          email: email_id,
-                          password: password_id)
-                        .then((currentUser) => Firestore.instance
-                          .collection("users")
-                          .document(currentUser.uid)
-                          .get()
-                          .then((DocumentSnapshot result) =>
-                          prefix0.Navigator.pushReplacement(context, prefix0.MaterialPageRoute(
-                            builder: (context) => ProfilePage(),
-                          ) )
-                          )); */
+                    try {
+                      User user = await logIn(loginEmailController.text,
+                          loginPasswordController.text);
+                      if (await networkStatus == true && user != null) {
+                        showInSnackBar('Logged in Successfully', Colors.green);
+                        Navigator.push(
+                          context,
+                          prefix0.MaterialPageRoute(
+                            builder: (context) => MainPage(),
+                          ),
+                        );
+                      }
+                    } on FirebaseAuthException catch (e) {
+                      if (e.code == 'invalid-email') {
+                        showInSnackBar(
+                            'Please provide a valid email', Colors.red);
+                      }
+                      if (e.code == 'wrong-password') {
+                        showInSnackBar(
+                            'Please type the correct Password', Colors.red);
+                      }
+                      if (e.code == 'user-not-found') {
+                        showInSnackBar(
+                            'Please signup before logging in', Colors.red);
+                      }
+                    } catch (e) {
+                      showInSnackBar('Unexpected error occurred', Colors.red);
+                      print(e);
+                    }
                   },
                 ),
               )
@@ -625,30 +637,30 @@ class _LoginPageState extends State<LoginPage>
                   ),
                   onPressed: () async {
                     c_class.checkInternet(context);
-                    if (signupNameController.text.length == 0 ||
-                        signupEmailController.text.length == 0 ||
-                        signupPasswordController.text.length == 0 ||
-                        signupConfirmPasswordController.text.length == 0) {
+                    if (signupNameController.text.isEmpty ||
+                        signupEmailController.text.isEmpty ||
+                        signupPasswordController.text.isEmpty ||
+                        signupConfirmPasswordController.text.isEmpty) {
                       showInSnackBar(
-                          'Please provide all the information!', Colors.red);
+                          'Please provide all the information', Colors.red);
                     }
 
                     if (signupPasswordController.text !=
                         signupConfirmPasswordController.text) {
-                      showInSnackBar('Passwords must match!', Colors.red);
+                      showInSnackBar('Passwords must match', Colors.red);
                     } else {
                       try {
-                        final newUser =
-                            await _auth.createUserWithEmailAndPassword(
-                          email: signupEmailController.text,
-                          password: signupPasswordController.text,
+                        final newUser = registerUser(
+                          signupEmailController.text,
+                          signupPasswordController.text,
+                          signupNameController.text,
                         );
                         if (newUser != null) {
                           Future<bool> networkStatus =
                               c_class.checkInternet(context);
                           if (await networkStatus == true) {
                             showInSnackBar(
-                                'User Created Successfully!', Colors.green);
+                                'User Created Successfully', Colors.green);
                             Navigator.push(
                               context,
                               prefix0.MaterialPageRoute(
@@ -672,6 +684,7 @@ class _LoginPageState extends State<LoginPage>
                               Colors.red);
                         }
                       } catch (e) {
+                        showInSnackBar('Unexpected error occured', Colors.red);
                         print(e);
                       }
                     }
