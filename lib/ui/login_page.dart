@@ -15,6 +15,8 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:mum_s/utils/TextEntryWidget.dart';
 import 'package:mum_s/classes/user_actions.dart';
 import 'package:mum_s/utils/snack_bar.dart';
+import 'package:modal_progress_hud_nsn/modal_progress_hud_nsn.dart';
+import 'package:loading_animation_widget/loading_animation_widget.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({Key? key}) : super(key: key);
@@ -51,6 +53,7 @@ class _LoginPageState extends State<LoginPage>
   bool _obscureTextLogin = true;
   bool _obscureTextSignup = true;
   bool _obscureTextSignupConfirm = true;
+  bool _loading = false;
 
   TextEditingController signupEmailController = TextEditingController();
   TextEditingController signupNameController = TextEditingController();
@@ -67,74 +70,82 @@ class _LoginPageState extends State<LoginPage>
   Widget build(BuildContext context) {
     return Scaffold(
       key: _scaffoldKey,
-      body: NotificationListener<OverscrollIndicatorNotification>(
-        onNotification: (overscroll) {
-          overscroll.disallowIndicator();
-          return true;
-        },
-        child: SingleChildScrollView(
-          child: Container(
-            width: MediaQuery.of(context).size.width,
-            height: MediaQuery.of(context).size.height >= 775.0
-                ? MediaQuery.of(context).size.height
-                : 775.0,
-            decoration: const BoxDecoration(
-              gradient: LinearGradient(
-                  colors: [
-                    Theme.Colors.loginGradientStart,
-                    Theme.Colors.loginGradientEnd
-                  ],
-                  begin: FractionalOffset(0.0, 0.0),
-                  end: FractionalOffset(1.0, 1.0),
-                  stops: [0.0, 1.0],
-                  tileMode: TileMode.clamp),
-            ),
-            child: Column(
-              mainAxisSize: MainAxisSize.max,
-              children: <Widget>[
-                const Padding(
-                  padding: EdgeInsets.only(top: 75.0),
-                  child: Image(
-                    width: 250.0,
-                    height: 191.0,
-                    fit: BoxFit.fill,
-                    image: AssetImage('assets/img/login_logo.png'),
-                  ),
-                ),
-                Padding(
-                  padding: const EdgeInsets.only(top: 20.0),
-                  child: _buildMenuBar(context),
-                ),
-                Expanded(
-                  flex: 2,
-                  child: PageView(
-                    controller: _pageController,
-                    onPageChanged: (i) {
-                      if (i == 0) {
-                        setState(() {
-                          right = Colors.white;
-                          left = Colors.black;
-                        });
-                      } else if (i == 1) {
-                        setState(() {
-                          right = Colors.black;
-                          left = Colors.white;
-                        });
-                      }
-                    },
-                    children: <Widget>[
-                      ConstrainedBox(
-                        constraints: const BoxConstraints.expand(),
-                        child: _buildSignIn(context),
-                      ),
-                      ConstrainedBox(
-                        constraints: const BoxConstraints.expand(),
-                        child: _buildSignUp(context),
-                      ),
+      body: ModalProgressHUD(
+        progressIndicator: LoadingAnimationWidget.beat(
+          color: Colors.pinkAccent,
+          size: 100,
+        ),
+        dismissible: true,
+        inAsyncCall: _loading,
+        child: NotificationListener<OverscrollIndicatorNotification>(
+          onNotification: (overscroll) {
+            overscroll.disallowIndicator();
+            return true;
+          },
+          child: SingleChildScrollView(
+            child: Container(
+              width: MediaQuery.of(context).size.width,
+              height: MediaQuery.of(context).size.height >= 775.0
+                  ? MediaQuery.of(context).size.height
+                  : 775.0,
+              decoration: const BoxDecoration(
+                gradient: LinearGradient(
+                    colors: [
+                      Theme.Colors.loginGradientStart,
+                      Theme.Colors.loginGradientEnd
                     ],
+                    begin: FractionalOffset(0.0, 0.0),
+                    end: FractionalOffset(1.0, 1.0),
+                    stops: [0.0, 1.0],
+                    tileMode: TileMode.clamp),
+              ),
+              child: Column(
+                mainAxisSize: MainAxisSize.max,
+                children: <Widget>[
+                  const Padding(
+                    padding: EdgeInsets.only(top: 75.0),
+                    child: Image(
+                      width: 250.0,
+                      height: 191.0,
+                      fit: BoxFit.fill,
+                      image: AssetImage('assets/img/login_logo.png'),
+                    ),
                   ),
-                ),
-              ],
+                  Padding(
+                    padding: const EdgeInsets.only(top: 20.0),
+                    child: _buildMenuBar(context),
+                  ),
+                  Expanded(
+                    flex: 2,
+                    child: PageView(
+                      controller: _pageController,
+                      onPageChanged: (i) {
+                        if (i == 0) {
+                          setState(() {
+                            right = Colors.white;
+                            left = Colors.black;
+                          });
+                        } else if (i == 1) {
+                          setState(() {
+                            right = Colors.black;
+                            left = Colors.white;
+                          });
+                        }
+                      },
+                      children: <Widget>[
+                        ConstrainedBox(
+                          constraints: const BoxConstraints.expand(),
+                          child: _buildSignIn(context),
+                        ),
+                        ConstrainedBox(
+                          constraints: const BoxConstraints.expand(),
+                          child: _buildSignUp(context),
+                        ),
+                      ],
+                    ),
+                  ),
+                ],
+              ),
             ),
           ),
         ),
@@ -327,6 +338,10 @@ class _LoginPageState extends State<LoginPage>
                           Colors.red, context, _scaffoldKey.currentContext!);
                     }
                     try {
+                      setState(() {
+                        _loading = true;
+                      });
+
                       User user = await logIn(loginEmailController.text,
                           loginPasswordController.text);
                       if (await networkStatus == true && user != null) {
@@ -338,8 +353,14 @@ class _LoginPageState extends State<LoginPage>
                             builder: (context) => MainPage(),
                           ),
                         );
+                        setState(() {
+                          _loading = false;
+                        });
                       }
                     } on FirebaseAuthException catch (e) {
+                      setState(() {
+                        _loading = false;
+                      });
                       if (e.code == 'invalid-email') {
                         showInSnackBar('Please provide a valid email',
                             Colors.red, context, _scaffoldKey.currentContext!);
@@ -353,6 +374,9 @@ class _LoginPageState extends State<LoginPage>
                             Colors.red, context, _scaffoldKey.currentContext!);
                       }
                     } catch (e) {
+                      setState(() {
+                        _loading = false;
+                      });
                       showInSnackBar('Unexpected error occurred', Colors.red,
                           context, _scaffoldKey.currentContext!);
                       print(e);
@@ -621,38 +645,47 @@ class _LoginPageState extends State<LoginPage>
                         signupConfirmPasswordController.text.isEmpty) {
                       showInSnackBar('Please provide all the information',
                           Colors.red, context, _scaffoldKey.currentContext!);
-                    }
-
-                    if (signupPasswordController.text !=
+                    } else if (signupPasswordController.text !=
                         signupConfirmPasswordController.text) {
                       showInSnackBar('Passwords must match', Colors.red,
                           context, _scaffoldKey.currentContext!);
                     } else {
                       try {
-                        final newUser = registerUser(
-                          signupEmailController.text,
-                          signupPasswordController.text,
-                          signupNameController.text,
-                        );
-                        if (newUser != null) {
-                          Future<bool> networkStatus =
-                              c_class.checkInternet(context);
-                          if (await networkStatus == true) {
-                            showInSnackBar(
-                                'User Created Successfully',
-                                Colors.green,
-                                context,
-                                _scaffoldKey.currentContext!);
-                            Navigator.push(
+                        setState(() {
+                          _loading = true;
+                        });
+
+                        final newUser = await registerUser(
+                            signupEmailController.text,
+                            signupPasswordController.text,
+                            signupNameController.text);
+
+                        // print('////////////////// newuser with name is ' +
+                        //     newUser.toString());
+
+                        Future<bool> networkStatus =
+                            c_class.checkInternet(context);
+                        if (await networkStatus == true && newUser != null) {
+                          showInSnackBar(
+                              'User Created Successfully',
+                              Colors.green,
                               context,
-                              prefix0.MaterialPageRoute(
-                                builder: (context) => MainPage(),
-                              ),
-                            );
-                          }
+                              _scaffoldKey.currentContext!);
+                          Navigator.push(
+                            context,
+                            prefix0.MaterialPageRoute(
+                              builder: (context) => MainPage(),
+                            ),
+                          );
+                          setState(() {
+                            _loading = false;
+                          });
                         }
                         // here
                       } on FirebaseAuthException catch (e) {
+                        setState(() {
+                          _loading = false;
+                        });
                         if (e.code == 'invalid-email') {
                           showInSnackBar(
                               'Please provide a valid email',
@@ -674,7 +707,10 @@ class _LoginPageState extends State<LoginPage>
                               _scaffoldKey.currentContext!);
                         }
                       } catch (e) {
-                        showInSnackBar('Unexpected error occured', Colors.red,
+                        setState(() {
+                          _loading = false;
+                        });
+                        showInSnackBar('Unexpected error occurred', Colors.red,
                             context, _scaffoldKey.currentContext!);
                         print(e);
                       }

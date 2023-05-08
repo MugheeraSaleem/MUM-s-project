@@ -4,26 +4,27 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 final db = FirebaseFirestore.instance;
 FirebaseAuth auth = FirebaseAuth.instance;
 
-//This method is used to create the user in firestore
-Future<void> createUser(String uid, String username, String email) async {
-  //Creates the user doc named whatever the user uid is in te collection "users"
-  //and adds the user data
-  await db.collection("users").doc(uid).set({'Name': username, 'Email': email});
-}
+// This method is used to create the user in firestore
+// Future<void> createUser(String uid, String username, String email) async {
+//   //Creates the user doc named whatever the user uid is in te collection "users"
+//   //and adds the user data
+//   await db.collection("users").doc(uid).set({'Name': username, 'Email': email});
+// }
 
 //This function registers a new user with auth and then calls the function createUser
-Future<UserCredential> registerUser(
+Future<User?> registerUser(
     String email, String password, String username) async {
   //Create the user with auth
-  UserCredential result = await auth.createUserWithEmailAndPassword(
+  UserCredential newUser = await auth.createUserWithEmailAndPassword(
       email: email, password: password);
 
-  User? user = result.user;
-  user!.updateDisplayName(username);
+  User? user = newUser.user;
+  user?.updateDisplayName(username);
 
-  //Create the user in firestore with the user data
-  createUser(result.user!.uid, username, email);
-  return result;
+  // Create the user in firestore with the user data
+  // createUser(newUser.user!.uid, username, email);
+  //
+  return user;
 }
 
 //Function for logging in a user
@@ -38,7 +39,6 @@ Future<User> logIn(String email, String password) async {
   DocumentSnapshot snapshot = await ref.get();
 
   //Print the user's name or do whatever you want to do with it
-
   return user;
 }
 
