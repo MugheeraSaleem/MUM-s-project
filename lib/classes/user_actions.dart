@@ -19,11 +19,11 @@ Future<User?> registerUser(
       email: email, password: password);
 
   User? user = newUser.user;
-  user?.updateDisplayName(username);
+  // User? currentUser = await auth.currentUser;
+  await user?.updateDisplayName(username);
 
   // Create the user in firestore with the user data
   // createUser(newUser.user!.uid, username, email);
-  //
   return user;
 }
 
