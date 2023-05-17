@@ -1,6 +1,11 @@
 import 'package:mum_s/pages/dashboard.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:mum_s/utils/user_actions.dart';
+import 'package:draggable_fab/draggable_fab.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:mum_s/utils/snack_bar.dart';
+import 'package:mum_s/utils/connectivity.dart';
 
 class ProfilePage extends StatefulWidget {
   @override
@@ -9,18 +14,44 @@ class ProfilePage extends StatefulWidget {
 
 class MapScreenState extends State<ProfilePage>
     with SingleTickerProviderStateMixin {
+  final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
   bool _status = true;
+  final _auth = FirebaseAuth.instance;
   final FocusNode myFocusNode = FocusNode();
+  late var loggedInUser;
+  ConnectivityClass c_class = ConnectivityClass();
 
   @override
   void initState() {
     // TODO: implement initState
+    loggedInUser = getCurrentUser();
     super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+        floatingActionButton: DraggableFab(
+          child: SizedBox(
+            height: 65,
+            width: 65,
+            child: FloatingActionButton(
+              backgroundColor: Colors.red,
+              child: const Icon(
+                size: 35,
+                Icons.logout,
+                color: Colors.white,
+              ),
+              onPressed: () {
+                c_class.checkInternet(context);
+                _auth.signOut();
+                Navigator.pop(context);
+                showInSnackBar('Logged out Successfully', Colors.green, context,
+                    _scaffoldKey.currentContext!);
+              },
+            ),
+          ),
+        ),
         backgroundColor: Colors.white,
         body: Container(
           color: Colors.white,
@@ -30,7 +61,7 @@ class MapScreenState extends State<ProfilePage>
                 children: <Widget>[
                   Container(
                     height: 250.0,
-                    color: Color(0xFFf7418c),
+                    color: const Color(0xFFF7637E),
                     child: Column(
                       children: <Widget>[
                         Padding(
@@ -40,16 +71,17 @@ class MapScreenState extends State<ProfilePage>
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: <Widget>[
                                 IconButton(
-                                    icon: const Icon(Icons.arrow_back,
-                                        color: Colors.black),
-                                    onPressed: () {
-                                      Navigator.pushReplacement(
-                                        context,
-                                        MaterialPageRoute(
-                                          builder: (context) => MainPage(),
-                                        ),
-                                      );
-                                    }),
+                                  icon: const Icon(Icons.arrow_back,
+                                      color: Colors.black),
+                                  onPressed: () {
+                                    Navigator.pushReplacement(
+                                      context,
+                                      MaterialPageRoute(
+                                        builder: (context) => MainPage(),
+                                      ),
+                                    );
+                                  },
+                                ),
                                 const Padding(
                                   padding:
                                       EdgeInsets.only(left: 20.0, top: 10.0),

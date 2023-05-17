@@ -1,14 +1,15 @@
-import 'package:mum_s/map.dart';
-import 'package:mum_s/music.dart';
+import 'package:mum_s/pages/map.dart';
+import 'package:mum_s/pages/music.dart';
 import 'package:mum_s/pages/reminders.dart';
-import 'package:mum_s/profile_page.dart';
+import 'package:mum_s/pages/profile_page.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
-import 'package:mum_s/ui/login_page.dart';
+import 'package:mum_s/pages/login_page.dart';
 import 'package:mum_s/utils/connectivity.dart';
-import 'package:mum_s/classes/user_actions.dart';
+import 'package:mum_s/utils/user_actions.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:mum_s/utils/snack_bar.dart';
+import 'package:draggable_fab/draggable_fab.dart';
 
 class MainPage extends StatefulWidget {
   @override
@@ -27,17 +28,22 @@ class _MainPageState extends State<MainPage> {
 
   ConnectivityClass c_class = ConnectivityClass();
   final _auth = FirebaseAuth.instance;
+  late ScrollController dashboardController;
+  late var loggedInUser;
 
   @override
   void initState() {
+    dashboardController = ScrollController();
     c_class.getConnectivity(context);
     c_class.checkInternet(context);
-    getCurrentUser();
+    // This function is printing the users name and its email
+    loggedInUser = getCurrentUser();
     super.initState();
   }
 
   @override
   void dispose() {
+    dashboardController.dispose();
     c_class.subscription.cancel();
     super.dispose();
   }
@@ -45,44 +51,42 @@ class _MainPageState extends State<MainPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      floatingActionButton: DraggableFab(
+        child: SizedBox(
+          height: 65,
+          width: 65,
+          child: FloatingActionButton(
+            backgroundColor: Colors.red,
+            child: const Icon(
+              size: 35,
+              Icons.logout,
+              color: Colors.white,
+            ),
+            onPressed: () {
+              c_class.checkInternet(context);
+              _auth.signOut();
+              Navigator.pop(context);
+              showInSnackBar('Logged out Successfully', Colors.green, context,
+                  _scaffoldKey.currentContext!);
+            },
+          ),
+        ),
+      ),
       key: _scaffoldKey,
-      backgroundColor: Color(0xFFf7418c),
+      backgroundColor: const Color(0xFFF7637E),
       appBar: AppBar(
         elevation: 2.0,
         backgroundColor: Colors.white,
         title: const Center(
-          child: Text('Dashboard',
-              style: TextStyle(
-                  color: Colors.black,
-                  fontWeight: FontWeight.w700,
-                  fontSize: 30.0)),
+          child: Text(
+            'Dashboard',
+            style: TextStyle(
+                color: Colors.black,
+                fontWeight: FontWeight.w700,
+                fontSize: 30.0),
+          ),
         ),
         actions: <Widget>[
-          Container(
-            margin: const EdgeInsets.only(right: 8.0),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: <Widget>[
-                ElevatedButton(
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: Colors.white,
-                  ),
-                  child: const Icon(
-                    Icons.power_settings_new_sharp,
-                    color: Colors.black,
-                  ),
-                  onPressed: () {
-                    c_class.checkInternet(context);
-                    _auth.signOut();
-                    Navigator.pop(context);
-                    showInSnackBar('Logged out Successfully', Colors.green,
-                        context, _scaffoldKey.currentContext!);
-                  },
-                )
-              ],
-            ),
-          ),
           Container(
             margin: const EdgeInsets.only(right: 8.0),
             child: Row(
@@ -115,6 +119,7 @@ class _MainPageState extends State<MainPage> {
         ],
       ),
       body: StaggeredGridView.count(
+        controller: dashboardController,
         crossAxisCount: 2,
         crossAxisSpacing: 12.0,
         mainAxisSpacing: 12.0,
@@ -135,12 +140,15 @@ class _MainPageState extends State<MainPage> {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: <Widget>[
-                  Column(
+                  const Column(
                     mainAxisAlignment: MainAxisAlignment.center,
                     crossAxisAlignment: CrossAxisAlignment.start,
-                    children: const <Widget>[
-                      Text('Months and Days left',
-                          style: TextStyle(color: Colors.blueAccent)),
+                    children: <Widget>[
+                      Text(
+                        'Months and Days left',
+                        style:
+                            TextStyle(color: Colors.blueAccent, fontSize: 15),
+                      ),
                       Text('05/15',
                           style: TextStyle(
                               color: Colors.black,
@@ -165,12 +173,12 @@ class _MainPageState extends State<MainPage> {
             onTap: () {},
           ),
           _buildTile(
-            Padding(
-              padding: const EdgeInsets.all(24.0),
+            const Padding(
+              padding: EdgeInsets.all(24.0),
               child: Column(
                   mainAxisAlignment: MainAxisAlignment.start,
                   crossAxisAlignment: CrossAxisAlignment.start,
-                  children: const <Widget>[
+                  children: <Widget>[
                     Material(
                         color: Colors.teal,
                         shape: CircleBorder(),
@@ -193,12 +201,12 @@ class _MainPageState extends State<MainPage> {
             onTap: () {},
           ),
           _buildTile(
-            Padding(
-              padding: const EdgeInsets.all(24.0),
+            const Padding(
+              padding: EdgeInsets.all(24.0),
               child: Column(
                   mainAxisAlignment: MainAxisAlignment.start,
                   crossAxisAlignment: CrossAxisAlignment.start,
-                  children: const <Widget>[
+                  children: <Widget>[
                     Material(
                         color: Colors.amber,
                         shape: CircleBorder(),
@@ -237,10 +245,10 @@ class _MainPageState extends State<MainPage> {
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: <Widget>[
-                        Column(
+                        const Column(
                           mainAxisAlignment: MainAxisAlignment.start,
                           crossAxisAlignment: CrossAxisAlignment.start,
-                          children: const <Widget>[
+                          children: <Widget>[
                             Text(
                               'Counseling & Exercise',
                               style:
@@ -333,10 +341,10 @@ class _MainPageState extends State<MainPage> {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: <Widget>[
-                  Column(
+                  const Column(
                     mainAxisAlignment: MainAxisAlignment.center,
                     crossAxisAlignment: CrossAxisAlignment.start,
-                    children: const <Widget>[
+                    children: <Widget>[
                       Text('Hospitals Nearby',
                           style: TextStyle(color: Colors.pinkAccent)),
                       Text('Maps',

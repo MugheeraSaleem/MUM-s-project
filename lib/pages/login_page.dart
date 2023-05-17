@@ -13,10 +13,13 @@ import 'package:mum_s/utils/connectivity.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:mum_s/utils/TextEntryWidget.dart';
-import 'package:mum_s/classes/user_actions.dart';
+import 'package:mum_s/utils/user_actions.dart';
+import 'package:mum_s/utils/google_sign_in.dart';
 import 'package:mum_s/utils/snack_bar.dart';
 import 'package:modal_progress_hud_nsn/modal_progress_hud_nsn.dart';
 import 'package:loading_animation_widget/loading_animation_widget.dart';
+import 'package:flutter/foundation.dart';
+import 'package:provider/provider.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({Key? key}) : super(key: key);
@@ -37,7 +40,7 @@ class _LoginPageState extends State<LoginPage>
   final FocusNode myFocusNodeName = FocusNode();
 
   final db = FirebaseFirestore.instance;
-  final _auth = FirebaseAuth.instance;
+  final auth = FirebaseAuth.instance;
 
   late String email;
   late String password;
@@ -62,6 +65,7 @@ class _LoginPageState extends State<LoginPage>
       TextEditingController();
 
   late PageController _pageController;
+  late ScrollController loginPageController;
 
   Color left = Colors.black;
   Color right = Colors.white;
@@ -79,10 +83,11 @@ class _LoginPageState extends State<LoginPage>
         inAsyncCall: _loading,
         child: NotificationListener<OverscrollIndicatorNotification>(
           onNotification: (overscroll) {
-            overscroll.disallowIndicator();
+            // overscroll.disallowIndicator();
             return true;
           },
           child: SingleChildScrollView(
+            controller: loginPageController,
             child: Container(
               width: MediaQuery.of(context).size.width,
               height: MediaQuery.of(context).size.height >= 775.0
@@ -156,6 +161,7 @@ class _LoginPageState extends State<LoginPage>
   @override
   void initState() {
     super.initState();
+    loginPageController = ScrollController();
     c_class.getConnectivity(context);
     SystemChrome.setPreferredOrientations([
       DeviceOrientation.portraitUp,
@@ -171,7 +177,10 @@ class _LoginPageState extends State<LoginPage>
     myFocusNodePassword.dispose();
     myFocusNodeEmail.dispose();
     myFocusNodeName.dispose();
+    myFocusNodeEmailLogin.dispose();
+    myFocusNodePasswordLogin.dispose();
     _pageController.dispose();
+    loginPageController.dispose();
     c_class.subscription.cancel();
     super.dispose();
   }
@@ -229,6 +238,7 @@ class _LoginPageState extends State<LoginPage>
   }
 
   Widget _buildSignIn(BuildContext context) {
+    var deviceSize = MediaQuery.of(context).size;
     return Container(
       padding: const EdgeInsets.only(top: 23.0),
       child: Column(
@@ -344,6 +354,11 @@ class _LoginPageState extends State<LoginPage>
 
                       User user = await logIn(loginEmailController.text,
                           loginPasswordController.text);
+
+                      print('finally checking' +
+                          networkStatus.toString() +
+                          user.toString());
+
                       if (await networkStatus == true && user != null) {
                         showInSnackBar('Logged in Successfully', Colors.green,
                             context, _scaffoldKey.currentContext!);
@@ -357,6 +372,9 @@ class _LoginPageState extends State<LoginPage>
                           _loading = false;
                         });
                       }
+                      setState(() {
+                        _loading = false;
+                      });
                     } on FirebaseAuthException catch (e) {
                       setState(() {
                         _loading = false;
@@ -377,9 +395,12 @@ class _LoginPageState extends State<LoginPage>
                       setState(() {
                         _loading = false;
                       });
-                      showInSnackBar('Unexpected error occurred', Colors.red,
-                          context, _scaffoldKey.currentContext!);
-                      print(e);
+                      showInSnackBar(
+                          'Unexpected error occurred while logging in',
+                          Colors.red,
+                          context,
+                          _scaffoldKey.currentContext!);
+                      print('here is the exception causing trouble $e');
                     }
                   },
                 ),
@@ -451,45 +472,84 @@ class _LoginPageState extends State<LoginPage>
           Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: <Widget>[
-              Padding(
-                padding: const EdgeInsets.only(top: 10.0, right: 40.0),
-                child: GestureDetector(
-                  onTap: () {
-                    showInSnackBar("Facebook button pressed", Colors.blue,
-                        context, _scaffoldKey.currentContext!);
-                  },
-                  child: Container(
-                    padding: const EdgeInsets.all(15.0),
-                    decoration: const BoxDecoration(
-                      shape: BoxShape.circle,
-                      color: Colors.white,
-                    ),
-                    child: const Icon(
-                      FontAwesomeIcons.facebookF,
-                      color: Color(0xFF0084ff),
+              InkWell(
+                child: Container(
+                  width: deviceSize.width / 1.8,
+                  height: deviceSize.height / 16,
+                  margin: const EdgeInsets.only(top: 25),
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(20),
+                    color: const Color(0xFF0C1355),
+                  ),
+                  child: Center(
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                      children: <Widget>[
+                        Container(
+                          height: 40.0,
+                          width: 40.0,
+                          decoration: const BoxDecoration(
+                            image: DecorationImage(
+                                image: AssetImage('assets/google.png'),
+                                fit: BoxFit.cover),
+                            shape: BoxShape.circle,
+                          ),
+                        ),
+                        const Text(
+                          'Sign in with Google',
+                          style: TextStyle(
+                              fontSize: 16.0,
+                              fontWeight: FontWeight.bold,
+                              color: Colors.white),
+                        ),
+                      ],
                     ),
                   ),
                 ),
-              ),
-              Padding(
-                padding: const EdgeInsets.only(top: 10.0),
-                child: GestureDetector(
-                  onTap: () {
+                onTap: () async {
+                  Future<bool> networkStatus = c_class.checkInternet(context);
+                  final provider =
+                      Provider.of<GoogleSignInProvider>(context, listen: false);
+
+                  try {
+                    setState(() {
+                      _loading = true;
+                    });
+
                     showInSnackBar("Google button pressed", Colors.blue,
                         context, _scaffoldKey.currentContext!);
-                  },
-                  child: Container(
-                    padding: const EdgeInsets.all(15.0),
-                    decoration: const BoxDecoration(
-                      shape: BoxShape.circle,
-                      color: Colors.white,
-                    ),
-                    child: const Icon(
-                      FontAwesomeIcons.google,
-                      color: Color(0xFF0084ff),
-                    ),
-                  ),
-                ),
+
+                    final user = await provider.googleLogin();
+
+                    print('finally checking' +
+                        networkStatus.toString() +
+                        user.toString());
+
+                    if (await networkStatus == true && user != null) {
+                      showInSnackBar('Logged in Successfully', Colors.green,
+                          context, _scaffoldKey.currentContext!);
+                      Navigator.push(
+                        context,
+                        prefix0.MaterialPageRoute(
+                          builder: (context) => MainPage(),
+                        ),
+                      );
+                      setState(() {
+                        _loading = false;
+                      });
+                    }
+                    setState(() {
+                      _loading = false;
+                    });
+                  } catch (e) {
+                    setState(() {
+                      _loading = false;
+                    });
+                    print('here is the exception causing trouble $e');
+                    showInSnackBar('Unexpected error occurred while logging in',
+                        Colors.red, context, _scaffoldKey.currentContext!);
+                  }
+                },
               ),
             ],
           ),
@@ -710,8 +770,11 @@ class _LoginPageState extends State<LoginPage>
                         setState(() {
                           _loading = false;
                         });
-                        showInSnackBar('Unexpected error occurred', Colors.red,
-                            context, _scaffoldKey.currentContext!);
+                        showInSnackBar(
+                            'Unexpected error occurred while signing up',
+                            Colors.red,
+                            context,
+                            _scaffoldKey.currentContext!);
                         print(e);
                       }
                     }

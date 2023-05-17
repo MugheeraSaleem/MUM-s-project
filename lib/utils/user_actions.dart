@@ -1,8 +1,12 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:google_sign_in/google_sign_in.dart';
+import 'package:mum_s/utils/snack_bar.dart';
+import 'package:flutter/material.dart';
 
 final db = FirebaseFirestore.instance;
-FirebaseAuth auth = FirebaseAuth.instance;
+final FirebaseAuth auth = FirebaseAuth.instance;
+final GoogleSignIn googleSignIn = GoogleSignIn();
 
 // This method is used to create the user in firestore
 // Future<void> createUser(String uid, String username, String email) async {
@@ -43,15 +47,40 @@ Future<User> logIn(String email, String password) async {
 }
 
 // This function is used to get the loggedIn user.
-void getCurrentUser() async {
+getCurrentUser() async {
   try {
     final user = auth.currentUser;
     if (user != null) {
       final loggedInUser = user;
       print(loggedInUser.displayName);
       print(loggedInUser.email);
+      print(loggedInUser.photoURL);
+      return loggedInUser;
     }
   } catch (e) {
+    showInSnackBar('Unexpected error occurred', Colors.red, null, null);
     print(e);
+    return;
   }
 }
+
+// purana code, doesnt work
+// Future signInWithGoogle(SignInViewModel model) async {
+//   model.state = ViewState.Busy;
+//   GoogleSignInAccount googleSignInAccount = await googleSignIn.signIn();
+//   GoogleSignInAuthentication googleSignInAuthentication =
+//       await googleSignInAccount.authentication;
+//   AuthCredential credential = GoogleAuthProvider.getCredential(
+//     accessToken: googleSignInAuthentication.accessToken,
+//     idToken: googleSignInAuthentication.idToken,
+//   );
+//   UserCredential authResult = await auth.signInWithCredential(credential);
+//   User? user = authResult.user;
+//   assert(user?.isAnonymous);
+//   assert(await user.getIdToken() != null);
+//   User currentUser = await auth.currentUser;
+//   assert(user.uid == currentUser.uid);
+//   model.state = ViewState.Idle;
+//   print("User Name: ${user.displayName}");
+//   print("User Email ${user.email}");
+// }
