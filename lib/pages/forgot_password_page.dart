@@ -61,7 +61,7 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
       ),
       appBar: AppBar(
         automaticallyImplyLeading: false,
-        backgroundColor: Colors.pinkAccent,
+        backgroundColor: const Color(0xFF490648),
         title: const Center(
           child: Text(
             'Forgot Password Page',

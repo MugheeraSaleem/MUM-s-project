@@ -498,7 +498,7 @@ class _LoginPageState extends State<LoginPage>
                   margin: const EdgeInsets.only(top: 25),
                   decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(20),
-                    color: const Color(0xFF0C1355),
+                    color: const Color(0xFF490648),
                   ),
                   child: Center(
                     child: Row(
@@ -545,11 +545,8 @@ class _LoginPageState extends State<LoginPage>
                         user.toString());
 
                     if (await networkStatus == true && user != null) {
-                      showInSnackBar(
-                          'Logged in Successfully',
-                          Colors.tealAccent,
-                          context,
-                          _scaffoldKey.currentContext!);
+                      showInSnackBar('Logged in Successfully', Colors.green,
+                          context, _scaffoldKey.currentContext!);
                       Navigator.push(
                         context,
                         prefix0.MaterialPageRoute(
@@ -747,7 +744,7 @@ class _LoginPageState extends State<LoginPage>
                         if (await networkStatus == true && newUser != null) {
                           showInSnackBar(
                               'User Created Successfully',
-                              Colors.tealAccent,
+                              Colors.green,
                               context,
                               _scaffoldKey.currentContext!);
                           Navigator.push(

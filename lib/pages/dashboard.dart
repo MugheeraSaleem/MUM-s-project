@@ -82,7 +82,7 @@ class _MainPageState extends State<MainPage> {
         appBar: AppBar(
           automaticallyImplyLeading: false,
           elevation: 2.0,
-          backgroundColor: Colors.pinkAccent,
+          backgroundColor: const Color(0xFF490648),
           title: const Center(
             child: Text(
               'Dashboard',

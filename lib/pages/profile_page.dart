@@ -37,7 +37,7 @@ class MapScreenState extends State<ProfilePage>
     return Scaffold(
         key: _scaffoldKey,
         appBar: AppBar(
-          backgroundColor: Colors.pinkAccent,
+          backgroundColor: const Color(0xFF490648),
           title: const Text(
             'Background Information',
             style: TextStyle(
@@ -407,7 +407,7 @@ class MapScreenState extends State<ProfilePage>
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(20.0),
                   ),
-                  backgroundColor: Colors.tealAccent,
+                  backgroundColor: Colors.green,
                 ),
                 child: const Text(
                   "Save",
