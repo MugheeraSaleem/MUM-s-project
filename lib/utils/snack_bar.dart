@@ -21,7 +21,7 @@ void showInSnackBar(String value, Color color, var context, var key) {
             fontFamily: "WorkSansSemiBold"),
       ),
       backgroundColor: color,
-      duration: const Duration(seconds: 3),
+      duration: const Duration(seconds: 1),
     ),
   );
 }

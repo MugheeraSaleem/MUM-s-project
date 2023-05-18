@@ -29,9 +29,6 @@ class MyApp extends StatelessWidget {
   }
 }
 
-//todo: add authentication.
-//todo: add google login.
-//todo: add password reset functionality.
 //todo: add personal data entry to database and fetch it in app after login.
 //todo: add profile picture upload in profile.
 //todo: add youtube videos as a playlist.

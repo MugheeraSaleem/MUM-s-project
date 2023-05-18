@@ -20,6 +20,7 @@ import 'package:modal_progress_hud_nsn/modal_progress_hud_nsn.dart';
 import 'package:loading_animation_widget/loading_animation_widget.dart';
 import 'package:flutter/foundation.dart';
 import 'package:provider/provider.dart';
+import 'package:mum_s/pages/forgot_password_page.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({Key? key}) : super(key: key);
@@ -191,7 +192,9 @@ class _LoginPageState extends State<LoginPage>
       height: 50.0,
       decoration: const BoxDecoration(
         color: Color(0x552B2B2B),
-        borderRadius: BorderRadius.all(Radius.circular(25.0)),
+        borderRadius: BorderRadius.all(
+          Radius.circular(25.0),
+        ),
       ),
       child: CustomPaint(
         painter: TabIndicationPainter(pageController: _pageController),
@@ -251,7 +254,9 @@ class _LoginPageState extends State<LoginPage>
                 elevation: 2.0,
                 color: Colors.white,
                 shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(8.0),
+                  borderRadius: BorderRadius.circular(
+                    8.0,
+                  ),
                 ),
                 child: SizedBox(
                   width: 300.0,
@@ -328,7 +333,11 @@ class _LoginPageState extends State<LoginPage>
                 child: MaterialButton(
                   highlightColor: Colors.transparent,
                   splashColor: Theme.Colors.loginGradientEnd,
-                  //shape: RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(5.0))),
+                  shape: const RoundedRectangleBorder(
+                    borderRadius: BorderRadius.all(
+                      Radius.circular(5.0),
+                    ),
+                  ),
                   child: const Padding(
                     padding:
                         EdgeInsets.symmetric(vertical: 10.0, horizontal: 42.0),
@@ -342,8 +351,8 @@ class _LoginPageState extends State<LoginPage>
                   ),
                   onPressed: () async {
                     Future<bool> networkStatus = c_class.checkInternet(context);
-                    if (loginEmailController.text.isEmpty ||
-                        loginPasswordController.text.isEmpty) {
+                    if (loginEmailController.text.trim().isEmpty ||
+                        loginPasswordController.text.trim().isEmpty) {
                       showInSnackBar('Please provide all the information',
                           Colors.red, context, _scaffoldKey.currentContext!);
                     }
@@ -352,16 +361,19 @@ class _LoginPageState extends State<LoginPage>
                         _loading = true;
                       });
 
-                      User user = await logIn(loginEmailController.text,
-                          loginPasswordController.text);
+                      User user = await logIn(loginEmailController.text.trim(),
+                          loginPasswordController.text.trim());
 
                       print('finally checking' +
                           networkStatus.toString() +
                           user.toString());
 
                       if (await networkStatus == true && user != null) {
-                        showInSnackBar('Logged in Successfully', Colors.green,
-                            context, _scaffoldKey.currentContext!);
+                        showInSnackBar(
+                            'Logged in Successfully',
+                            Colors.tealAccent,
+                            context,
+                            _scaffoldKey.currentContext!);
                         Navigator.push(
                           context,
                           prefix0.MaterialPageRoute(
@@ -410,7 +422,14 @@ class _LoginPageState extends State<LoginPage>
           Padding(
             padding: const EdgeInsets.only(top: 10.0),
             child: TextButton(
-              onPressed: () {},
+              onPressed: () {
+                Navigator.push(
+                  context,
+                  prefix0.MaterialPageRoute(
+                    builder: (context) => const ForgotPasswordPage(),
+                  ),
+                );
+              },
               child: const Text(
                 "Forgot Password?",
                 style: TextStyle(
@@ -526,8 +545,11 @@ class _LoginPageState extends State<LoginPage>
                         user.toString());
 
                     if (await networkStatus == true && user != null) {
-                      showInSnackBar('Logged in Successfully', Colors.green,
-                          context, _scaffoldKey.currentContext!);
+                      showInSnackBar(
+                          'Logged in Successfully',
+                          Colors.tealAccent,
+                          context,
+                          _scaffoldKey.currentContext!);
                       Navigator.push(
                         context,
                         prefix0.MaterialPageRoute(
@@ -699,14 +721,14 @@ class _LoginPageState extends State<LoginPage>
                   ),
                   onPressed: () async {
                     c_class.checkInternet(context);
-                    if (signupNameController.text.isEmpty ||
-                        signupEmailController.text.isEmpty ||
-                        signupPasswordController.text.isEmpty ||
-                        signupConfirmPasswordController.text.isEmpty) {
+                    if (signupNameController.text.trim().isEmpty ||
+                        signupEmailController.text.trim().isEmpty ||
+                        signupPasswordController.text.trim().isEmpty ||
+                        signupConfirmPasswordController.text.trim().isEmpty) {
                       showInSnackBar('Please provide all the information',
                           Colors.red, context, _scaffoldKey.currentContext!);
-                    } else if (signupPasswordController.text !=
-                        signupConfirmPasswordController.text) {
+                    } else if (signupPasswordController.text.trim() !=
+                        signupConfirmPasswordController.text.trim()) {
                       showInSnackBar('Passwords must match', Colors.red,
                           context, _scaffoldKey.currentContext!);
                     } else {
@@ -716,19 +738,16 @@ class _LoginPageState extends State<LoginPage>
                         });
 
                         final newUser = await registerUser(
-                            signupEmailController.text,
-                            signupPasswordController.text,
-                            signupNameController.text);
-
-                        // print('////////////////// newuser with name is ' +
-                        //     newUser.toString());
+                            signupEmailController.text.trim(),
+                            signupPasswordController.text.trim(),
+                            signupNameController.text.trim());
 
                         Future<bool> networkStatus =
                             c_class.checkInternet(context);
                         if (await networkStatus == true && newUser != null) {
                           showInSnackBar(
                               'User Created Successfully',
-                              Colors.green,
+                              Colors.tealAccent,
                               context,
                               _scaffoldKey.currentContext!);
                           Navigator.push(
