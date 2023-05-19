@@ -1,6 +1,15 @@
 import 'package:mum_s/pages/dashboard.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:mum_s/pages/login_page.dart';
+import 'package:mum_s/utils/user_actions.dart';
+import 'package:draggable_fab/draggable_fab.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:mum_s/utils/snack_bar.dart';
+import 'package:mum_s/utils/connectivity.dart';
+import 'package:mum_s/style/theme.dart' as Theme;
+
+import 'package:flutter/material.dart' as prefix0;
 
 class ProfilePage extends StatefulWidget {
   @override
@@ -9,59 +18,83 @@ class ProfilePage extends StatefulWidget {
 
 class MapScreenState extends State<ProfilePage>
     with SingleTickerProviderStateMixin {
+  final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
   bool _status = true;
+  final _auth = FirebaseAuth.instance;
   final FocusNode myFocusNode = FocusNode();
+  late var loggedInUser;
+  ConnectivityClass c_class = ConnectivityClass();
 
   @override
   void initState() {
     // TODO: implement initState
+    loggedInUser = getCurrentUser();
     super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+        key: _scaffoldKey,
+        appBar: AppBar(
+          backgroundColor: const Color(0xFF490648),
+          title: const Text(
+            'Background Information',
+            style: TextStyle(
+                color: Colors.white,
+                fontWeight: FontWeight.w700,
+                fontSize: 26.0),
+          ),
+        ),
+        floatingActionButton: DraggableFab(
+          child: SizedBox(
+            height: 65,
+            width: 65,
+            child: FloatingActionButton(
+              backgroundColor: Colors.red,
+              child: const Icon(
+                size: 35,
+                Icons.logout,
+                color: Colors.white,
+              ),
+              onPressed: () {
+                c_class.checkInternet(context);
+                _auth.signOut();
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => LoginPage(),
+                  ),
+                );
+                showInSnackBar('Logged out Successfully', Colors.tealAccent,
+                    context, _scaffoldKey.currentContext!);
+              },
+            ),
+          ),
+        ),
         backgroundColor: Colors.white,
         body: Container(
-          color: Colors.white,
+          color: Colors.pinkAccent,
           child: ListView(
             children: <Widget>[
               Column(
                 children: <Widget>[
                   Container(
+                    decoration: const BoxDecoration(
+                      gradient: LinearGradient(
+                          colors: [
+                            Theme.Colors.loginGradientStart,
+                            Theme.Colors.loginGradientEnd
+                          ],
+                          begin: FractionalOffset(0.0, 0.0),
+                          end: FractionalOffset(1.0, 1.0),
+                          stops: [0.0, 1.0],
+                          tileMode: TileMode.clamp),
+                    ),
                     height: 250.0,
-                    color: Color(0xFFf7418c),
                     child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
                       children: <Widget>[
-                        Padding(
-                            padding:
-                                const EdgeInsets.only(left: 20.0, top: 20.0),
-                            child: Row(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: <Widget>[
-                                IconButton(
-                                    icon: const Icon(Icons.arrow_back,
-                                        color: Colors.black),
-                                    onPressed: () {
-                                      Navigator.pushReplacement(
-                                        context,
-                                        MaterialPageRoute(
-                                          builder: (context) => MainPage(),
-                                        ),
-                                      );
-                                    }),
-                                const Padding(
-                                  padding:
-                                      EdgeInsets.only(left: 20.0, top: 10.0),
-                                  child: Text('Background Information',
-                                      style: TextStyle(
-                                          fontWeight: FontWeight.bold,
-                                          fontSize: 20.0,
-                                          fontFamily: 'sans-serif-light',
-                                          color: Colors.black)),
-                                )
-                              ],
-                            )),
                         Padding(
                           padding: const EdgeInsets.only(top: 20.0),
                           child: Stack(fit: StackFit.loose, children: <Widget>[
@@ -82,12 +115,11 @@ class MapScreenState extends State<ProfilePage>
                                     )),
                               ],
                             ),
-                            Padding(
-                              padding: const EdgeInsets.only(
-                                  top: 90.0, right: 100.0),
+                            const Padding(
+                              padding: EdgeInsets.only(top: 90.0, right: 100.0),
                               child: Row(
                                 mainAxisAlignment: MainAxisAlignment.center,
-                                children: const <Widget>[
+                                children: <Widget>[
                                   CircleAvatar(
                                     backgroundColor: Colors.red,
                                     radius: 25.0,
@@ -120,10 +152,10 @@ class MapScreenState extends State<ProfilePage>
                                     MainAxisAlignment.spaceBetween,
                                 mainAxisSize: MainAxisSize.max,
                                 children: <Widget>[
-                                  Column(
+                                  const Column(
                                     mainAxisAlignment: MainAxisAlignment.start,
                                     mainAxisSize: MainAxisSize.min,
-                                    children: const <Widget>[
+                                    children: <Widget>[
                                       Text(
                                         'Personal Information',
                                         style: TextStyle(
@@ -141,8 +173,8 @@ class MapScreenState extends State<ProfilePage>
                                   )
                                 ],
                               )),
-                          Padding(
-                              padding: const EdgeInsets.only(
+                          const Padding(
+                              padding: EdgeInsets.only(
                                   left: 25.0, right: 25.0, top: 25.0),
                               child: Row(
                                 mainAxisSize: MainAxisSize.max,
@@ -150,7 +182,7 @@ class MapScreenState extends State<ProfilePage>
                                   Column(
                                     mainAxisAlignment: MainAxisAlignment.start,
                                     mainAxisSize: MainAxisSize.min,
-                                    children: const <Widget>[
+                                    children: <Widget>[
                                       Text(
                                         'Expected Delivery Date',
                                         style: TextStyle(
@@ -179,8 +211,8 @@ class MapScreenState extends State<ProfilePage>
                                   ),
                                 ],
                               )),
-                          Padding(
-                              padding: const EdgeInsets.only(
+                          const Padding(
+                              padding: EdgeInsets.only(
                                   left: 25.0, right: 25.0, top: 25.0),
                               child: Row(
                                 mainAxisSize: MainAxisSize.max,
@@ -188,7 +220,7 @@ class MapScreenState extends State<ProfilePage>
                                   Column(
                                     mainAxisAlignment: MainAxisAlignment.start,
                                     mainAxisSize: MainAxisSize.min,
-                                    children: const <Widget>[
+                                    children: <Widget>[
                                       Text(
                                         'Age',
                                         style: TextStyle(
@@ -214,8 +246,8 @@ class MapScreenState extends State<ProfilePage>
                                   ),
                                 ],
                               )),
-                          Padding(
-                              padding: const EdgeInsets.only(
+                          const Padding(
+                              padding: EdgeInsets.only(
                                   left: 25.0, right: 25.0, top: 25.0),
                               child: Row(
                                 mainAxisSize: MainAxisSize.max,
@@ -223,7 +255,7 @@ class MapScreenState extends State<ProfilePage>
                                   Column(
                                     mainAxisAlignment: MainAxisAlignment.start,
                                     mainAxisSize: MainAxisSize.min,
-                                    children: const <Widget>[
+                                    children: <Widget>[
                                       Text(
                                         'Mobile',
                                         style: TextStyle(
@@ -249,8 +281,8 @@ class MapScreenState extends State<ProfilePage>
                                   ),
                                 ],
                               )),
-                          Padding(
-                              padding: const EdgeInsets.only(
+                          const Padding(
+                              padding: EdgeInsets.only(
                                   left: 25.0, right: 25.0, top: 25.0),
                               child: Row(
                                 mainAxisSize: MainAxisSize.max,
@@ -258,7 +290,7 @@ class MapScreenState extends State<ProfilePage>
                                   Column(
                                     mainAxisAlignment: MainAxisAlignment.start,
                                     mainAxisSize: MainAxisSize.min,
-                                    children: const <Widget>[
+                                    children: <Widget>[
                                       Text(
                                         'Pincode',
                                         style: TextStyle(
@@ -284,8 +316,8 @@ class MapScreenState extends State<ProfilePage>
                                   ),
                                 ],
                               )),
-                          Padding(
-                              padding: const EdgeInsets.only(
+                          const Padding(
+                              padding: EdgeInsets.only(
                                   left: 25.0, right: 25.0, top: 25.0),
                               child: Row(
                                 mainAxisSize: MainAxisSize.max,
@@ -293,24 +325,20 @@ class MapScreenState extends State<ProfilePage>
                                 children: <Widget>[
                                   Expanded(
                                     flex: 2,
-                                    child: Container(
-                                      child: const Text(
-                                        'Height',
-                                        style: TextStyle(
-                                            fontSize: 16.0,
-                                            fontWeight: FontWeight.bold),
-                                      ),
+                                    child: Text(
+                                      'Height',
+                                      style: TextStyle(
+                                          fontSize: 16.0,
+                                          fontWeight: FontWeight.bold),
                                     ),
                                   ),
                                   Expanded(
                                     flex: 2,
-                                    child: Container(
-                                      child: const Text(
-                                        'Weight',
-                                        style: TextStyle(
-                                            fontSize: 16.0,
-                                            fontWeight: FontWeight.bold),
-                                      ),
+                                    child: Text(
+                                      'Weight',
+                                      style: TextStyle(
+                                          fontSize: 16.0,
+                                          fontWeight: FontWeight.bold),
                                     ),
                                   ),
                                 ],
@@ -374,24 +402,22 @@ class MapScreenState extends State<ProfilePage>
             flex: 2,
             child: Padding(
               padding: const EdgeInsets.only(right: 10.0),
-              child: Container(
-                child: ElevatedButton(
-                  style: ElevatedButton.styleFrom(
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(20.0),
-                    ),
-                    backgroundColor: Colors.green,
+              child: ElevatedButton(
+                style: ElevatedButton.styleFrom(
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(20.0),
                   ),
-                  child: const Text(
-                    "Save",
-                    style: TextStyle(
-                      color: Colors.white,
-                    ),
+                  backgroundColor: Colors.green,
+                ),
+                child: const Text(
+                  "Save",
+                  style: TextStyle(
+                    color: Colors.white,
                   ),
-                  onPressed: () => Navigator.pushReplacement(
-                    context,
-                    MaterialPageRoute(builder: (context) => MainPage()),
-                  ),
+                ),
+                onPressed: () => Navigator.pushReplacement(
+                  context,
+                  MaterialPageRoute(builder: (context) => MainPage()),
                 ),
               ),
             ),
@@ -400,27 +426,25 @@ class MapScreenState extends State<ProfilePage>
             flex: 2,
             child: Padding(
               padding: const EdgeInsets.only(left: 10.0),
-              child: Container(
-                child: ElevatedButton(
-                  style: ElevatedButton.styleFrom(
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(20.0),
-                    ),
-                    backgroundColor: Colors.red,
+              child: ElevatedButton(
+                style: ElevatedButton.styleFrom(
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(20.0),
                   ),
-                  child: const Text(
-                    "Cancel",
-                    style: TextStyle(
-                      color: Colors.white,
-                    ),
-                  ),
-                  onPressed: () {
-                    setState(() {
-                      _status = true;
-                      FocusScope.of(context).requestFocus(FocusNode());
-                    });
-                  },
+                  backgroundColor: Colors.red,
                 ),
+                child: const Text(
+                  "Cancel",
+                  style: TextStyle(
+                    color: Colors.white,
+                  ),
+                ),
+                onPressed: () {
+                  setState(() {
+                    _status = true;
+                    FocusScope.of(context).requestFocus(FocusNode());
+                  });
+                },
               ),
             ),
           ),

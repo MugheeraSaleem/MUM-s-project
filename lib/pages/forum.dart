@@ -97,7 +97,9 @@ class _ItemReviewsPageState extends State<ItemReviewsPage> {
                           const Padding(padding: EdgeInsets.only(right: 24.0)),
                           Expanded(
                             child: Theme(
-                              data: ThemeData(accentColor: Colors.green),
+                              data: ThemeData(
+                                  colorScheme: ColorScheme.fromSwatch()
+                                      .copyWith(secondary: Colors.green)),
                               child: const LinearProgressIndicator(
                                 value: 0.9,
                                 backgroundColor: Colors.black12,
@@ -132,7 +134,9 @@ class _ItemReviewsPageState extends State<ItemReviewsPage> {
                           const Padding(padding: EdgeInsets.only(right: 24.0)),
                           Expanded(
                             child: Theme(
-                              data: ThemeData(accentColor: Colors.lightGreen),
+                              data: ThemeData(
+                                  colorScheme: ColorScheme.fromSwatch()
+                                      .copyWith(secondary: Colors.lightGreen)),
                               child: const LinearProgressIndicator(
                                 value: 0.7,
                                 backgroundColor: Colors.black12,
@@ -167,7 +171,9 @@ class _ItemReviewsPageState extends State<ItemReviewsPage> {
                           const Padding(padding: EdgeInsets.only(right: 24.0)),
                           Expanded(
                             child: Theme(
-                              data: ThemeData(accentColor: Colors.yellow),
+                              data: ThemeData(
+                                  colorScheme: ColorScheme.fromSwatch()
+                                      .copyWith(secondary: Colors.yellow)),
                               child: const LinearProgressIndicator(
                                 value: 0.25,
                                 backgroundColor: Colors.black12,
