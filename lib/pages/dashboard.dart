@@ -29,12 +29,11 @@ class _MainPageState extends State<MainPage> {
 
   ConnectivityClass c_class = ConnectivityClass();
   final _auth = FirebaseAuth.instance;
-  late ScrollController dashboardController;
+  final ScrollController dashboardController = ScrollController();
   late var loggedInUser;
 
   @override
   void initState() {
-    dashboardController = ScrollController();
     c_class.getConnectivity(context);
     c_class.checkInternet(context);
     // This function is printing the users name and its email

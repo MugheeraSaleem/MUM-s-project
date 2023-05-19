@@ -65,8 +65,8 @@ class _LoginPageState extends State<LoginPage>
   TextEditingController signupConfirmPasswordController =
       TextEditingController();
 
-  late PageController _pageController;
-  late ScrollController loginPageController;
+  final PageController _pageController = PageController();
+  late ScrollController loginPageController = ScrollController();
 
   Color left = Colors.black;
   Color right = Colors.white;
@@ -169,7 +169,6 @@ class _LoginPageState extends State<LoginPage>
       DeviceOrientation.portraitDown,
     ]);
 
-    _pageController = PageController();
     c_class.checkInternet(context);
   }
 
