@@ -8,6 +8,7 @@ import 'package:draggable_fab/draggable_fab.dart';
 import 'package:mum_s/utils/connectivity.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:mum_s/utils/snack_bar.dart';
+import 'package:mum_s/utils/user_actions.dart';
 
 class ForgotPasswordPage extends StatefulWidget {
   const ForgotPasswordPage({Key? key}) : super(key: key);
@@ -192,14 +193,11 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
                           _scaffoldKey.currentContext!,
                         );
                       } else {
-                        await _auth.sendPasswordResetEmail(
-                          email: forgotPasswordEmailController.text.trim(),
+                        resetPassword(
+                          forgotPasswordEmailController.text.trim(),
+                          _scaffoldKey.currentContext,
+                          context,
                         );
-                        showInSnackBar(
-                            'Check your valid email for password rest email',
-                            Colors.tealAccent,
-                            context,
-                            _scaffoldKey);
                       }
                     }
                   },

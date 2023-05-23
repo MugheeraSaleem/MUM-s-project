@@ -21,6 +21,7 @@ import 'package:loading_animation_widget/loading_animation_widget.dart';
 import 'package:flutter/foundation.dart';
 import 'package:provider/provider.dart';
 import 'package:mum_s/pages/forgot_password_page.dart';
+import 'package:google_sign_in/google_sign_in.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({Key? key}) : super(key: key);
@@ -66,7 +67,7 @@ class _LoginPageState extends State<LoginPage>
       TextEditingController();
 
   final PageController _pageController = PageController();
-  late ScrollController loginPageController = ScrollController();
+  final ScrollController loginPageController = ScrollController();
 
   Color left = Colors.black;
   Color right = Colors.white;
@@ -162,7 +163,6 @@ class _LoginPageState extends State<LoginPage>
   @override
   void initState() {
     super.initState();
-    loginPageController = ScrollController();
     c_class.getConnectivity(context);
     SystemChrome.setPreferredOrientations([
       DeviceOrientation.portraitUp,
@@ -363,16 +363,13 @@ class _LoginPageState extends State<LoginPage>
                       User user = await logIn(loginEmailController.text.trim(),
                           loginPasswordController.text.trim());
 
-                      print('finally checking' +
+                      print('finally checking from login button' +
                           networkStatus.toString() +
                           user.toString());
 
                       if (await networkStatus == true && user != null) {
-                        showInSnackBar(
-                            'Logged in Successfully',
-                            Colors.tealAccent,
-                            context,
-                            _scaffoldKey.currentContext!);
+                        showInSnackBar('Logged in Successfully', Colors.green,
+                            context, _scaffoldKey.currentContext!);
                         Navigator.push(
                           context,
                           prefix0.MaterialPageRoute(

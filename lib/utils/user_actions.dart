@@ -58,29 +58,66 @@ getCurrentUser() async {
       return loggedInUser;
     }
   } catch (e) {
-    showInSnackBar('Unexpected error occurred', Colors.red, null, null);
+    showInSnackBar(
+      'Unexpected error occurred',
+      Colors.red,
+      null,
+      null,
+    );
     print(e);
-    return;
   }
 }
 
-// purana code, doesnt work
-// Future signInWithGoogle(SignInViewModel model) async {
-//   model.state = ViewState.Busy;
-//   GoogleSignInAccount googleSignInAccount = await googleSignIn.signIn();
-//   GoogleSignInAuthentication googleSignInAuthentication =
-//       await googleSignInAccount.authentication;
-//   AuthCredential credential = GoogleAuthProvider.getCredential(
-//     accessToken: googleSignInAuthentication.accessToken,
-//     idToken: googleSignInAuthentication.idToken,
-//   );
-//   UserCredential authResult = await auth.signInWithCredential(credential);
-//   User? user = authResult.user;
-//   assert(user?.isAnonymous);
-//   assert(await user.getIdToken() != null);
-//   User currentUser = await auth.currentUser;
-//   assert(user.uid == currentUser.uid);
-//   model.state = ViewState.Idle;
-//   print("User Name: ${user.displayName}");
-//   print("User Email ${user.email}");
-// }
+ImageProvider<Object> getProfileImage() {
+  final user = auth.currentUser;
+  if (user != null) {
+    final loggedInUser = user;
+    var photoURL = loggedInUser.photoURL;
+    if (photoURL != null) {
+      return NetworkImage(photoURL);
+    } else {
+      return const ExactAssetImage(
+        'assets/images/as.png',
+      );
+    }
+  } else {
+    return const ExactAssetImage(
+      'assets/images/as.png',
+    );
+  }
+}
+
+// This function is used to send the reset password emails to the user
+Future? resetPassword(email, scaffoldKey, context) async {
+  try {
+    await auth.sendPasswordResetEmail(
+      email: email,
+    );
+    showInSnackBar('Check your valid email to reset password', Colors.green,
+        scaffoldKey, context);
+  } on FirebaseAuthException catch (e) {
+    if (e.code == 'invalid-email') {
+      showInSnackBar(
+        'Please provide a valid email',
+        Colors.red,
+        context,
+        scaffoldKey,
+      );
+    } else if (e.code == 'user-not-found') {
+      showInSnackBar(
+        'User not found',
+        Colors.red,
+        context,
+        scaffoldKey,
+      );
+    } else {
+      print(e);
+      showInSnackBar(
+        e.toString(),
+        Colors.red,
+        context,
+        scaffoldKey,
+      );
+    }
+  }
+}

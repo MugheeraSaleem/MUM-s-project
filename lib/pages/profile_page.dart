@@ -8,8 +8,9 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:mum_s/utils/snack_bar.dart';
 import 'package:mum_s/utils/connectivity.dart';
 import 'package:mum_s/style/theme.dart' as Theme;
-
-import 'package:flutter/material.dart' as prefix0;
+import 'package:image_picker/image_picker.dart';
+import 'package:firebase_storage/firebase_storage.dart';
+import 'dart:io';
 
 class ProfilePage extends StatefulWidget {
   @override
@@ -22,14 +23,36 @@ class MapScreenState extends State<ProfilePage>
   bool _status = true;
   final _auth = FirebaseAuth.instance;
   final FocusNode myFocusNode = FocusNode();
-  late var loggedInUser;
+  final loggedInUser = getCurrentUser();
   ConnectivityClass c_class = ConnectivityClass();
+  String profilePicLink = "";
 
   @override
   void initState() {
-    // TODO: implement initState
-    loggedInUser = getCurrentUser();
     super.initState();
+  }
+
+  void pickUploadProfilePic() async {
+    final image = await ImagePicker().pickImage(
+      source: ImageSource.gallery,
+      maxHeight: 512,
+      maxWidth: 512,
+      imageQuality: 80,
+    );
+
+    Reference ref = FirebaseStorage.instance.ref().child("profilepic.jpg");
+
+    await ref.putFile(File(image!.path));
+
+    ref.getDownloadURL().then((value) async {
+      final user = auth.currentUser;
+      if (user != null) {
+        final loggedInUser = user;
+        loggedInUser.updatePhotoURL(value);
+
+        setState(() {});
+      }
+    });
   }
 
   @override
@@ -66,8 +89,8 @@ class MapScreenState extends State<ProfilePage>
                     builder: (context) => LoginPage(),
                   ),
                 );
-                showInSnackBar('Logged out Successfully', Colors.tealAccent,
-                    context, _scaffoldKey.currentContext!);
+                showInSnackBar('Logged out Successfully', Colors.green, context,
+                    _scaffoldKey.currentContext!);
               },
             ),
           ),
@@ -103,30 +126,35 @@ class MapScreenState extends State<ProfilePage>
                               mainAxisAlignment: MainAxisAlignment.center,
                               children: <Widget>[
                                 Container(
-                                    width: 140.0,
-                                    height: 140.0,
-                                    decoration: const BoxDecoration(
+                                    width: 160.0,
+                                    height: 160.0,
+                                    decoration: BoxDecoration(
                                       shape: BoxShape.circle,
                                       image: DecorationImage(
-                                        image: ExactAssetImage(
-                                            'assets/images/as.png'),
+                                        image: getProfileImage(),
                                         fit: BoxFit.cover,
                                       ),
                                     )),
                               ],
                             ),
-                            const Padding(
-                              padding: EdgeInsets.only(top: 90.0, right: 100.0),
+                            Padding(
+                              padding: const EdgeInsets.only(
+                                  top: 110.0, right: 100.0),
                               child: Row(
                                 mainAxisAlignment: MainAxisAlignment.center,
                                 children: <Widget>[
-                                  CircleAvatar(
-                                    backgroundColor: Colors.red,
-                                    radius: 25.0,
-                                    child: Icon(
-                                      Icons.camera_alt,
-                                      color: Colors.white,
+                                  GestureDetector(
+                                    child: const CircleAvatar(
+                                      backgroundColor: Colors.red,
+                                      radius: 25.0,
+                                      child: Icon(
+                                        Icons.add_a_photo_outlined,
+                                        color: Colors.white,
+                                      ),
                                     ),
+                                    onTap: () {
+                                      pickUploadProfilePic();
+                                    },
                                   )
                                 ],
                               ),
