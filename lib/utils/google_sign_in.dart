@@ -19,8 +19,6 @@ class GoogleSignInProvider extends ChangeNotifier {
     final firebase_user =
         await FirebaseAuth.instance.signInWithCredential(credential);
     notifyListeners();
-    // print('google user is hereeeeeeeeeeeee' + googleUser.toString());
-    // print('firebase user is hereeeeeeeeeeeee' + firebase_user.toString());
-    return googleUser;
+    return firebase_user;
   }
 }

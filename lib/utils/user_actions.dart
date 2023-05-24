@@ -11,7 +11,10 @@ final GoogleSignIn googleSignIn = GoogleSignIn();
 
 //This function registers a new user with auth and then calls the function createUser
 Future<User?> registerUser(
-    String email, String password, String username) async {
+  String email,
+  String password,
+  String username,
+) async {
   //Create the user with auth
   UserCredential newUser = await auth.createUserWithEmailAndPassword(
       email: email, password: password);
@@ -20,23 +23,16 @@ Future<User?> registerUser(
   // User? currentUser = await auth.currentUser;
   await user?.updateDisplayName(username);
 
-  // Create the user in firestore with the user data
-  // createUser(newUser.user!.uid, username, email);
+  //TODO: Create the user in firestore-collection as well with the user data while the user signs-up
   return user;
 }
 
 //Function for logging in a user
-Future<User> logIn(String email, String password) async {
+Future<User?> logIn(String email, String password) async {
   //sign in the user with auth and get the user auth info back
   User? user =
       (await auth.signInWithEmailAndPassword(email: email, password: password))
           .user;
-
-  //Get the user doc with the uid of the user that just logged in
-  DocumentReference ref = db.collection("users").doc(user!.uid);
-  DocumentSnapshot snapshot = await ref.get();
-
-  //Print the user's name or do whatever you want to do with it
   return user;
 }
 
@@ -62,25 +58,6 @@ User getCurrentUser() {
     return loggedInUser;
   }
   return loggedInUser;
-}
-
-getProfileImage() {
-  final user = auth.currentUser;
-  if (user != null) {
-    final loggedInUser = user;
-    var photoURL = loggedInUser.photoURL;
-    if (photoURL != null) {
-      return NetworkImage(photoURL);
-    } else {
-      return const AssetImage(
-        'assets/images/as.png',
-      );
-    }
-  } else {
-    return const AssetImage(
-      'assets/images/as.png',
-    );
-  }
 }
 
 // This function is used to send the reset password emails to the user

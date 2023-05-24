@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:mum_s/pages/login_page.dart';
-import 'package:mum_s/utils/connectivity.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:mum_s/utils/google_sign_in.dart';
 import 'package:provider/provider.dart';
@@ -23,7 +22,7 @@ class MyApp extends StatelessWidget {
         theme: ThemeData(
           primarySwatch: Colors.blue,
         ),
-        home: LoginPage(),
+        home: const LoginPage(),
       ),
     );
   }

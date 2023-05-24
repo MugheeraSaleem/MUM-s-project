@@ -1,6 +1,5 @@
 import 'package:mum_s/pages/map.dart';
 import 'package:mum_s/pages/music.dart';
-import 'package:mum_s/pages/reminders.dart';
 import 'package:mum_s/pages/profile_page.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';

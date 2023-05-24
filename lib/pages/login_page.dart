@@ -36,22 +36,22 @@ class _LoginPageState extends State<LoginPage>
 
   final FocusNode myFocusNodeEmailLogin = FocusNode();
   final FocusNode myFocusNodePasswordLogin = FocusNode();
-
   final FocusNode myFocusNodePassword = FocusNode();
   final FocusNode myFocusNodeEmail = FocusNode();
   final FocusNode myFocusNodeName = FocusNode();
 
-  final db = FirebaseFirestore.instance;
-  final auth = FirebaseAuth.instance;
-
-  late String email;
-  late String password;
-  late String username;
-
   TextEditingController loginEmailController = TextEditingController();
   TextEditingController loginPasswordController = TextEditingController();
+  TextEditingController signupEmailController = TextEditingController();
+  TextEditingController signupNameController = TextEditingController();
+  TextEditingController signupPasswordController = TextEditingController();
+  TextEditingController signupConfirmPasswordController =
+      TextEditingController();
 
   // get hold of the value of the controller using my_controller.text
+
+  final PageController _pageController = PageController();
+  final ScrollController loginPageController = ScrollController();
 
   ConnectivityClass c_class = ConnectivityClass();
 
@@ -59,15 +59,6 @@ class _LoginPageState extends State<LoginPage>
   bool _obscureTextSignup = true;
   bool _obscureTextSignupConfirm = true;
   bool _loading = false;
-
-  TextEditingController signupEmailController = TextEditingController();
-  TextEditingController signupNameController = TextEditingController();
-  TextEditingController signupPasswordController = TextEditingController();
-  TextEditingController signupConfirmPasswordController =
-      TextEditingController();
-
-  final PageController _pageController = PageController();
-  final ScrollController loginPageController = ScrollController();
 
   Color left = Colors.black;
   Color right = Colors.white;
@@ -361,7 +352,7 @@ class _LoginPageState extends State<LoginPage>
                           _loading = true;
                         });
 
-                        User user = await logIn(
+                        User? user = await logIn(
                             loginEmailController.text.trim(),
                             loginPasswordController.text.trim());
 

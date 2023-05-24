@@ -7,7 +7,6 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart'
 import 'package:mum_s/style/theme.dart' as Theme;
 import 'package:draggable_fab/draggable_fab.dart';
 import 'package:mum_s/utils/connectivity.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:mum_s/utils/snack_bar.dart';
 import 'package:mum_s/utils/user_actions.dart';
 
@@ -23,7 +22,6 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
   final FocusNode myFocusNodeEmailForgotPassword = FocusNode();
   final forgotPasswordEmailController = TextEditingController();
   ConnectivityClass c_class = ConnectivityClass();
-  final _auth = FirebaseAuth.instance;
 
   @override
   void initState() {
