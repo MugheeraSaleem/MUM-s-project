@@ -11,6 +11,10 @@ import 'package:mum_s/style/theme.dart' as Theme;
 import 'package:image_picker/image_picker.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'dart:io';
+import 'package:cached_network_image/cached_network_image.dart';
+import 'package:mum_s/style/constants.dart';
+
+late User loggedInUser;
 
 class ProfilePage extends StatefulWidget {
   @override
@@ -23,12 +27,11 @@ class MapScreenState extends State<ProfilePage>
   bool _status = true;
   final _auth = FirebaseAuth.instance;
   final FocusNode myFocusNode = FocusNode();
-  final loggedInUser = getCurrentUser();
   ConnectivityClass c_class = ConnectivityClass();
-  String profilePicLink = "";
 
   @override
   void initState() {
+    loggedInUser = getCurrentUser();
     super.initState();
   }
 
@@ -40,19 +43,26 @@ class MapScreenState extends State<ProfilePage>
       imageQuality: 80,
     );
 
-    Reference ref = FirebaseStorage.instance.ref().child("profilepic.jpg");
+    if (image == null) return;
 
-    await ref.putFile(File(image!.path));
+    Reference referenceRoot = FirebaseStorage.instance.ref();
+    Reference referenceDirImages = referenceRoot.child('Images');
 
-    ref.getDownloadURL().then((value) async {
-      final user = auth.currentUser;
-      if (user != null) {
-        final loggedInUser = user;
-        loggedInUser.updatePhotoURL(value);
+    Reference referenceImageToUpload = referenceDirImages
+        .child("${loggedInUser?.displayName.toString()}_profile_pic.jpg");
 
-        setState(() {});
-      }
-    });
+    try {
+      await referenceImageToUpload.putFile(File(image.path));
+
+      referenceImageToUpload.getDownloadURL().then(
+        (value) {
+          loggedInUser.updatePhotoURL(value);
+          setState(() {});
+        },
+      );
+    } catch (e) {
+      print(e);
+    }
   }
 
   @override
@@ -60,7 +70,7 @@ class MapScreenState extends State<ProfilePage>
     return Scaffold(
         key: _scaffoldKey,
         appBar: AppBar(
-          backgroundColor: const Color(0xFF490648),
+          backgroundColor: kAppBarColor,
           title: const Text(
             'Background Information',
             style: TextStyle(
@@ -74,7 +84,7 @@ class MapScreenState extends State<ProfilePage>
             height: 65,
             width: 65,
             child: FloatingActionButton(
-              backgroundColor: Colors.red,
+              backgroundColor: kFloatingActionButtonColor,
               child: const Icon(
                 size: 35,
                 Icons.logout,
@@ -86,7 +96,7 @@ class MapScreenState extends State<ProfilePage>
                 Navigator.push(
                   context,
                   MaterialPageRoute(
-                    builder: (context) => LoginPage(),
+                    builder: (context) => const LoginPage(),
                   ),
                 );
                 showInSnackBar('Logged out Successfully', Colors.green, context,
@@ -97,7 +107,6 @@ class MapScreenState extends State<ProfilePage>
         ),
         backgroundColor: Colors.white,
         body: Container(
-          color: Colors.pinkAccent,
           child: ListView(
             children: <Widget>[
               Column(
@@ -125,16 +134,38 @@ class MapScreenState extends State<ProfilePage>
                               crossAxisAlignment: CrossAxisAlignment.center,
                               mainAxisAlignment: MainAxisAlignment.center,
                               children: <Widget>[
-                                Container(
+                                CachedNetworkImage(
+                                  imageUrl: loggedInUser.photoURL.toString(),
+                                  imageBuilder: (context, imageProvider) =>
+                                      Container(
                                     width: 160.0,
                                     height: 160.0,
                                     decoration: BoxDecoration(
                                       shape: BoxShape.circle,
                                       image: DecorationImage(
-                                        image: getProfileImage(),
-                                        fit: BoxFit.cover,
-                                      ),
-                                    )),
+                                          image: imageProvider,
+                                          fit: BoxFit.cover),
+                                    ),
+                                  ),
+                                  placeholder: (context, url) => CircleAvatar(
+                                    backgroundColor: Colors.white,
+                                    radius: 80,
+                                    child: CircularProgressIndicator(
+                                      strokeWidth: 10,
+                                      color: kFloatingActionButtonColor,
+                                    ),
+                                  ),
+                                  errorWidget: (context, url, error) =>
+                                      CircleAvatar(
+                                    backgroundColor: Colors.white,
+                                    radius: 80,
+                                    child: Icon(
+                                      Icons.person_rounded,
+                                      size: 160,
+                                      color: kFloatingActionButtonColor,
+                                    ),
+                                  ),
+                                )
                               ],
                             ),
                             Padding(
@@ -144,12 +175,14 @@ class MapScreenState extends State<ProfilePage>
                                 mainAxisAlignment: MainAxisAlignment.center,
                                 children: <Widget>[
                                   GestureDetector(
-                                    child: const CircleAvatar(
-                                      backgroundColor: Colors.red,
+                                    child: CircleAvatar(
+                                      backgroundColor:
+                                          kFloatingActionButtonColor,
                                       radius: 25.0,
-                                      child: Icon(
+                                      child: const Icon(
                                         Icons.add_a_photo_outlined,
                                         color: Colors.white,
+                                        size: 25,
                                       ),
                                     ),
                                     onTap: () {
@@ -261,7 +294,10 @@ class MapScreenState extends State<ProfilePage>
                               )),
                           Padding(
                               padding: const EdgeInsets.only(
-                                  left: 25.0, right: 25.0, top: 2.0),
+                                left: 25.0,
+                                right: 25.0,
+                                top: 2.0,
+                              ),
                               child: Row(
                                 mainAxisSize: MainAxisSize.max,
                                 children: <Widget>[
@@ -320,7 +356,7 @@ class MapScreenState extends State<ProfilePage>
                                     mainAxisSize: MainAxisSize.min,
                                     children: <Widget>[
                                       Text(
-                                        'Pincode',
+                                        'City',
                                         style: TextStyle(
                                             fontSize: 16.0,
                                             fontWeight: FontWeight.bold),
@@ -338,7 +374,7 @@ class MapScreenState extends State<ProfilePage>
                                   Flexible(
                                     child: TextField(
                                       decoration: const InputDecoration(
-                                          hintText: "Enter your pincode"),
+                                          hintText: "Enter your city name"),
                                       enabled: !_status,
                                     ),
                                   ),
@@ -483,13 +519,13 @@ class MapScreenState extends State<ProfilePage>
 
   Widget _getEditIcon() {
     return GestureDetector(
-      child: const CircleAvatar(
-        backgroundColor: Colors.red,
-        radius: 14.0,
-        child: Icon(
+      child: CircleAvatar(
+        backgroundColor: kFloatingActionButtonColor,
+        radius: 25.0,
+        child: const Icon(
           Icons.edit,
           color: Colors.white,
-          size: 16.0,
+          size: 25.0,
         ),
       ),
       onTap: () {

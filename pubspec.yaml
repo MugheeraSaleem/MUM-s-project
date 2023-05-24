@@ -38,6 +38,7 @@ dev_dependencies:
   provider: ^6.0.5
   draggable_fab: ^0.1.4
   email_validator: ^2.1.16
+  cached_network_image: ^3.2.3
 
 
 flutter:

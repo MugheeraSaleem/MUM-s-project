@@ -1,19 +1,13 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:google_sign_in/google_sign_in.dart';
+import 'package:mum_s/pages/dashboard.dart';
 import 'package:mum_s/utils/snack_bar.dart';
 import 'package:flutter/material.dart';
 
 final db = FirebaseFirestore.instance;
 final FirebaseAuth auth = FirebaseAuth.instance;
 final GoogleSignIn googleSignIn = GoogleSignIn();
-
-// This method is used to create the user in firestore
-// Future<void> createUser(String uid, String username, String email) async {
-//   //Creates the user doc named whatever the user uid is in te collection "users"
-//   //and adds the user data
-//   await db.collection("users").doc(uid).set({'Name': username, 'Email': email});
-// }
 
 //This function registers a new user with auth and then calls the function createUser
 Future<User?> registerUser(
@@ -47,7 +41,7 @@ Future<User> logIn(String email, String password) async {
 }
 
 // This function is used to get the loggedIn user.
-getCurrentUser() async {
+User getCurrentUser() {
   try {
     final user = auth.currentUser;
     if (user != null) {
@@ -65,10 +59,12 @@ getCurrentUser() async {
       null,
     );
     print(e);
+    return loggedInUser;
   }
+  return loggedInUser;
 }
 
-ImageProvider<Object> getProfileImage() {
+getProfileImage() {
   final user = auth.currentUser;
   if (user != null) {
     final loggedInUser = user;
@@ -76,12 +72,12 @@ ImageProvider<Object> getProfileImage() {
     if (photoURL != null) {
       return NetworkImage(photoURL);
     } else {
-      return const ExactAssetImage(
+      return const AssetImage(
         'assets/images/as.png',
       );
     }
   } else {
-    return const ExactAssetImage(
+    return const AssetImage(
       'assets/images/as.png',
     );
   }

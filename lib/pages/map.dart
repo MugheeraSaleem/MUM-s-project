@@ -3,6 +3,7 @@ import 'package:mum_s/pages/dashboard.dart';
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:mum_s/style/constants.dart';
 
 class MapPage extends StatefulWidget {
   @override
@@ -22,6 +23,7 @@ class MapPageState extends State<MapPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        backgroundColor: kAppBarColor,
         leading: IconButton(
             icon: const Icon(FontAwesomeIcons.arrowLeft),
             onPressed: () => Navigator.of(context)

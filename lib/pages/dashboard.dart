@@ -5,12 +5,15 @@ import 'package:mum_s/pages/profile_page.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:mum_s/pages/login_page.dart';
+import 'package:mum_s/style/constants.dart';
 import 'package:mum_s/utils/connectivity.dart';
 import 'package:mum_s/utils/user_actions.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:mum_s/utils/snack_bar.dart';
 import 'package:draggable_fab/draggable_fab.dart';
 import 'package:mum_s/style/theme.dart' as Theme;
+
+late User loggedInUser;
 
 class MainPage extends StatefulWidget {
   @override
@@ -30,7 +33,6 @@ class _MainPageState extends State<MainPage> {
   ConnectivityClass c_class = ConnectivityClass();
   final _auth = FirebaseAuth.instance;
   final ScrollController dashboardController = ScrollController();
-  late var loggedInUser;
 
   @override
   void initState() {
@@ -56,7 +58,7 @@ class _MainPageState extends State<MainPage> {
             height: 65,
             width: 65,
             child: FloatingActionButton(
-              backgroundColor: Colors.red,
+              backgroundColor: kFloatingActionButtonColor,
               child: const Icon(
                 size: 35,
                 Icons.logout,
@@ -81,8 +83,9 @@ class _MainPageState extends State<MainPage> {
         appBar: AppBar(
           automaticallyImplyLeading: false,
           elevation: 2.0,
-          backgroundColor: const Color(0xFF490648),
-          title: const Center(
+          backgroundColor: kAppBarColor,
+          title: const Padding(
+            padding: EdgeInsets.only(left: 90.0),
             child: Text(
               'Dashboard',
               style: TextStyle(
@@ -98,14 +101,17 @@ class _MainPageState extends State<MainPage> {
                 mainAxisAlignment: MainAxisAlignment.center,
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: <Widget>[
-                  ElevatedButton(
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: Colors.white,
-                    ),
-                    child: const Text(
-                      "My Profile",
-                      style: TextStyle(
-                        color: Colors.pink,
+                  MaterialButton(
+                    child: Material(
+                      color: Colors.white,
+                      shape: const CircleBorder(),
+                      child: Padding(
+                        padding: const EdgeInsets.all(5.0),
+                        child: Icon(
+                          Icons.person,
+                          color: kFloatingActionButtonColor,
+                          size: 45.0,
+                        ),
                       ),
                     ),
                     onPressed: () {
@@ -203,13 +209,14 @@ class _MainPageState extends State<MainPage> {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: <Widget>[
                           Material(
-                              color: Colors.teal,
-                              shape: CircleBorder(),
-                              child: Padding(
-                                padding: EdgeInsets.all(16.0),
-                                child: Icon(Icons.fastfood,
-                                    color: Colors.white, size: 30.0),
-                              )),
+                            color: Colors.teal,
+                            shape: CircleBorder(),
+                            child: Padding(
+                              padding: EdgeInsets.all(16.0),
+                              child: Icon(Icons.fastfood,
+                                  color: Colors.white, size: 30.0),
+                            ),
+                          ),
                           Padding(padding: EdgeInsets.only(bottom: 16.0)),
                           Text('Diet Chart',
                               style: TextStyle(
