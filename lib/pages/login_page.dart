@@ -21,7 +21,7 @@ import 'package:loading_animation_widget/loading_animation_widget.dart';
 import 'package:flutter/foundation.dart';
 import 'package:provider/provider.dart';
 import 'package:mum_s/pages/forgot_password_page.dart';
-import 'package:google_sign_in/google_sign_in.dart';
+import 'package:mum_s/style/constants.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({Key? key}) : super(key: key);
@@ -267,7 +267,6 @@ class _LoginPageState extends State<LoginPage>
                           simple_icon: const Icon(
                             FontAwesomeIcons.envelope,
                             color: Colors.black,
-                            size: 22.0,
                           ),
                           trailing_icon: null,
                           displaytext: "Email Address",
@@ -295,7 +294,6 @@ class _LoginPageState extends State<LoginPage>
                         ),
                         simple_icon: const Icon(
                           FontAwesomeIcons.lock,
-                          size: 22.0,
                           color: Colors.black,
                         ),
                       )
@@ -303,114 +301,124 @@ class _LoginPageState extends State<LoginPage>
                   ),
                 ),
               ),
-              Container(
-                margin: const EdgeInsets.only(top: 170.0),
-                decoration: const BoxDecoration(
-                  borderRadius: BorderRadius.all(Radius.circular(5.0)),
-                  boxShadow: <BoxShadow>[
-                    BoxShadow(
-                      color: Theme.Colors.loginGradientStart,
-                      offset: Offset(1.0, 6.0),
-                      blurRadius: 20.0,
-                    ),
-                    BoxShadow(
-                      color: Theme.Colors.loginGradientEnd,
-                      offset: Offset(1.0, 6.0),
-                      blurRadius: 20.0,
-                    ),
-                  ],
-                  gradient: LinearGradient(
-                      colors: [
-                        Theme.Colors.loginGradientEnd,
-                        Theme.Colors.loginGradientStart
-                      ],
-                      begin: FractionalOffset(0.2, 0.2),
-                      end: FractionalOffset(1.0, 1.0),
-                      stops: [0.0, 1.0],
-                      tileMode: TileMode.clamp),
-                ),
-                child: MaterialButton(
-                  highlightColor: Colors.transparent,
-                  splashColor: Theme.Colors.loginGradientEnd,
-                  shape: const RoundedRectangleBorder(
-                    borderRadius: BorderRadius.all(
-                      Radius.circular(5.0),
-                    ),
+              Hero(
+                tag: 'yo',
+                child: Container(
+                  margin: const EdgeInsets.only(top: 170.0),
+                  decoration: const BoxDecoration(
+                    borderRadius: BorderRadius.all(Radius.circular(5.0)),
+                    boxShadow: <BoxShadow>[
+                      BoxShadow(
+                        color: Theme.Colors.loginGradientStart,
+                        offset: Offset(1.0, 6.0),
+                        blurRadius: 20.0,
+                      ),
+                      BoxShadow(
+                        color: Theme.Colors.loginGradientEnd,
+                        offset: Offset(1.0, 6.0),
+                        blurRadius: 20.0,
+                      ),
+                    ],
+                    gradient: LinearGradient(
+                        colors: [
+                          Theme.Colors.loginGradientEnd,
+                          Theme.Colors.loginGradientStart
+                        ],
+                        begin: FractionalOffset(0.2, 0.2),
+                        end: FractionalOffset(1.0, 1.0),
+                        stops: [0.0, 1.0],
+                        tileMode: TileMode.clamp),
                   ),
-                  child: const Padding(
-                    padding:
-                        EdgeInsets.symmetric(vertical: 10.0, horizontal: 42.0),
-                    child: Text(
-                      "LOGIN",
-                      style: TextStyle(
-                          color: Colors.white,
-                          fontSize: 25.0,
-                          fontFamily: "WorkSansBold"),
+                  child: MaterialButton(
+                    highlightColor: Colors.transparent,
+                    splashColor: Theme.Colors.loginGradientEnd,
+                    shape: const RoundedRectangleBorder(
+                      borderRadius: BorderRadius.all(
+                        Radius.circular(5.0),
+                      ),
                     ),
-                  ),
-                  onPressed: () async {
-                    Future<bool> networkStatus = c_class.checkInternet(context);
-                    if (loginEmailController.text.trim().isEmpty ||
-                        loginPasswordController.text.trim().isEmpty) {
-                      showInSnackBar('Please provide all the information',
-                          Colors.red, context, _scaffoldKey.currentContext!);
-                    }
-                    try {
-                      setState(() {
-                        _loading = true;
-                      });
+                    child: const Padding(
+                      padding: EdgeInsets.symmetric(
+                          vertical: 10.0, horizontal: 42.0),
+                      child: Text(
+                        "LOGIN",
+                        style: TextStyle(
+                            color: Colors.white,
+                            fontSize: 25.0,
+                            fontFamily: "WorkSansBold"),
+                      ),
+                    ),
+                    onPressed: () async {
+                      Future<bool> networkStatus =
+                          c_class.checkInternet(context);
+                      if (loginEmailController.text.trim().isEmpty ||
+                          loginPasswordController.text.trim().isEmpty) {
+                        showInSnackBar('Please provide all the information',
+                            Colors.red, context, _scaffoldKey.currentContext!);
+                      }
+                      try {
+                        setState(() {
+                          _loading = true;
+                        });
 
-                      User user = await logIn(loginEmailController.text.trim(),
-                          loginPasswordController.text.trim());
+                        User user = await logIn(
+                            loginEmailController.text.trim(),
+                            loginPasswordController.text.trim());
 
-                      print('finally checking from login button' +
-                          networkStatus.toString() +
-                          user.toString());
-
-                      if (await networkStatus == true && user != null) {
-                        showInSnackBar('Logged in Successfully', Colors.green,
-                            context, _scaffoldKey.currentContext!);
-                        Navigator.push(
-                          context,
-                          prefix0.MaterialPageRoute(
-                            builder: (context) => MainPage(),
-                          ),
-                        );
+                        if (await networkStatus == true && user != null) {
+                          showInSnackBar('Logged in Successfully', Colors.green,
+                              context, _scaffoldKey.currentContext!);
+                          Navigator.push(
+                            context,
+                            prefix0.MaterialPageRoute(
+                              builder: (context) => MainPage(),
+                            ),
+                          );
+                          setState(() {
+                            _loading = false;
+                          });
+                        }
                         setState(() {
                           _loading = false;
                         });
+                      } on FirebaseAuthException catch (e) {
+                        setState(() {
+                          _loading = false;
+                        });
+                        if (e.code == 'invalid-email') {
+                          showInSnackBar(
+                              'Please provide a valid email',
+                              Colors.red,
+                              context,
+                              _scaffoldKey.currentContext!);
+                        }
+                        if (e.code == 'wrong-password') {
+                          showInSnackBar(
+                              'Please type the correct Password',
+                              Colors.red,
+                              context,
+                              _scaffoldKey.currentContext!);
+                        }
+                        if (e.code == 'user-not-found') {
+                          showInSnackBar(
+                              'Please signup before logging in',
+                              Colors.red,
+                              context,
+                              _scaffoldKey.currentContext!);
+                        }
+                      } catch (e) {
+                        setState(() {
+                          _loading = false;
+                        });
+                        showInSnackBar(
+                            'Unexpected error occurred while logging in',
+                            Colors.red,
+                            context,
+                            _scaffoldKey.currentContext!);
+                        print('here is the exception causing trouble $e');
                       }
-                      setState(() {
-                        _loading = false;
-                      });
-                    } on FirebaseAuthException catch (e) {
-                      setState(() {
-                        _loading = false;
-                      });
-                      if (e.code == 'invalid-email') {
-                        showInSnackBar('Please provide a valid email',
-                            Colors.red, context, _scaffoldKey.currentContext!);
-                      }
-                      if (e.code == 'wrong-password') {
-                        showInSnackBar('Please type the correct Password',
-                            Colors.red, context, _scaffoldKey.currentContext!);
-                      }
-                      if (e.code == 'user-not-found') {
-                        showInSnackBar('Please signup before logging in',
-                            Colors.red, context, _scaffoldKey.currentContext!);
-                      }
-                    } catch (e) {
-                      setState(() {
-                        _loading = false;
-                      });
-                      showInSnackBar(
-                          'Unexpected error occurred while logging in',
-                          Colors.red,
-                          context,
-                          _scaffoldKey.currentContext!);
-                      print('here is the exception causing trouble $e');
-                    }
-                  },
+                    },
+                  ),
                 ),
               )
             ],
@@ -494,7 +502,7 @@ class _LoginPageState extends State<LoginPage>
                   margin: const EdgeInsets.only(top: 25),
                   decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(20),
-                    color: const Color(0xFF490648),
+                    color: kAppBarColor,
                   ),
                   child: Center(
                     child: Row(
@@ -513,7 +521,7 @@ class _LoginPageState extends State<LoginPage>
                         const Text(
                           'Sign in with Google',
                           style: TextStyle(
-                              fontSize: 16.0,
+                              fontSize: 18.0,
                               fontWeight: FontWeight.bold,
                               color: Colors.white),
                         ),
@@ -535,10 +543,6 @@ class _LoginPageState extends State<LoginPage>
                         context, _scaffoldKey.currentContext!);
 
                     final user = await provider.googleLogin();
-
-                    print('finally checking' +
-                        networkStatus.toString() +
-                        user.toString());
 
                     if (await networkStatus == true && user != null) {
                       showInSnackBar('Logged in Successfully', Colors.green,
