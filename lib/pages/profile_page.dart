@@ -16,6 +16,13 @@ import 'package:mum_s/style/constants.dart';
 
 late User loggedInUser;
 
+late var deliveryDate;
+late var age;
+late var mobileNumer;
+late var city;
+late var height;
+late var weight;
+
 class ProfilePage extends StatefulWidget {
   @override
   MapScreenState createState() => MapScreenState();
@@ -30,16 +37,16 @@ class MapScreenState extends State<ProfilePage>
   final FocusNode myFocusNodeDeliveryDate = FocusNode();
   final FocusNode myFocusNodeAge = FocusNode();
   final FocusNode myFocusNodeMobileNumber = FocusNode();
-  final FocusNode myFocusNodeCity = FocusNode();
+  // final FocusNode myFocusNodeCity = FocusNode();
   final FocusNode myFocusNodeHeight = FocusNode();
   final FocusNode myFocusNodeWeight = FocusNode();
 
-  TextEditingController DeliveryDateController = TextEditingController();
-  TextEditingController AgeController = TextEditingController();
-  TextEditingController MobileNumberController = TextEditingController();
-  TextEditingController CityController = TextEditingController();
-  TextEditingController HeightController = TextEditingController();
-  TextEditingController WeightController = TextEditingController();
+  TextEditingController deliveryDateController = TextEditingController();
+  TextEditingController ageController = TextEditingController();
+  TextEditingController mobileNumberController = TextEditingController();
+  // TextEditingController cityController = TextEditingController();
+  TextEditingController heightController = TextEditingController();
+  TextEditingController weightController = TextEditingController();
 
   ConnectivityClass c_class = ConnectivityClass();
 
@@ -54,16 +61,17 @@ class MapScreenState extends State<ProfilePage>
     // Clean up the controller when the Widget is disposed
     myFocusNodeDeliveryDate.dispose();
     myFocusNodeAge.dispose();
-    myFocusNodeCity.dispose();
+    // myFocusNodeCity.dispose();
     myFocusNodeHeight.dispose();
     myFocusNodeWeight.dispose();
 
-    DeliveryDateController.dispose();
-    AgeController.dispose();
-    CityController.dispose();
-    HeightController.dispose();
-    WeightController.dispose();
-    MobileNumberController.dispose();
+    deliveryDateController.dispose();
+    ageController.dispose();
+    // cityController.dispose();
+    heightController.dispose();
+    weightController.dispose();
+    mobileNumberController.dispose();
+
     super.dispose();
   }
 
@@ -292,7 +300,7 @@ class MapScreenState extends State<ProfilePage>
                               children: <Widget>[
                                 Flexible(
                                   child: TextField(
-                                    controller: DeliveryDateController,
+                                    controller: deliveryDateController,
                                     focusNode: myFocusNodeDeliveryDate,
                                     decoration: const InputDecoration(
                                       hintText:
@@ -334,7 +342,7 @@ class MapScreenState extends State<ProfilePage>
                               Flexible(
                                 child: TextField(
                                   focusNode: myFocusNodeAge,
-                                  controller: AgeController,
+                                  controller: ageController,
                                   decoration: const InputDecoration(
                                       hintText: "Enter your age in years."),
                                   enabled: !_status,
@@ -343,82 +351,82 @@ class MapScreenState extends State<ProfilePage>
                             ],
                           ),
                         ),
-                        const Padding(
-                          padding: EdgeInsets.only(
-                              left: 25.0, right: 25.0, top: 25.0),
-                          child: Row(
-                            mainAxisSize: MainAxisSize.max,
-                            children: <Widget>[
-                              Column(
-                                mainAxisAlignment: MainAxisAlignment.start,
-                                mainAxisSize: MainAxisSize.min,
-                                children: <Widget>[
-                                  Text(
-                                    'Mobile',
-                                    style: TextStyle(
-                                        fontSize: 16.0,
-                                        fontWeight: FontWeight.bold),
-                                  ),
-                                ],
-                              ),
-                            ],
-                          ),
-                        ),
-                        Padding(
-                            padding: const EdgeInsets.only(
-                                left: 25.0, right: 25.0, top: 2.0),
-                            child: Row(
-                              mainAxisSize: MainAxisSize.max,
-                              children: <Widget>[
-                                Flexible(
-                                  child: TextField(
-                                    controller: MobileNumberController,
-                                    focusNode: myFocusNodeMobileNumber,
-                                    decoration: const InputDecoration(
-                                        hintText: "Enter Mobile Number"),
-                                    enabled: !_status,
-                                  ),
-                                ),
-                              ],
-                            )),
-                        const Padding(
-                          padding: EdgeInsets.only(
-                              left: 25.0, right: 25.0, top: 25.0),
-                          child: Row(
-                            mainAxisSize: MainAxisSize.max,
-                            children: <Widget>[
-                              Column(
-                                mainAxisAlignment: MainAxisAlignment.start,
-                                mainAxisSize: MainAxisSize.min,
-                                children: <Widget>[
-                                  Text(
-                                    'City',
-                                    style: TextStyle(
-                                        fontSize: 16.0,
-                                        fontWeight: FontWeight.bold),
-                                  ),
-                                ],
-                              ),
-                            ],
-                          ),
-                        ),
-                        Padding(
-                            padding: const EdgeInsets.only(
-                                left: 25.0, right: 25.0, top: 2.0),
-                            child: Row(
-                              mainAxisSize: MainAxisSize.max,
-                              children: <Widget>[
-                                Flexible(
-                                  child: TextField(
-                                    focusNode: myFocusNodeCity,
-                                    controller: CityController,
-                                    decoration: const InputDecoration(
-                                        hintText: "Enter your city name"),
-                                    enabled: !_status,
-                                  ),
-                                ),
-                              ],
-                            )),
+                        // const Padding(
+                        //   padding: EdgeInsets.only(
+                        //       left: 25.0, right: 25.0, top: 25.0),
+                        //   child: Row(
+                        //     mainAxisSize: MainAxisSize.max,
+                        //     children: <Widget>[
+                        //       Column(
+                        //         mainAxisAlignment: MainAxisAlignment.start,
+                        //         mainAxisSize: MainAxisSize.min,
+                        //         children: <Widget>[
+                        //           Text(
+                        //             'Mobile',
+                        //             style: TextStyle(
+                        //                 fontSize: 16.0,
+                        //                 fontWeight: FontWeight.bold),
+                        //           ),
+                        //         ],
+                        //       ),
+                        //     ],
+                        //   ),
+                        // ),
+                        // Padding(
+                        //     padding: const EdgeInsets.only(
+                        //         left: 25.0, right: 25.0, top: 2.0),
+                        //     child: Row(
+                        //       mainAxisSize: MainAxisSize.max,
+                        //       children: <Widget>[
+                        //         Flexible(
+                        //           child: TextField(
+                        //             controller: mobileNumberController,
+                        //             focusNode: myFocusNodeMobileNumber,
+                        //             decoration: const InputDecoration(
+                        //                 hintText: "Enter Mobile Number"),
+                        //             enabled: !_status,
+                        //           ),
+                        //         ),
+                        //       ],
+                        //     )),
+                        // // const Padding(
+                        //   padding: EdgeInsets.only(
+                        //       left: 25.0, right: 25.0, top: 25.0),
+                        //   child: Row(
+                        //     mainAxisSize: MainAxisSize.max,
+                        //     children: <Widget>[
+                        //       Column(
+                        //         mainAxisAlignment: MainAxisAlignment.start,
+                        //         mainAxisSize: MainAxisSize.min,
+                        //         children: <Widget>[
+                        //           Text(
+                        //             'City',
+                        //             style: TextStyle(
+                        //                 fontSize: 16.0,
+                        //                 fontWeight: FontWeight.bold),
+                        //           ),
+                        //         ],
+                        //       ),
+                        //     ],
+                        //   ),
+                        // ),
+                        // Padding(
+                        //     padding: const EdgeInsets.only(
+                        //         left: 25.0, right: 25.0, top: 2.0),
+                        //     child: Row(
+                        //       mainAxisSize: MainAxisSize.max,
+                        //       children: <Widget>[
+                        //         Flexible(
+                        //           child: TextField(
+                        //             focusNode: myFocusNodeCity,
+                        //             controller: cityController,
+                        //             decoration: const InputDecoration(
+                        //                 hintText: "Enter your city name"),
+                        //             enabled: !_status,
+                        //           ),
+                        //         ),
+                        //       ],
+                        //     )),
                         const Padding(
                             padding: EdgeInsets.only(
                                 left: 25.0, right: 25.0, top: 25.0),
@@ -459,7 +467,7 @@ class MapScreenState extends State<ProfilePage>
                                   padding: const EdgeInsets.only(right: 10.0),
                                   child: TextField(
                                     focusNode: myFocusNodeHeight,
-                                    controller: HeightController,
+                                    controller: heightController,
                                     decoration: const InputDecoration(
                                         hintText: "in cms"),
                                     enabled: !_status,
@@ -470,7 +478,7 @@ class MapScreenState extends State<ProfilePage>
                                 flex: 2,
                                 child: TextField(
                                   focusNode: myFocusNodeWeight,
-                                  controller: WeightController,
+                                  controller: weightController,
                                   decoration:
                                       const InputDecoration(hintText: "in kgs"),
                                   enabled: !_status,
@@ -517,12 +525,25 @@ class MapScreenState extends State<ProfilePage>
                   ),
                 ),
                 onPressed: () {
-                  Navigator.pushReplacement(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => MainPage(),
-                    ),
-                  );
+                  if (deliveryDateController.text.trim().isEmpty ||
+                      ageController.text.trim().isEmpty ||
+                      mobileNumberController.text.trim().isEmpty ||
+                      // cityController.text.trim().isEmpty ||
+                      heightController.text.trim().isEmpty ||
+                      weightController.text.trim().isEmpty) {
+                    showInSnackBar(
+                        'Please provide all the information for best experience.',
+                        Colors.red,
+                        context,
+                        _scaffoldKey.currentContext);
+                  } else {
+                    Navigator.pushReplacement(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => MainPage(),
+                      ),
+                    );
+                  }
                 },
               ),
             ),
