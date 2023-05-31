@@ -11,8 +11,10 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:mum_s/utils/snack_bar.dart';
 import 'package:draggable_fab/draggable_fab.dart';
 import 'package:mum_s/style/theme.dart' as Theme;
+import 'package:cloud_firestore/cloud_firestore.dart';
 
-late User loggedInUser;
+late User? loggedInUser;
+var usersCollection = FirebaseFirestore.instance.collection('Users');
 
 class MainPage extends StatefulWidget {
   @override
@@ -84,7 +86,7 @@ class _MainPageState extends State<MainPage> {
           elevation: 2.0,
           backgroundColor: kAppBarColor,
           title: const Padding(
-            padding: EdgeInsets.only(left: 90.0),
+            padding: EdgeInsets.only(left: 105.0),
             child: Text(
               'Dashboard',
               style: TextStyle(
@@ -109,7 +111,7 @@ class _MainPageState extends State<MainPage> {
                         child: Icon(
                           Icons.person,
                           color: kFloatingActionButtonColor,
-                          size: 45.0,
+                          size: 35.0,
                         ),
                       ),
                     ),

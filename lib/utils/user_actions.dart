@@ -1,13 +1,13 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:google_sign_in/google_sign_in.dart';
 import 'package:mum_s/pages/dashboard.dart';
 import 'package:mum_s/utils/snack_bar.dart';
 import 'package:flutter/material.dart';
 
-final db = FirebaseFirestore.instance;
+var usersCollection = FirebaseFirestore.instance.collection('Users');
+
+final firestore = FirebaseFirestore.instance;
 final FirebaseAuth auth = FirebaseAuth.instance;
-final GoogleSignIn googleSignIn = GoogleSignIn();
 
 //This function registers a new user with auth and then calls the function createUser
 Future<User?> registerUser(
@@ -20,10 +20,10 @@ Future<User?> registerUser(
       email: email, password: password);
 
   User? user = newUser.user;
-  // User? currentUser = await auth.currentUser;
-  await user?.updateDisplayName(username);
 
-  //TODO: Create the user in firestore-collection as well with the user data while the user signs-up
+  // User? currentUser = await auth.currentUser;
+  user?.updateDisplayName(username);
+
   return user;
 }
 
@@ -37,7 +37,7 @@ Future<User?> logIn(String email, String password) async {
 }
 
 // This function is used to get the loggedIn user.
-User getCurrentUser() {
+User? getCurrentUser() {
   try {
     final user = auth.currentUser;
     if (user != null) {

@@ -8,7 +8,7 @@ class TabIndicationPainter extends CustomPainter {
   final double radius;
   final double dy;
 
-  final PageController pageController;
+  late PageController pageController;
 
   TabIndicationPainter(
       {this.dxTarget = 125.0,

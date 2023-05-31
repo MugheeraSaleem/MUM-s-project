@@ -13,7 +13,6 @@ class ConnectivityClass {
   late StreamSubscription subscription;
   bool isDeviceConnected = false;
   bool isAlertSet = false;
-  bool _tryAgain = false;
 
   // method for checking stream of internet.
   void getConnectivity(context) {

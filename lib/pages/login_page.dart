@@ -23,6 +23,9 @@ import 'package:provider/provider.dart';
 import 'package:mum_s/pages/forgot_password_page.dart';
 import 'package:mum_s/style/constants.dart';
 
+var usersCollection = FirebaseFirestore.instance.collection('Users');
+late User? user;
+
 class LoginPage extends StatefulWidget {
   const LoginPage({Key? key}) : super(key: key);
 
@@ -352,8 +355,7 @@ class _LoginPageState extends State<LoginPage>
                           _loading = true;
                         });
 
-                        User? user = await logIn(
-                            loginEmailController.text.trim(),
+                        user = await logIn(loginEmailController.text.trim(),
                             loginPasswordController.text.trim());
 
                         if (await networkStatus == true && user != null) {
@@ -533,11 +535,27 @@ class _LoginPageState extends State<LoginPage>
                     showInSnackBar("Google button pressed", Colors.blue,
                         context, _scaffoldKey.currentContext!);
 
-                    final user = await provider.googleLogin();
+                    UserCredential googleUser = await provider.googleLogin();
+
+                    user = googleUser.user;
 
                     if (await networkStatus == true && user != null) {
+                      Map<String, dynamic> userData = {
+                        'uid': user!.uid,
+                        'displayName': user!.displayName,
+                        'photoURL': user!.photoURL,
+                        'email': user!.email,
+                      };
+
+                      await usersCollection
+                          .doc(user!.displayName)
+                          .set(userData, SetOptions(merge: true))
+                          .then((_) => print('Success'))
+                          .catchError((error) => print('Failed: $error'));
+
                       showInSnackBar('Logged in Successfully', Colors.green,
                           context, _scaffoldKey.currentContext!);
+
                       Navigator.push(
                         context,
                         prefix0.MaterialPageRoute(
@@ -725,7 +743,7 @@ class _LoginPageState extends State<LoginPage>
                           _loading = true;
                         });
 
-                        final newUser = await registerUser(
+                        final User? newUser = await registerUser(
                             signupEmailController.text.trim(),
                             signupPasswordController.text.trim(),
                             signupNameController.text.trim());
@@ -733,6 +751,19 @@ class _LoginPageState extends State<LoginPage>
                         Future<bool> networkStatus =
                             c_class.checkInternet(context);
                         if (await networkStatus == true && newUser != null) {
+                          Map<String, dynamic> userData = {
+                            'uid': newUser.uid,
+                            'displayName': signupNameController.text.trim(),
+                            'photoURL': newUser.photoURL,
+                            'email': newUser.email,
+                          };
+
+                          await usersCollection
+                              .doc(signupNameController.text.trim())
+                              .set(userData)
+                              .then((_) => print('Success'))
+                              .catchError((error) => print('Failed: $error'));
+
                           showInSnackBar(
                               'User Created Successfully',
                               Colors.green,

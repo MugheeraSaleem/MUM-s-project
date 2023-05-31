@@ -13,15 +13,15 @@ import 'package:firebase_storage/firebase_storage.dart';
 import 'dart:io';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:mum_s/style/constants.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 
-late User loggedInUser;
+var usersCollection = FirebaseFirestore.instance.collection('Users');
 
-late var deliveryDate;
-late var age;
-late var mobileNumer;
-late var city;
-late var height;
-late var weight;
+late User? loggedInUser;
+late int? age;
+late int? height;
+late int? weight;
+late var photoURL;
 
 class ProfilePage extends StatefulWidget {
   @override
@@ -36,14 +36,14 @@ class MapScreenState extends State<ProfilePage>
 
   final FocusNode myFocusNodeDeliveryDate = FocusNode();
   final FocusNode myFocusNodeAge = FocusNode();
-  final FocusNode myFocusNodeMobileNumber = FocusNode();
+  // final FocusNode myFocusNodeMobileNumber = FocusNode();
   // final FocusNode myFocusNodeCity = FocusNode();
   final FocusNode myFocusNodeHeight = FocusNode();
   final FocusNode myFocusNodeWeight = FocusNode();
 
   TextEditingController deliveryDateController = TextEditingController();
   TextEditingController ageController = TextEditingController();
-  TextEditingController mobileNumberController = TextEditingController();
+  // TextEditingController mobileNumberController = TextEditingController();
   // TextEditingController cityController = TextEditingController();
   TextEditingController heightController = TextEditingController();
   TextEditingController weightController = TextEditingController();
@@ -70,7 +70,7 @@ class MapScreenState extends State<ProfilePage>
     // cityController.dispose();
     heightController.dispose();
     weightController.dispose();
-    mobileNumberController.dispose();
+    // mobileNumberController.dispose();
 
     super.dispose();
   }
@@ -89,23 +89,31 @@ class MapScreenState extends State<ProfilePage>
     Reference referenceDirImages = referenceRoot.child('Images');
 
     Reference referenceImageToUpload = referenceDirImages
-        .child("${loggedInUser.displayName.toString()}_profile_pic.jpg");
+        .child("${loggedInUser!.uid.toString()}_profile_pic.jpg");
 
     try {
       await referenceImageToUpload.putFile(File(image.path));
 
       referenceImageToUpload.getDownloadURL().then(
-        (value) {
-          loggedInUser.updatePhotoURL(value);
-          setState(() {});
+        (value) async {
+          await loggedInUser!.updatePhotoURL(value);
         },
       );
+
+      Map<String, dynamic> userData = {
+        'photoURL': await referenceImageToUpload.getDownloadURL(),
+      };
+
+      await usersCollection
+          .doc(loggedInUser!.displayName)
+          .set(userData, SetOptions(merge: true))
+          .then((_) => print('photoURL change = Success'))
+          .catchError((error) => print('Failed: $error'));
+      setState(() {});
     } catch (e) {
       print(e);
     }
   }
-
-  updatePicture() {}
 
   @override
   Widget build(BuildContext context) {
@@ -146,173 +154,191 @@ class MapScreenState extends State<ProfilePage>
         ),
       ),
       backgroundColor: Colors.white,
-      body: Container(
-        child: ListView(
-          children: <Widget>[
-            Column(
-              children: <Widget>[
-                Container(
-                  decoration: const BoxDecoration(
-                    gradient: LinearGradient(
-                        colors: [
-                          Theme.Colors.loginGradientStart,
-                          Theme.Colors.loginGradientEnd
-                        ],
-                        begin: FractionalOffset(0.0, 0.0),
-                        end: FractionalOffset(1.0, 1.0),
-                        stops: [0.0, 1.0],
-                        tileMode: TileMode.clamp),
-                  ),
-                  height: 250.0,
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: <Widget>[
-                      Padding(
-                        padding: const EdgeInsets.only(top: 20.0),
-                        child: Stack(fit: StackFit.loose, children: <Widget>[
-                          Row(
-                            crossAxisAlignment: CrossAxisAlignment.center,
+      body: ListView(
+        children: <Widget>[
+          Column(
+            children: <Widget>[
+              Container(
+                decoration: const BoxDecoration(
+                  gradient: LinearGradient(
+                      colors: [
+                        Theme.Colors.loginGradientStart,
+                        Theme.Colors.loginGradientEnd
+                      ],
+                      begin: FractionalOffset(0.0, 0.0),
+                      end: FractionalOffset(1.0, 1.0),
+                      stops: [0.0, 1.0],
+                      tileMode: TileMode.clamp),
+                ),
+                height: 250.0,
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: <Widget>[
+                    Padding(
+                      padding: const EdgeInsets.only(top: 20.0),
+                      child: Stack(fit: StackFit.loose, children: <Widget>[
+                        Row(
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: <Widget>[
+                            StreamBuilder<Object>(
+                                stream: usersCollection
+                                    .doc(loggedInUser!.displayName)
+                                    .snapshots(),
+                                builder: (context, AsyncSnapshot snapshot) {
+                                  if (snapshot.hasData) {
+                                    photoURL = snapshot.data['photoURL'];
+                                    if (photoURL != null) {
+                                      return CachedNetworkImage(
+                                        imageUrl: photoURL,
+                                        imageBuilder:
+                                            (context, imageProvider) =>
+                                                Container(
+                                          width: 160.0,
+                                          height: 160.0,
+                                          decoration: BoxDecoration(
+                                            shape: BoxShape.circle,
+                                            image: DecorationImage(
+                                                image: imageProvider,
+                                                fit: BoxFit.cover),
+                                          ),
+                                        ),
+                                        placeholder: (context, url) =>
+                                            CircleAvatar(
+                                          backgroundColor: Colors.white,
+                                          radius: 80,
+                                          child: CircularProgressIndicator(
+                                            strokeWidth: 10,
+                                            color: kFloatingActionButtonColor,
+                                          ),
+                                        ),
+                                        errorWidget: (context, url, error) =>
+                                            CircleAvatar(
+                                          backgroundColor: Colors.white,
+                                          radius: 80,
+                                          child: Icon(
+                                            Icons.person_rounded,
+                                            size: 160,
+                                            color: kFloatingActionButtonColor,
+                                          ),
+                                        ),
+                                      );
+                                    } else {
+                                      return CachedNetworkImage(
+                                        imageUrl:
+                                            loggedInUser!.photoURL.toString(),
+                                        imageBuilder:
+                                            (context, imageProvider) =>
+                                                Container(
+                                          width: 160.0,
+                                          height: 160.0,
+                                          decoration: BoxDecoration(
+                                            shape: BoxShape.circle,
+                                            image: DecorationImage(
+                                                image: imageProvider,
+                                                fit: BoxFit.cover),
+                                          ),
+                                        ),
+                                        placeholder: (context, url) =>
+                                            CircleAvatar(
+                                          backgroundColor: Colors.white,
+                                          radius: 80,
+                                          child: CircularProgressIndicator(
+                                            strokeWidth: 10,
+                                            color: kFloatingActionButtonColor,
+                                          ),
+                                        ),
+                                        errorWidget: (context, url, error) =>
+                                            CircleAvatar(
+                                          backgroundColor: Colors.white,
+                                          radius: 80,
+                                          child: Icon(
+                                            Icons.person_rounded,
+                                            size: 160,
+                                            color: kFloatingActionButtonColor,
+                                          ),
+                                        ),
+                                      );
+                                    }
+                                  } else {
+                                    return CircleAvatar(
+                                      backgroundColor: Colors.white,
+                                      radius: 80,
+                                      child: Icon(
+                                        Icons.person_rounded,
+                                        size: 160,
+                                        color: kFloatingActionButtonColor,
+                                      ),
+                                    );
+                                  }
+                                })
+                          ],
+                        ),
+                        Padding(
+                          padding:
+                              const EdgeInsets.only(top: 110.0, right: 100.0),
+                          child: Row(
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: <Widget>[
-                              CachedNetworkImage(
-                                imageUrl: loggedInUser.photoURL.toString(),
-                                imageBuilder: (context, imageProvider) =>
-                                    Container(
-                                  width: 160.0,
-                                  height: 160.0,
-                                  decoration: BoxDecoration(
-                                    shape: BoxShape.circle,
-                                    image: DecorationImage(
-                                        image: imageProvider,
-                                        fit: BoxFit.cover),
+                              GestureDetector(
+                                child: CircleAvatar(
+                                  backgroundColor: kFloatingActionButtonColor,
+                                  radius: 25.0,
+                                  child: const Icon(
+                                    Icons.add_a_photo_outlined,
+                                    color: Colors.white,
+                                    size: 25,
                                   ),
                                 ),
-                                placeholder: (context, url) => CircleAvatar(
-                                  backgroundColor: Colors.white,
-                                  radius: 80,
-                                  child: CircularProgressIndicator(
-                                    strokeWidth: 10,
-                                    color: kFloatingActionButtonColor,
-                                  ),
-                                ),
-                                errorWidget: (context, url, error) =>
-                                    CircleAvatar(
-                                  backgroundColor: Colors.white,
-                                  radius: 80,
-                                  child: Icon(
-                                    Icons.person_rounded,
-                                    size: 160,
-                                    color: kFloatingActionButtonColor,
-                                  ),
-                                ),
+                                onTap: () {
+                                  pickUploadProfilePic();
+                                },
                               )
                             ],
                           ),
-                          Padding(
-                            padding:
-                                const EdgeInsets.only(top: 110.0, right: 100.0),
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: <Widget>[
-                                GestureDetector(
-                                  child: CircleAvatar(
-                                    backgroundColor: kFloatingActionButtonColor,
-                                    radius: 25.0,
-                                    child: const Icon(
-                                      Icons.add_a_photo_outlined,
-                                      color: Colors.white,
-                                      size: 25,
-                                    ),
-                                  ),
-                                  onTap: () {
-                                    pickUploadProfilePic();
-                                  },
-                                )
-                              ],
-                            ),
-                          ),
-                        ]),
-                      )
-                    ],
-                  ),
+                        ),
+                      ]),
+                    )
+                  ],
                 ),
-                Container(
-                  color: const Color(0xffFFFFFF),
-                  child: Padding(
-                    padding: const EdgeInsets.only(bottom: 25.0),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      mainAxisAlignment: MainAxisAlignment.start,
-                      children: <Widget>[
-                        Padding(
-                            padding: const EdgeInsets.only(
-                                left: 25.0, right: 25.0, top: 25.0),
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              mainAxisSize: MainAxisSize.max,
-                              children: <Widget>[
-                                const Column(
-                                  mainAxisAlignment: MainAxisAlignment.start,
-                                  mainAxisSize: MainAxisSize.min,
-                                  children: <Widget>[
-                                    Text(
-                                      'Personal Information',
-                                      style: TextStyle(
-                                          fontSize: 18.0,
-                                          fontWeight: FontWeight.bold),
-                                    ),
-                                  ],
-                                ),
-                                Column(
-                                  mainAxisAlignment: MainAxisAlignment.end,
-                                  mainAxisSize: MainAxisSize.min,
-                                  children: <Widget>[
-                                    _status ? _getEditIcon() : Container(),
-                                  ],
-                                )
-                              ],
-                            )),
-                        const Padding(
-                            padding: EdgeInsets.only(
-                                left: 25.0, right: 25.0, top: 25.0),
-                            child: Row(
-                              mainAxisSize: MainAxisSize.max,
-                              children: <Widget>[
-                                Column(
-                                  mainAxisAlignment: MainAxisAlignment.start,
-                                  mainAxisSize: MainAxisSize.min,
-                                  children: <Widget>[
-                                    Text(
-                                      'Expected Delivery Date',
-                                      style: TextStyle(
-                                          fontSize: 16.0,
-                                          fontWeight: FontWeight.bold),
-                                    ),
-                                  ],
-                                ),
-                              ],
-                            )),
-                        Padding(
-                            padding: const EdgeInsets.only(
-                                left: 25.0, right: 25.0, top: 2.0),
-                            child: Row(
-                              mainAxisSize: MainAxisSize.max,
-                              children: <Widget>[
-                                Flexible(
-                                  child: TextField(
-                                    controller: deliveryDateController,
-                                    focusNode: myFocusNodeDeliveryDate,
-                                    decoration: const InputDecoration(
-                                      hintText:
-                                          "Enter Date in DD/MM/YYYY format",
-                                    ),
-                                    enabled: !_status,
-                                    autofocus: !_status,
+              ),
+              Container(
+                color: const Color(0xffFFFFFF),
+                child: Padding(
+                  padding: const EdgeInsets.only(bottom: 25.0),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    children: <Widget>[
+                      Padding(
+                          padding: const EdgeInsets.only(
+                              left: 25.0, right: 25.0, top: 25.0),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            mainAxisSize: MainAxisSize.max,
+                            children: <Widget>[
+                              const Column(
+                                mainAxisAlignment: MainAxisAlignment.start,
+                                mainAxisSize: MainAxisSize.min,
+                                children: <Widget>[
+                                  Text(
+                                    'Personal Information',
+                                    style: TextStyle(
+                                        fontSize: 18.0,
+                                        fontWeight: FontWeight.bold),
                                   ),
-                                ),
-                              ],
-                            )),
-                        const Padding(
+                                ],
+                              ),
+                              Column(
+                                mainAxisAlignment: MainAxisAlignment.end,
+                                mainAxisSize: MainAxisSize.min,
+                                children: <Widget>[
+                                  _status ? _getEditIcon() : Container(),
+                                ],
+                              )
+                            ],
+                          )),
+                      const Padding(
                           padding: EdgeInsets.only(
                               left: 25.0, right: 25.0, top: 25.0),
                           child: Row(
@@ -323,7 +349,7 @@ class MapScreenState extends State<ProfilePage>
                                 mainAxisSize: MainAxisSize.min,
                                 children: <Widget>[
                                   Text(
-                                    'Age',
+                                    'Expected Delivery Date',
                                     style: TextStyle(
                                         fontSize: 16.0,
                                         fontWeight: FontWeight.bold),
@@ -331,9 +357,8 @@ class MapScreenState extends State<ProfilePage>
                                 ],
                               ),
                             ],
-                          ),
-                        ),
-                        Padding(
+                          )),
+                      Padding(
                           padding: const EdgeInsets.only(
                               left: 25.0, right: 25.0, top: 2.0),
                           child: Row(
@@ -341,161 +366,200 @@ class MapScreenState extends State<ProfilePage>
                             children: <Widget>[
                               Flexible(
                                 child: TextField(
-                                  focusNode: myFocusNodeAge,
-                                  controller: ageController,
+                                  controller: deliveryDateController,
+                                  focusNode: myFocusNodeDeliveryDate,
                                   decoration: const InputDecoration(
-                                      hintText: "Enter your age in years."),
+                                    hintText: "Enter Date in YYYY-MM-DD format",
+                                  ),
                                   enabled: !_status,
+                                  autofocus: !_status,
                                 ),
                               ),
                             ],
-                          ),
-                        ),
-                        // const Padding(
-                        //   padding: EdgeInsets.only(
-                        //       left: 25.0, right: 25.0, top: 25.0),
-                        //   child: Row(
-                        //     mainAxisSize: MainAxisSize.max,
-                        //     children: <Widget>[
-                        //       Column(
-                        //         mainAxisAlignment: MainAxisAlignment.start,
-                        //         mainAxisSize: MainAxisSize.min,
-                        //         children: <Widget>[
-                        //           Text(
-                        //             'Mobile',
-                        //             style: TextStyle(
-                        //                 fontSize: 16.0,
-                        //                 fontWeight: FontWeight.bold),
-                        //           ),
-                        //         ],
-                        //       ),
-                        //     ],
-                        //   ),
-                        // ),
-                        // Padding(
-                        //     padding: const EdgeInsets.only(
-                        //         left: 25.0, right: 25.0, top: 2.0),
-                        //     child: Row(
-                        //       mainAxisSize: MainAxisSize.max,
-                        //       children: <Widget>[
-                        //         Flexible(
-                        //           child: TextField(
-                        //             controller: mobileNumberController,
-                        //             focusNode: myFocusNodeMobileNumber,
-                        //             decoration: const InputDecoration(
-                        //                 hintText: "Enter Mobile Number"),
-                        //             enabled: !_status,
-                        //           ),
-                        //         ),
-                        //       ],
-                        //     )),
-                        // // const Padding(
-                        //   padding: EdgeInsets.only(
-                        //       left: 25.0, right: 25.0, top: 25.0),
-                        //   child: Row(
-                        //     mainAxisSize: MainAxisSize.max,
-                        //     children: <Widget>[
-                        //       Column(
-                        //         mainAxisAlignment: MainAxisAlignment.start,
-                        //         mainAxisSize: MainAxisSize.min,
-                        //         children: <Widget>[
-                        //           Text(
-                        //             'City',
-                        //             style: TextStyle(
-                        //                 fontSize: 16.0,
-                        //                 fontWeight: FontWeight.bold),
-                        //           ),
-                        //         ],
-                        //       ),
-                        //     ],
-                        //   ),
-                        // ),
-                        // Padding(
-                        //     padding: const EdgeInsets.only(
-                        //         left: 25.0, right: 25.0, top: 2.0),
-                        //     child: Row(
-                        //       mainAxisSize: MainAxisSize.max,
-                        //       children: <Widget>[
-                        //         Flexible(
-                        //           child: TextField(
-                        //             focusNode: myFocusNodeCity,
-                        //             controller: cityController,
-                        //             decoration: const InputDecoration(
-                        //                 hintText: "Enter your city name"),
-                        //             enabled: !_status,
-                        //           ),
-                        //         ),
-                        //       ],
-                        //     )),
-                        const Padding(
-                            padding: EdgeInsets.only(
-                                left: 25.0, right: 25.0, top: 25.0),
-                            child: Row(
-                              mainAxisSize: MainAxisSize.max,
+                          )),
+                      const Padding(
+                        padding:
+                            EdgeInsets.only(left: 25.0, right: 25.0, top: 25.0),
+                        child: Row(
+                          mainAxisSize: MainAxisSize.max,
+                          children: <Widget>[
+                            Column(
                               mainAxisAlignment: MainAxisAlignment.start,
+                              mainAxisSize: MainAxisSize.min,
                               children: <Widget>[
-                                Expanded(
-                                  flex: 2,
-                                  child: Text(
-                                    'Height',
-                                    style: TextStyle(
-                                        fontSize: 16.0,
-                                        fontWeight: FontWeight.bold),
-                                  ),
-                                ),
-                                Expanded(
-                                  flex: 2,
-                                  child: Text(
-                                    'Weight',
-                                    style: TextStyle(
-                                        fontSize: 16.0,
-                                        fontWeight: FontWeight.bold),
-                                  ),
+                                Text(
+                                  'Age',
+                                  style: TextStyle(
+                                      fontSize: 16.0,
+                                      fontWeight: FontWeight.bold),
                                 ),
                               ],
-                            )),
-                        Padding(
-                          padding: const EdgeInsets.only(
-                              left: 25.0, right: 25.0, top: 2.0),
+                            ),
+                          ],
+                        ),
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.only(
+                            left: 25.0, right: 25.0, top: 2.0),
+                        child: Row(
+                          mainAxisSize: MainAxisSize.max,
+                          children: <Widget>[
+                            Flexible(
+                              child: TextField(
+                                focusNode: myFocusNodeAge,
+                                controller: ageController,
+                                decoration: const InputDecoration(
+                                    hintText: "Enter your age in years."),
+                                enabled: !_status,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                      // const Padding(
+                      //   padding: EdgeInsets.only(
+                      //       left: 25.0, right: 25.0, top: 25.0),
+                      //   child: Row(
+                      //     mainAxisSize: MainAxisSize.max,
+                      //     children: <Widget>[
+                      //       Column(
+                      //         mainAxisAlignment: MainAxisAlignment.start,
+                      //         mainAxisSize: MainAxisSize.min,
+                      //         children: <Widget>[
+                      //           Text(
+                      //             'Mobile',
+                      //             style: TextStyle(
+                      //                 fontSize: 16.0,
+                      //                 fontWeight: FontWeight.bold),
+                      //           ),
+                      //         ],
+                      //       ),
+                      //     ],
+                      //   ),
+                      // ),
+                      // Padding(
+                      //     padding: const EdgeInsets.only(
+                      //         left: 25.0, right: 25.0, top: 2.0),
+                      //     child: Row(
+                      //       mainAxisSize: MainAxisSize.max,
+                      //       children: <Widget>[
+                      //         Flexible(
+                      //           child: TextField(
+                      //             controller: mobileNumberController,
+                      //             focusNode: myFocusNodeMobileNumber,
+                      //             decoration: const InputDecoration(
+                      //                 hintText: "Enter Mobile Number"),
+                      //             enabled: !_status,
+                      //           ),
+                      //         ),
+                      //       ],
+                      //     )),
+                      // // const Padding(
+                      //   padding: EdgeInsets.only(
+                      //       left: 25.0, right: 25.0, top: 25.0),
+                      //   child: Row(
+                      //     mainAxisSize: MainAxisSize.max,
+                      //     children: <Widget>[
+                      //       Column(
+                      //         mainAxisAlignment: MainAxisAlignment.start,
+                      //         mainAxisSize: MainAxisSize.min,
+                      //         children: <Widget>[
+                      //           Text(
+                      //             'City',
+                      //             style: TextStyle(
+                      //                 fontSize: 16.0,
+                      //                 fontWeight: FontWeight.bold),
+                      //           ),
+                      //         ],
+                      //       ),
+                      //     ],
+                      //   ),
+                      // ),
+                      // Padding(
+                      //     padding: const EdgeInsets.only(
+                      //         left: 25.0, right: 25.0, top: 2.0),
+                      //     child: Row(
+                      //       mainAxisSize: MainAxisSize.max,
+                      //       children: <Widget>[
+                      //         Flexible(
+                      //           child: TextField(
+                      //             focusNode: myFocusNodeCity,
+                      //             controller: cityController,
+                      //             decoration: const InputDecoration(
+                      //                 hintText: "Enter your city name"),
+                      //             enabled: !_status,
+                      //           ),
+                      //         ),
+                      //       ],
+                      //     )),
+                      const Padding(
+                          padding: EdgeInsets.only(
+                              left: 25.0, right: 25.0, top: 25.0),
                           child: Row(
                             mainAxisSize: MainAxisSize.max,
                             mainAxisAlignment: MainAxisAlignment.start,
                             children: <Widget>[
-                              Flexible(
+                              Expanded(
                                 flex: 2,
-                                child: Padding(
-                                  padding: const EdgeInsets.only(right: 10.0),
-                                  child: TextField(
-                                    focusNode: myFocusNodeHeight,
-                                    controller: heightController,
-                                    decoration: const InputDecoration(
-                                        hintText: "in cms"),
-                                    enabled: !_status,
-                                  ),
+                                child: Text(
+                                  'Height',
+                                  style: TextStyle(
+                                      fontSize: 16.0,
+                                      fontWeight: FontWeight.bold),
                                 ),
                               ),
-                              Flexible(
+                              Expanded(
                                 flex: 2,
-                                child: TextField(
-                                  focusNode: myFocusNodeWeight,
-                                  controller: weightController,
-                                  decoration:
-                                      const InputDecoration(hintText: "in kgs"),
-                                  enabled: !_status,
+                                child: Text(
+                                  'Weight',
+                                  style: TextStyle(
+                                      fontSize: 16.0,
+                                      fontWeight: FontWeight.bold),
                                 ),
                               ),
                             ],
-                          ),
+                          )),
+                      Padding(
+                        padding: const EdgeInsets.only(
+                            left: 25.0, right: 25.0, top: 2.0),
+                        child: Row(
+                          mainAxisSize: MainAxisSize.max,
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          children: <Widget>[
+                            Flexible(
+                              flex: 2,
+                              child: Padding(
+                                padding: const EdgeInsets.only(right: 10.0),
+                                child: TextField(
+                                  focusNode: myFocusNodeHeight,
+                                  controller: heightController,
+                                  decoration:
+                                      const InputDecoration(hintText: "in cms"),
+                                  enabled: !_status,
+                                ),
+                              ),
+                            ),
+                            Flexible(
+                              flex: 2,
+                              child: TextField(
+                                focusNode: myFocusNodeWeight,
+                                controller: weightController,
+                                decoration:
+                                    const InputDecoration(hintText: "in kgs"),
+                                enabled: !_status,
+                              ),
+                            ),
+                          ],
                         ),
-                        !_status ? _getActionButtons() : Container(),
-                      ],
-                    ),
+                      ),
+                      !_status ? _getActionButtons() : Container(),
+                    ],
                   ),
-                )
-              ],
-            ),
-          ],
-        ),
+                ),
+              )
+            ],
+          ),
+        ],
       ),
     );
   }
@@ -524,11 +588,9 @@ class MapScreenState extends State<ProfilePage>
                     color: Colors.white,
                   ),
                 ),
-                onPressed: () {
+                onPressed: () async {
                   if (deliveryDateController.text.trim().isEmpty ||
                       ageController.text.trim().isEmpty ||
-                      mobileNumberController.text.trim().isEmpty ||
-                      // cityController.text.trim().isEmpty ||
                       heightController.text.trim().isEmpty ||
                       weightController.text.trim().isEmpty) {
                     showInSnackBar(
@@ -537,12 +599,95 @@ class MapScreenState extends State<ProfilePage>
                         context,
                         _scaffoldKey.currentContext);
                   } else {
-                    Navigator.pushReplacement(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => MainPage(),
-                      ),
-                    );
+                    DateTime currentDate = DateTime.now();
+
+                    String entredDate =
+                        deliveryDateController.text.trim().toString();
+
+                    DateTime? parsedDate = DateTime.tryParse(entredDate);
+
+                    if (parsedDate != null && parsedDate.isAfter(currentDate)) {
+                      print(parsedDate);
+
+                      print('datetime parser working');
+
+                      print(num.tryParse(
+                          weightController.text.trim().toString()));
+                    } else if (parsedDate == null ||
+                        parsedDate.isBefore(currentDate)) {
+                      print('here');
+                      showInSnackBar('Please provide a valid date', Colors.red,
+                          context, _scaffoldKey.currentContext);
+                    }
+
+                    if (int.tryParse(ageController.text.trim().toString()) !=
+                            null &&
+                        int.tryParse(heightController.text.trim().toString()) !=
+                            null &&
+                        int.tryParse(weightController.text.trim().toString()) !=
+                            null) {
+                      age = int.tryParse(ageController.text.trim().toString());
+                      weight =
+                          int.tryParse(weightController.text.trim().toString());
+                      height =
+                          int.tryParse(heightController.text.trim().toString());
+                    }
+
+                    if (parsedDate != null &&
+                        parsedDate.isAfter(currentDate) &&
+                        num.tryParse(ageController.text.trim().toString()) !=
+                            null &&
+                        num.tryParse(weightController.text.trim().toString()) !=
+                            null &&
+                        num.tryParse(heightController.text.trim().toString()) !=
+                            null &&
+                        int.tryParse(ageController.text.trim().toString()) !=
+                            null &&
+                        int.tryParse(heightController.text.trim().toString()) !=
+                            null &&
+                        int.tryParse(weightController.text.trim().toString()) !=
+                            null &&
+                        age! >= 15 &&
+                        age! < 76 &&
+                        height! >= 105 &&
+                        height! < 201 &&
+                        weight! >= 35 &&
+                        weight! < 116) {
+                      print(
+                          'here comes all the conditions so after data can be added to the database');
+
+                      Map<String, dynamic> userData = {
+                        'deliveryDate': parsedDate,
+                        'age': age,
+                        'weight': weight,
+                        'height': height
+                      };
+
+                      UpdateData().updateData(userData);
+
+                      Navigator.pushReplacement(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => MainPage(),
+                        ),
+                      );
+                    } else {
+                      if (num.tryParse(ageController.text.trim().toString()) ==
+                          null) {
+                        showInSnackBar('Please provide a valid Age', Colors.red,
+                            context, _scaffoldKey.currentContext);
+                      } else if (num.tryParse(
+                              heightController.text.trim().toString()) ==
+                          null) {
+                        showInSnackBar('Please provide a valid Height',
+                            Colors.red, context, _scaffoldKey.currentContext);
+                      } else if (num.tryParse(
+                              weightController.text.trim().toString()) ==
+                          null) {
+                        showInSnackBar('Please provide a valid Weight',
+                            Colors.red, context, _scaffoldKey.currentContext);
+                      }
+                    }
                   }
                 },
               ),
@@ -600,5 +745,15 @@ class MapScreenState extends State<ProfilePage>
         });
       },
     );
+  }
+}
+
+class UpdateData {
+  updateData(userData) async {
+    await usersCollection
+        .doc(loggedInUser!.displayName)
+        .set(userData, SetOptions(merge: true))
+        .then((_) => print('age/weight/height change = Success'))
+        .catchError((error) => print('Failed: $error'));
   }
 }
