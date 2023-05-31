@@ -756,6 +756,10 @@ class _LoginPageState extends State<LoginPage>
                             'displayName': signupNameController.text.trim(),
                             'photoURL': newUser.photoURL,
                             'email': newUser.email,
+                            // 'deliveryDate': null,
+                            // 'age': null,
+                            // 'weight': null,
+                            // 'height': null
                           };
 
                           await usersCollection

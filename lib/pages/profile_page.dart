@@ -189,6 +189,9 @@ class MapScreenState extends State<ProfilePage>
                                   if (snapshot.hasData) {
                                     photoURL = snapshot.data['photoURL'];
                                     if (photoURL != null) {
+                                      print(snapshot.data!
+                                          .data()!
+                                          .containsKey('photoURL'));
                                       return CachedNetworkImage(
                                         imageUrl: photoURL,
                                         imageBuilder:
