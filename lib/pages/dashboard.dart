@@ -170,20 +170,46 @@ class _MainPageState extends State<MainPage> {
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       crossAxisAlignment: CrossAxisAlignment.center,
                       children: <Widget>[
-                        const Column(
+                        Column(
                           mainAxisAlignment: MainAxisAlignment.center,
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: <Widget>[
-                            Text(
+                            const Text(
                               'Months and Days left',
                               style: TextStyle(
                                   color: Colors.blueAccent, fontSize: 15),
                             ),
-                            Text('05/15',
-                                style: TextStyle(
-                                    color: Colors.black,
-                                    fontWeight: FontWeight.w700,
-                                    fontSize: 34.0))
+                            StreamBuilder<Object>(
+                                stream: usersCollection
+                                    .doc(loggedInUser!.displayName)
+                                    .snapshots(),
+                                builder: (context, AsyncSnapshot snapshot) {
+                                  if (snapshot.hasData &&
+                                      snapshot.data!
+                                          .data()!
+                                          .containsKey('deliveryDate')) {
+                                    DateTime now = DateTime.now();
+                                    print(now.month -
+                                        snapshot.data['deliveryDate']
+                                            .toDate()
+                                            .month);
+                                    return Text(
+                                      '${snapshot.data['deliveryDate'].toDate().month - now.month}/${snapshot.data['deliveryDate'].toDate().day - now.day}',
+                                      style: const TextStyle(
+                                          color: Colors.black,
+                                          fontWeight: FontWeight.w700,
+                                          fontSize: 34.0),
+                                    );
+                                  }
+
+                                  return const Text(
+                                    '00/00',
+                                    style: TextStyle(
+                                        color: Colors.black,
+                                        fontWeight: FontWeight.w700,
+                                        fontSize: 34.0),
+                                  );
+                                })
                           ],
                         ),
                         Material(

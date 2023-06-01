@@ -14,6 +14,7 @@ import 'dart:io';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:mum_s/style/constants.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:intl/intl.dart';
 
 var usersCollection = FirebaseFirestore.instance.collection('Users');
 
@@ -22,6 +23,7 @@ late int? age;
 late int? height;
 late int? weight;
 late var photoURL;
+late var parsedDate;
 
 class ProfilePage extends StatefulWidget {
   @override
@@ -189,9 +191,6 @@ class MapScreenState extends State<ProfilePage>
                                   if (snapshot.hasData) {
                                     photoURL = snapshot.data['photoURL'];
                                     if (photoURL != null) {
-                                      print(snapshot.data!
-                                          .data()!
-                                          .containsKey('photoURL'));
                                       return CachedNetworkImage(
                                         imageUrl: photoURL,
                                         imageBuilder:
@@ -368,15 +367,53 @@ class MapScreenState extends State<ProfilePage>
                             mainAxisSize: MainAxisSize.max,
                             children: <Widget>[
                               Flexible(
-                                child: TextField(
-                                  controller: deliveryDateController,
-                                  focusNode: myFocusNodeDeliveryDate,
-                                  decoration: const InputDecoration(
-                                    hintText: "Enter Date in YYYY-MM-DD format",
-                                  ),
-                                  enabled: !_status,
-                                  autofocus: !_status,
-                                ),
+                                child: StreamBuilder<Object>(
+                                    stream: usersCollection
+                                        .doc(loggedInUser!.displayName)
+                                        .snapshots(),
+                                    builder: (context, AsyncSnapshot snapshot) {
+                                      if (snapshot.hasData &&
+                                          snapshot.data!
+                                              .data()!
+                                              .containsKey('deliveryDate') &&
+                                          _status) {
+                                        var date = snapshot.data['deliveryDate']
+                                            .toDate();
+                                        return Padding(
+                                          padding:
+                                              const EdgeInsets.only(top: 15.0),
+                                          child: Container(
+                                            decoration: const BoxDecoration(
+                                              color: Color(0xFFEAE9EE),
+                                              borderRadius: BorderRadius.all(
+                                                Radius.circular(10.0),
+                                              ),
+                                            ),
+                                            width: 400,
+                                            height: 30,
+                                            child: Center(
+                                              child: Text(
+                                                "${date.day}-${date.month}-${date.year}",
+                                                style: const TextStyle(
+                                                    fontWeight:
+                                                        FontWeight.bold),
+                                              ),
+                                            ),
+                                          ),
+                                        );
+                                      } else {
+                                        return TextField(
+                                          controller: deliveryDateController,
+                                          focusNode: myFocusNodeDeliveryDate,
+                                          decoration: const InputDecoration(
+                                            hintText:
+                                                "Enter Date in DD-MM-YYYY format",
+                                          ),
+                                          enabled: !_status,
+                                          autofocus: !_status,
+                                        );
+                                      }
+                                    }),
                               ),
                             ],
                           )),
@@ -408,13 +445,49 @@ class MapScreenState extends State<ProfilePage>
                           mainAxisSize: MainAxisSize.max,
                           children: <Widget>[
                             Flexible(
-                              child: TextField(
-                                focusNode: myFocusNodeAge,
-                                controller: ageController,
-                                decoration: const InputDecoration(
-                                    hintText: "Enter your age in years."),
-                                enabled: !_status,
-                              ),
+                              child: StreamBuilder<Object>(
+                                  stream: usersCollection
+                                      .doc(loggedInUser!.displayName)
+                                      .snapshots(),
+                                  builder: (context, AsyncSnapshot snapshot) {
+                                    if (snapshot.hasData &&
+                                        snapshot.data!
+                                            .data()!
+                                            .containsKey('age') &&
+                                        _status) {
+                                      var userAge = snapshot.data['age'];
+                                      return Padding(
+                                        padding:
+                                            const EdgeInsets.only(top: 15.0),
+                                        child: Container(
+                                          decoration: const BoxDecoration(
+                                            color: Color(0xFFEAE9EE),
+                                            borderRadius: BorderRadius.all(
+                                              Radius.circular(10.0),
+                                            ),
+                                          ),
+                                          width: 400,
+                                          height: 30,
+                                          child: Center(
+                                            child: Text(
+                                              "${userAge} Years",
+                                              style: const TextStyle(
+                                                  fontWeight: FontWeight.bold),
+                                            ),
+                                          ),
+                                        ),
+                                      );
+                                    } else {
+                                      return TextField(
+                                        focusNode: myFocusNodeAge,
+                                        controller: ageController,
+                                        decoration: const InputDecoration(
+                                            hintText:
+                                                "Enter your age in years."),
+                                        enabled: !_status,
+                                      );
+                                    }
+                                  }),
                             ),
                           ],
                         ),
@@ -533,24 +606,96 @@ class MapScreenState extends State<ProfilePage>
                               flex: 2,
                               child: Padding(
                                 padding: const EdgeInsets.only(right: 10.0),
-                                child: TextField(
-                                  focusNode: myFocusNodeHeight,
-                                  controller: heightController,
-                                  decoration:
-                                      const InputDecoration(hintText: "in cms"),
-                                  enabled: !_status,
-                                ),
+                                child: StreamBuilder<Object>(
+                                    stream: usersCollection
+                                        .doc(loggedInUser!.displayName)
+                                        .snapshots(),
+                                    builder: (context, AsyncSnapshot snapshot) {
+                                      if (snapshot.hasData &&
+                                          snapshot.data!
+                                              .data()!
+                                              .containsKey('height') &&
+                                          _status) {
+                                        var userHeight =
+                                            snapshot.data['height'];
+                                        return Padding(
+                                          padding:
+                                              const EdgeInsets.only(top: 15.0),
+                                          child: Container(
+                                            decoration: const BoxDecoration(
+                                              color: Color(0xFFEAE9EE),
+                                              borderRadius: BorderRadius.all(
+                                                Radius.circular(10.0),
+                                              ),
+                                            ),
+                                            width: 400,
+                                            height: 30,
+                                            child: Center(
+                                              child: Text(
+                                                "${userHeight} cms",
+                                                style: const TextStyle(
+                                                    fontWeight:
+                                                        FontWeight.bold),
+                                              ),
+                                            ),
+                                          ),
+                                        );
+                                      } else {
+                                        return TextField(
+                                          focusNode: myFocusNodeHeight,
+                                          controller: heightController,
+                                          decoration: const InputDecoration(
+                                              hintText: "in cms"),
+                                          enabled: !_status,
+                                        );
+                                      }
+                                    }),
                               ),
                             ),
                             Flexible(
                               flex: 2,
-                              child: TextField(
-                                focusNode: myFocusNodeWeight,
-                                controller: weightController,
-                                decoration:
-                                    const InputDecoration(hintText: "in kgs"),
-                                enabled: !_status,
-                              ),
+                              child: StreamBuilder<Object>(
+                                  stream: usersCollection
+                                      .doc(loggedInUser!.displayName)
+                                      .snapshots(),
+                                  builder: (context, AsyncSnapshot snapshot) {
+                                    if (snapshot.hasData &&
+                                        snapshot.data!
+                                            .data()!
+                                            .containsKey('weight') &&
+                                        _status) {
+                                      var userWeight = snapshot.data['weight'];
+                                      return Padding(
+                                        padding:
+                                            const EdgeInsets.only(top: 15.0),
+                                        child: Container(
+                                          decoration: const BoxDecoration(
+                                            color: Color(0xFFEAE9EE),
+                                            borderRadius: BorderRadius.all(
+                                              Radius.circular(10.0),
+                                            ),
+                                          ),
+                                          width: 400,
+                                          height: 30,
+                                          child: Center(
+                                            child: Text(
+                                              "${userWeight} kgs",
+                                              style: const TextStyle(
+                                                  fontWeight: FontWeight.bold),
+                                            ),
+                                          ),
+                                        ),
+                                      );
+                                    } else {
+                                      return TextField(
+                                        focusNode: myFocusNodeWeight,
+                                        controller: weightController,
+                                        decoration: const InputDecoration(
+                                            hintText: "in kgs"),
+                                        enabled: !_status,
+                                      );
+                                    }
+                                  }),
                             ),
                           ],
                         ),
@@ -604,18 +749,20 @@ class MapScreenState extends State<ProfilePage>
                   } else {
                     DateTime currentDate = DateTime.now();
 
-                    String entredDate =
+                    var entredDate =
                         deliveryDateController.text.trim().toString();
 
-                    DateTime? parsedDate = DateTime.tryParse(entredDate);
+                    try {
+                      parsedDate = DateFormat('dd-MM-yyyy').parse(entredDate);
+                    } catch (e) {
+                      print(e);
+                      parsedDate = null;
+                    }
 
                     if (parsedDate != null && parsedDate.isAfter(currentDate)) {
                       print(parsedDate);
 
                       print('datetime parser working');
-
-                      print(num.tryParse(
-                          weightController.text.trim().toString()));
                     } else if (parsedDate == null ||
                         parsedDate.isBefore(currentDate)) {
                       print('here');
