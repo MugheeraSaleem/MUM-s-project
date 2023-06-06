@@ -40,6 +40,7 @@ dev_dependencies:
   email_validator: ^2.1.16
   cached_network_image: ^3.2.3
   geolocator: ^9.0.2
+  youtube_player_flutter: ^8.1.2
 
 
 flutter:

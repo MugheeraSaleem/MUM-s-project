@@ -27,7 +27,7 @@ class MapPageState extends State<MapPage> {
         leading: IconButton(
             icon: const Icon(FontAwesomeIcons.arrowLeft),
             onPressed: () => Navigator.of(context)
-                .push(MaterialPageRoute(builder: (_) => MainPage())
+                .push(MaterialPageRoute(builder: (_) => DashboardPage())
 
                     //
                     )),

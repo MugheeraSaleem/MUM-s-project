@@ -15,6 +15,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:mum_s/style/constants.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:intl/intl.dart';
+import 'package:mum_s/pages/playlist_page.dart';
 
 var usersCollection = FirebaseFirestore.instance.collection('Users');
 
@@ -818,7 +819,7 @@ class MapScreenState extends State<ProfilePage>
                       Navigator.pushReplacement(
                         context,
                         MaterialPageRoute(
-                          builder: (context) => MainPage(),
+                          builder: (context) => DashboardPage(),
                         ),
                       );
                     } else {

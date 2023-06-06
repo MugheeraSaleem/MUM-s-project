@@ -364,7 +364,7 @@ class _LoginPageState extends State<LoginPage>
                           Navigator.push(
                             context,
                             prefix0.MaterialPageRoute(
-                              builder: (context) => MainPage(),
+                              builder: (context) => DashboardPage(),
                             ),
                           );
                           setState(() {
@@ -559,7 +559,7 @@ class _LoginPageState extends State<LoginPage>
                       Navigator.push(
                         context,
                         prefix0.MaterialPageRoute(
-                          builder: (context) => MainPage(),
+                          builder: (context) => DashboardPage(),
                         ),
                       );
                       setState(() {
@@ -776,7 +776,7 @@ class _LoginPageState extends State<LoginPage>
                           Navigator.push(
                             context,
                             prefix0.MaterialPageRoute(
-                              builder: (context) => MainPage(),
+                              builder: (context) => DashboardPage(),
                             ),
                           );
                           setState(() {

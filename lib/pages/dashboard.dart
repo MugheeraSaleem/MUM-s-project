@@ -1,5 +1,6 @@
 import 'package:mum_s/pages/map.dart';
 import 'package:mum_s/pages/music.dart';
+import 'package:mum_s/pages/playlist_page.dart';
 import 'package:mum_s/pages/profile_page.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
@@ -16,12 +17,12 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 late User? loggedInUser;
 var usersCollection = FirebaseFirestore.instance.collection('Users');
 
-class MainPage extends StatefulWidget {
+class DashboardPage extends StatefulWidget {
   @override
-  _MainPageState createState() => _MainPageState();
+  _DashboardPageState createState() => _DashboardPageState();
 }
 
-class _MainPageState extends State<MainPage> {
+class _DashboardPageState extends State<DashboardPage> {
   static final List<String> chartDropdownItems = [
     'Last 7 days',
     'Last month',
@@ -107,13 +108,12 @@ class _MainPageState extends State<MainPage> {
                       color: Colors.white,
                       shape: const CircleBorder(),
                       child: Padding(
-                        padding: const EdgeInsets.all(5.0),
-                        child: Icon(
-                          Icons.person,
-                          color: kFloatingActionButtonColor,
-                          size: 35.0,
-                        ),
-                      ),
+                          padding: const EdgeInsets.all(3.0),
+                          child: Icon(
+                            Icons.person,
+                            color: kFloatingActionButtonColor,
+                            size: 40.0,
+                          )),
                     ),
                     onPressed: () {
                       Navigator.push(
@@ -163,7 +163,7 @@ class _MainPageState extends State<MainPage> {
                 StaggeredTile.extent(2, 110.0),
               ],
               children: <Widget>[
-                _buildTile(
+                buildTile(
                   Padding(
                     padding: const EdgeInsets.all(24.0),
                     child: Row(
@@ -189,16 +189,12 @@ class _MainPageState extends State<MainPage> {
                                           .data()!
                                           .containsKey('deliveryDate')) {
                                     DateTime now = DateTime.now();
-                                    print(now.month -
-                                        snapshot.data['deliveryDate']
-                                            .toDate()
-                                            .month);
                                     return Text(
-                                      '${snapshot.data['deliveryDate'].toDate().month - now.month}/${snapshot.data['deliveryDate'].toDate().day - now.day}',
+                                      '${snapshot.data['deliveryDate'].toDate().month - now.month} months/${snapshot.data['deliveryDate'].toDate().day - now.day} days',
                                       style: const TextStyle(
                                           color: Colors.black,
                                           fontWeight: FontWeight.w700,
-                                          fontSize: 34.0),
+                                          fontSize: 25.0),
                                     );
                                   }
 
@@ -228,7 +224,7 @@ class _MainPageState extends State<MainPage> {
                   ),
                   onTap: () {},
                 ),
-                _buildTile(
+                buildTile(
                   const Padding(
                     padding: EdgeInsets.all(24.0),
                     child: Column(
@@ -257,7 +253,7 @@ class _MainPageState extends State<MainPage> {
                   ),
                   onTap: () {},
                 ),
-                _buildTile(
+                buildTile(
                   const Padding(
                     padding: EdgeInsets.all(24.0),
                     child: Column(
@@ -291,7 +287,7 @@ class _MainPageState extends State<MainPage> {
                     // );
                   },
                 ),
-                _buildTile(
+                buildTile(
                   Padding(
                       padding: const EdgeInsets.all(24.0),
                       child: Column(
@@ -350,7 +346,7 @@ class _MainPageState extends State<MainPage> {
                   onTap: () {
                     Navigator.of(context).push(
                       MaterialPageRoute(
-                        builder: (_) => MusicHome(),
+                        builder: (_) => PlaylistPage(),
                       ),
                     );
                   },
@@ -391,7 +387,7 @@ class _MainPageState extends State<MainPage> {
                 //   onTap: () => Navigator.of(context)
                 //       .push(MaterialPageRoute(builder: (_) => ShopItemsPage())),
                 // ),
-                _buildTile(
+                buildTile(
                   Padding(
                     padding: const EdgeInsets.all(24.0),
                     child: Row(
@@ -438,19 +434,20 @@ class _MainPageState extends State<MainPage> {
           ),
         ));
   }
+}
 
-  Widget _buildTile(Widget child, {required Function() onTap}) {
-    return Material(
-        elevation: 14.0,
-        borderRadius: BorderRadius.circular(12.0),
-        shadowColor: const Color(0x802196F3),
-        child: InkWell(
-            // Do onTap() if it isn't null, otherwise do print()
-            onTap: onTap != null
-                ? () => onTap()
-                : () {
-                    print('Not set yet');
-                  },
-            child: child));
-  }
+Widget buildTile(Widget child, {required Function() onTap}) {
+  return Material(
+    elevation: 14.0,
+    borderRadius: BorderRadius.circular(12.0),
+    shadowColor: const Color(0x802196F3),
+    child: InkWell(
+        // Do onTap() if it isn't null, otherwise do print()
+        onTap: onTap != null
+            ? () => onTap()
+            : () {
+                print('Not set yet');
+              },
+        child: child),
+  );
 }

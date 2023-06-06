@@ -41,8 +41,8 @@ class _MusicHomeState extends State<MusicHome> {
           elevation: 0.0,
           leading: IconButton(
             icon: const Icon(Icons.arrow_back_ios, color: Color(0xFFFE1483)),
-            onPressed: () => Navigator.pushReplacement(
-                context, MaterialPageRoute(builder: (context) => MainPage())),
+            onPressed: () => Navigator.pushReplacement(context,
+                MaterialPageRoute(builder: (context) => DashboardPage())),
           ),
           title: const Text("Pregnency Playlist",
               style: TextStyle(color: Color(0xFFFE1483), fontFamily: "Nexa")),
@@ -98,8 +98,8 @@ class _MusicHomeState extends State<MusicHome> {
               const SizedBox(
                 height: 25.0,
               ),
-              Column(
-                children: const <Widget>[
+              const Column(
+                children: <Widget>[
                   Text(
                     "Deep Relaxing Music",
                     style: TextStyle(
