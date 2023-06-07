@@ -5,22 +5,22 @@ import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:mum_s/pages/login_page.dart';
 import 'package:mum_s/style/constants.dart';
 import 'package:mum_s/utils/connectivity.dart';
-import 'package:mum_s/utils/user_actions.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:mum_s/utils/snack_bar.dart';
 import 'package:draggable_fab/draggable_fab.dart';
 import 'package:mum_s/style/theme.dart' as Theme;
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:mum_s/pages/dashboard.dart';
-import 'package:youtube_player_flutter/youtube_player_flutter.dart';
+import 'package:flutter/services.dart';
+import 'package:mum_s/pages/counselingPage.dart';
 
 late User? loggedInUser;
 var usersCollection = FirebaseFirestore.instance.collection('Users');
 
 ConnectivityClass c_class = ConnectivityClass();
 final _auth = FirebaseAuth.instance;
+
 final ScrollController playListPageController = ScrollController();
-late YoutubePlayerController videoController;
 
 class PlaylistPage extends StatefulWidget {
   @override
@@ -29,18 +29,7 @@ class PlaylistPage extends StatefulWidget {
 
 class _PlaylistPageState extends State<PlaylistPage> {
   @override
-  void initState() {
-    c_class.getConnectivity(context);
-    c_class.checkInternet(context);
-    // This function is printing the users name and its email
-    loggedInUser = getCurrentUser();
-
-    super.initState();
-  }
-
-  @override
   void dispose() {
-    // TODO: implement dispose
     super.dispose();
   }
 
@@ -201,7 +190,15 @@ class _PlaylistPageState extends State<PlaylistPage> {
                             fontSize: 24.0),
                       ),
                     ]),
-                onTap: () {},
+                onTap: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => counselingPage(),
+                    ),
+                  );
+                  c_class.checkInternet(context);
+                },
               ),
               buildTile(
                 Row(
