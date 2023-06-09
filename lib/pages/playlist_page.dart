@@ -141,55 +141,61 @@ class _PlaylistPageState extends State<PlaylistPage> {
             ],
             children: [
               buildTile(
-                Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    children: <Widget>[
-                      CircleAvatar(
-                        radius: 70,
-                        backgroundColor: Colors.white,
-                        child: ClipOval(
-                          clipper: MClipper(),
-                          child: Image.asset(
-                            "assets/focus.jpeg",
-                            fit: BoxFit.contain,
+                Padding(
+                  padding: const EdgeInsets.only(left: 18.0),
+                  child: Row(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: <Widget>[
+                        CircleAvatar(
+                          radius: 70,
+                          backgroundColor: Colors.white,
+                          child: ClipOval(
+                            clipper: MClipper(),
+                            child: Image.asset(
+                              "assets/focus.jpeg",
+                              fit: BoxFit.contain,
+                            ),
                           ),
                         ),
-                      ),
-                      const Text(
-                        'My Exercises',
-                        style: TextStyle(
-                            color: Colors.black,
-                            fontWeight: FontWeight.w700,
-                            fontSize: 24.0),
-                      ),
-                    ]),
+                        const Text(
+                          'My Exercises',
+                          style: TextStyle(
+                              color: Colors.black,
+                              fontWeight: FontWeight.w700,
+                              fontSize: 24.0),
+                        ),
+                      ]),
+                ),
                 onTap: () {},
               ),
               buildTile(
-                Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    children: <Widget>[
-                      CircleAvatar(
-                        radius: 70,
-                        backgroundColor: Colors.white,
-                        child: ClipOval(
-                          clipper: MClipper(),
-                          child: Image.asset(
-                            "assets/counseling.jpg",
-                            fit: BoxFit.contain,
+                Padding(
+                  padding: const EdgeInsets.only(left: 18.0),
+                  child: Row(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: <Widget>[
+                        CircleAvatar(
+                          radius: 70,
+                          backgroundColor: Colors.white,
+                          child: ClipOval(
+                            clipper: MClipper(),
+                            child: Image.asset(
+                              "assets/counseling.jpg",
+                              fit: BoxFit.contain,
+                            ),
                           ),
                         ),
-                      ),
-                      const Text(
-                        'My Counseling',
-                        style: TextStyle(
-                            color: Colors.black,
-                            fontWeight: FontWeight.w700,
-                            fontSize: 24.0),
-                      ),
-                    ]),
+                        const Text(
+                          'My Counseling',
+                          style: TextStyle(
+                              color: Colors.black,
+                              fontWeight: FontWeight.w700,
+                              fontSize: 24.0),
+                        ),
+                      ]),
+                ),
                 onTap: () {
                   Navigator.push(
                     context,
@@ -201,29 +207,32 @@ class _PlaylistPageState extends State<PlaylistPage> {
                 },
               ),
               buildTile(
-                Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    children: <Widget>[
-                      CircleAvatar(
-                        radius: 70,
-                        backgroundColor: Colors.white,
-                        child: ClipOval(
-                          clipper: MClipper(),
-                          child: Image.asset(
-                            "assets/print.jpg",
-                            fit: BoxFit.contain,
+                Padding(
+                  padding: const EdgeInsets.only(left: 18.0),
+                  child: Row(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: <Widget>[
+                        CircleAvatar(
+                          radius: 70,
+                          backgroundColor: Colors.white,
+                          child: ClipOval(
+                            clipper: MClipper(),
+                            child: Image.asset(
+                              "assets/print.jpg",
+                              fit: BoxFit.contain,
+                            ),
                           ),
                         ),
-                      ),
-                      const Text(
-                        'My Media',
-                        style: TextStyle(
-                            color: Colors.black,
-                            fontWeight: FontWeight.w700,
-                            fontSize: 24.0),
-                      ),
-                    ]),
+                        const Text(
+                          'My Media',
+                          style: TextStyle(
+                              color: Colors.black,
+                              fontWeight: FontWeight.w700,
+                              fontSize: 24.0),
+                        ),
+                      ]),
+                ),
                 onTap: () {},
               ),
             ],

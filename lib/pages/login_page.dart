@@ -77,13 +77,13 @@ class _LoginPageState extends State<LoginPage>
         ),
         dismissible: true,
         inAsyncCall: _loading,
-        child: NotificationListener<OverscrollIndicatorNotification>(
-          onNotification: (overscroll) {
-            // overscroll.disallowIndicator();
-            return true;
-          },
-          child: SingleChildScrollView(
-            controller: loginPageController,
+        child: SingleChildScrollView(
+          controller: loginPageController,
+          child: NotificationListener<OverscrollIndicatorNotification>(
+            onNotification: (overscroll) {
+              // overscroll.disallowIndicator();
+              return true;
+            },
             child: Container(
               width: MediaQuery.of(context).size.width,
               height: MediaQuery.of(context).size.height >= 775.0
@@ -107,9 +107,9 @@ class _LoginPageState extends State<LoginPage>
                     padding: EdgeInsets.only(top: 75.0),
                     child: Image(
                       width: 250.0,
-                      height: 191.0,
+                      height: 200.0,
                       fit: BoxFit.fill,
-                      image: AssetImage('assets/img/login_logo.png'),
+                      image: AssetImage('assets/main_img.png'),
                     ),
                   ),
                   Padding(
@@ -180,54 +180,56 @@ class _LoginPageState extends State<LoginPage>
   }
 
   Widget _buildMenuBar(BuildContext context) {
-    return Container(
-      width: 300.0,
-      height: 50.0,
-      decoration: const BoxDecoration(
-        color: Color(0x552B2B2B),
-        borderRadius: BorderRadius.all(
-          Radius.circular(25.0),
+    return SingleChildScrollView(
+      child: Container(
+        width: 300.0,
+        height: 50.0,
+        decoration: const BoxDecoration(
+          color: Color(0x552B2B2B),
+          borderRadius: BorderRadius.all(
+            Radius.circular(25.0),
+          ),
         ),
-      ),
-      child: CustomPaint(
-        painter: TabIndicationPainter(pageController: _pageController),
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-          children: <Widget>[
-            Expanded(
-              child: TextButton(
-                style: ButtonStyle(
-                  overlayColor: MaterialStateProperty.all(Colors.transparent),
-                ),
-                // highlightColor: Colors.transparent,
-                onPressed: _onSignInButtonPress,
-                child: Text(
-                  "Existing",
-                  style: TextStyle(
-                      color: left,
-                      fontSize: 16.0,
-                      fontFamily: "WorkSansSemiBold"),
-                ),
-              ),
-            ),
-            //Container(height: 33.0, width: 1.0, color: Colors.white),
-            Expanded(
-              child: TextButton(
-                style: ButtonStyle(
-                  overlayColor: MaterialStateProperty.all(Colors.transparent),
-                ),
-                // highlightColor: Colors.transparent,
-                onPressed: _onSignUpButtonPress,
-                child: Text(
-                  "New",
-                  style: TextStyle(
-                      color: right,
-                      fontSize: 16.0,
-                      fontFamily: "WorkSansSemiBold"),
+        child: CustomPaint(
+          painter: TabIndicationPainter(pageController: _pageController),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            children: <Widget>[
+              Expanded(
+                child: TextButton(
+                  style: ButtonStyle(
+                    overlayColor: MaterialStateProperty.all(Colors.transparent),
+                  ),
+                  // highlightColor: Colors.transparent,
+                  onPressed: _onSignInButtonPress,
+                  child: Text(
+                    "Existing",
+                    style: TextStyle(
+                        color: left,
+                        fontSize: 16.0,
+                        fontFamily: "WorkSansSemiBold"),
+                  ),
                 ),
               ),
-            ),
-          ],
+              //Container(height: 33.0, width: 1.0, color: Colors.white),
+              Expanded(
+                child: TextButton(
+                  style: ButtonStyle(
+                    overlayColor: MaterialStateProperty.all(Colors.transparent),
+                  ),
+                  // highlightColor: Colors.transparent,
+                  onPressed: _onSignUpButtonPress,
+                  child: Text(
+                    "New",
+                    style: TextStyle(
+                        color: right,
+                        fontSize: 16.0,
+                        fontFamily: "WorkSansSemiBold"),
+                  ),
+                ),
+              ),
+            ],
+          ),
         ),
       ),
     );
@@ -587,245 +589,247 @@ class _LoginPageState extends State<LoginPage>
   }
 
   Widget _buildSignUp(BuildContext context) {
-    return Container(
-      padding: const EdgeInsets.only(top: 23.0),
-      child: Column(
-        children: <Widget>[
-          Stack(
-            alignment: Alignment.topCenter,
-            clipBehavior: Clip.none,
-            children: <Widget>[
-              Card(
-                elevation: 2.0,
-                color: Colors.white,
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(8.0),
-                ),
-                child: SizedBox(
-                  width: 300.0,
-                  height: 360.0,
-                  child: Column(
-                    children: <Widget>[
-                      TextEntryWidget(
-                          myFocusNode: myFocusNodeName,
-                          controller: signupNameController,
-                          displaytext: "Name",
+    return SingleChildScrollView(
+      child: Container(
+        padding: const EdgeInsets.only(top: 23.0),
+        child: Column(
+          children: <Widget>[
+            Stack(
+              alignment: Alignment.topCenter,
+              clipBehavior: Clip.none,
+              children: <Widget>[
+                Card(
+                  elevation: 2.0,
+                  color: Colors.white,
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(8.0),
+                  ),
+                  child: SizedBox(
+                    width: 300.0,
+                    height: 360.0,
+                    child: Column(
+                      children: <Widget>[
+                        TextEntryWidget(
+                            myFocusNode: myFocusNodeName,
+                            controller: signupNameController,
+                            displaytext: "Name",
+                            trailing_icon: null,
+                            simple_icon: const Icon(
+                              FontAwesomeIcons.user,
+                              color: Colors.black,
+                            ),
+                            hidetext: false),
+                        Container(
+                          width: 250.0,
+                          height: 1.0,
+                          color: Colors.grey[400],
+                        ),
+                        TextEntryWidget(
+                          myFocusNode: myFocusNodeEmail,
+                          controller: signupEmailController,
+                          displaytext: "Email Address",
                           trailing_icon: null,
                           simple_icon: const Icon(
-                            FontAwesomeIcons.user,
+                            FontAwesomeIcons.envelope,
                             color: Colors.black,
                           ),
-                          hidetext: false),
-                      Container(
-                        width: 250.0,
-                        height: 1.0,
-                        color: Colors.grey[400],
-                      ),
-                      TextEntryWidget(
-                        myFocusNode: myFocusNodeEmail,
-                        controller: signupEmailController,
-                        displaytext: "Email Address",
-                        trailing_icon: null,
-                        simple_icon: const Icon(
-                          FontAwesomeIcons.envelope,
-                          color: Colors.black,
+                          hidetext: false,
                         ),
-                        hidetext: false,
-                      ),
-                      Container(
-                        width: 250.0,
-                        height: 1.0,
-                        color: Colors.grey[400],
-                      ),
-                      TextEntryWidget(
-                          myFocusNode: myFocusNodePassword,
-                          controller: signupPasswordController,
-                          displaytext: "Password",
-                          trailing_icon: GestureDetector(
-                            onTap: _toggleSignup,
-                            child: Icon(
-                              _obscureTextSignup
-                                  ? FontAwesomeIcons.eye
-                                  : FontAwesomeIcons.eyeSlash,
-                              size: 15.0,
+                        Container(
+                          width: 250.0,
+                          height: 1.0,
+                          color: Colors.grey[400],
+                        ),
+                        TextEntryWidget(
+                            myFocusNode: myFocusNodePassword,
+                            controller: signupPasswordController,
+                            displaytext: "Password",
+                            trailing_icon: GestureDetector(
+                              onTap: _toggleSignup,
+                              child: Icon(
+                                _obscureTextSignup
+                                    ? FontAwesomeIcons.eye
+                                    : FontAwesomeIcons.eyeSlash,
+                                size: 15.0,
+                                color: Colors.black,
+                              ),
+                            ),
+                            simple_icon: const Icon(
+                              FontAwesomeIcons.lock,
                               color: Colors.black,
                             ),
-                          ),
-                          simple_icon: const Icon(
-                            FontAwesomeIcons.lock,
-                            color: Colors.black,
-                          ),
-                          hidetext: _obscureTextSignup),
-                      Container(
-                        width: 250.0,
-                        height: 1.0,
-                        color: Colors.grey[400],
-                      ),
-                      TextEntryWidget(
-                          myFocusNode: null,
-                          controller: signupConfirmPasswordController,
-                          displaytext: "Confirmation",
-                          trailing_icon: GestureDetector(
-                            onTap: _toggleSignupConfirm,
-                            child: Icon(
-                              _obscureTextSignupConfirm
-                                  ? FontAwesomeIcons.eye
-                                  : FontAwesomeIcons.eyeSlash,
-                              size: 15.0,
+                            hidetext: _obscureTextSignup),
+                        Container(
+                          width: 250.0,
+                          height: 1.0,
+                          color: Colors.grey[400],
+                        ),
+                        TextEntryWidget(
+                            myFocusNode: null,
+                            controller: signupConfirmPasswordController,
+                            displaytext: "Confirmation",
+                            trailing_icon: GestureDetector(
+                              onTap: _toggleSignupConfirm,
+                              child: Icon(
+                                _obscureTextSignupConfirm
+                                    ? FontAwesomeIcons.eye
+                                    : FontAwesomeIcons.eyeSlash,
+                                size: 15.0,
+                                color: Colors.black,
+                              ),
+                            ),
+                            simple_icon: const Icon(
+                              FontAwesomeIcons.lock,
                               color: Colors.black,
                             ),
-                          ),
-                          simple_icon: const Icon(
-                            FontAwesomeIcons.lock,
-                            color: Colors.black,
-                          ),
-                          hidetext: _obscureTextSignupConfirm)
-                    ],
-                  ),
-                ),
-              ),
-              Container(
-                margin: const EdgeInsets.only(top: 340.0),
-                decoration: const BoxDecoration(
-                  borderRadius: BorderRadius.all(Radius.circular(5.0)),
-                  boxShadow: <BoxShadow>[
-                    BoxShadow(
-                      color: Theme.Colors.loginGradientStart,
-                      offset: Offset(1.0, 6.0),
-                      blurRadius: 20.0,
-                    ),
-                    BoxShadow(
-                      color: Theme.Colors.loginGradientEnd,
-                      offset: Offset(1.0, 6.0),
-                      blurRadius: 20.0,
-                    ),
-                  ],
-                  gradient: LinearGradient(
-                      colors: [
-                        Theme.Colors.loginGradientEnd,
-                        Theme.Colors.loginGradientStart
+                            hidetext: _obscureTextSignupConfirm)
                       ],
-                      begin: FractionalOffset(0.2, 0.2),
-                      end: FractionalOffset(1.0, 1.0),
-                      stops: [0.0, 1.0],
-                      tileMode: TileMode.clamp),
-                ),
-                child: MaterialButton(
-                  highlightColor: Colors.transparent,
-                  splashColor: Theme.Colors.loginGradientEnd,
-                  //shape: RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(5.0))),
-                  child: const Padding(
-                    padding:
-                        EdgeInsets.symmetric(vertical: 10.0, horizontal: 42.0),
-                    child: Text(
-                      "SIGN UP",
-                      style: TextStyle(
-                          color: Colors.white,
-                          fontSize: 25.0,
-                          fontFamily: "WorkSansBold"),
                     ),
                   ),
-                  onPressed: () async {
-                    c_class.checkInternet(context);
-                    if (signupNameController.text.trim().isEmpty ||
-                        signupEmailController.text.trim().isEmpty ||
-                        signupPasswordController.text.trim().isEmpty ||
-                        signupConfirmPasswordController.text.trim().isEmpty) {
-                      showInSnackBar('Please provide all the information',
-                          Colors.red, context, _scaffoldKey.currentContext!);
-                    } else if (signupPasswordController.text.trim() !=
-                        signupConfirmPasswordController.text.trim()) {
-                      showInSnackBar('Passwords must match', Colors.red,
-                          context, _scaffoldKey.currentContext!);
-                    } else {
-                      try {
-                        setState(() {
-                          _loading = true;
-                        });
+                ),
+                Container(
+                  margin: const EdgeInsets.only(top: 340.0),
+                  decoration: const BoxDecoration(
+                    borderRadius: BorderRadius.all(Radius.circular(5.0)),
+                    boxShadow: <BoxShadow>[
+                      BoxShadow(
+                        color: Theme.Colors.loginGradientStart,
+                        offset: Offset(1.0, 6.0),
+                        blurRadius: 20.0,
+                      ),
+                      BoxShadow(
+                        color: Theme.Colors.loginGradientEnd,
+                        offset: Offset(1.0, 6.0),
+                        blurRadius: 20.0,
+                      ),
+                    ],
+                    gradient: LinearGradient(
+                        colors: [
+                          Theme.Colors.loginGradientEnd,
+                          Theme.Colors.loginGradientStart
+                        ],
+                        begin: FractionalOffset(0.2, 0.2),
+                        end: FractionalOffset(1.0, 1.0),
+                        stops: [0.0, 1.0],
+                        tileMode: TileMode.clamp),
+                  ),
+                  child: MaterialButton(
+                    highlightColor: Colors.transparent,
+                    splashColor: Theme.Colors.loginGradientEnd,
+                    //shape: RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(5.0))),
+                    child: const Padding(
+                      padding: EdgeInsets.symmetric(
+                          vertical: 10.0, horizontal: 42.0),
+                      child: Text(
+                        "SIGN UP",
+                        style: TextStyle(
+                            color: Colors.white,
+                            fontSize: 25.0,
+                            fontFamily: "WorkSansBold"),
+                      ),
+                    ),
+                    onPressed: () async {
+                      c_class.checkInternet(context);
+                      if (signupNameController.text.trim().isEmpty ||
+                          signupEmailController.text.trim().isEmpty ||
+                          signupPasswordController.text.trim().isEmpty ||
+                          signupConfirmPasswordController.text.trim().isEmpty) {
+                        showInSnackBar('Please provide all the information',
+                            Colors.red, context, _scaffoldKey.currentContext!);
+                      } else if (signupPasswordController.text.trim() !=
+                          signupConfirmPasswordController.text.trim()) {
+                        showInSnackBar('Passwords must match', Colors.red,
+                            context, _scaffoldKey.currentContext!);
+                      } else {
+                        try {
+                          setState(() {
+                            _loading = true;
+                          });
 
-                        final User? newUser = await registerUser(
-                            signupEmailController.text.trim(),
-                            signupPasswordController.text.trim(),
-                            signupNameController.text.trim());
+                          final User? newUser = await registerUser(
+                              signupEmailController.text.trim(),
+                              signupPasswordController.text.trim(),
+                              signupNameController.text.trim());
 
-                        Future<bool> networkStatus =
-                            c_class.checkInternet(context);
-                        if (await networkStatus == true && newUser != null) {
-                          Map<String, dynamic> userData = {
-                            'uid': newUser.uid,
-                            'displayName': signupNameController.text.trim(),
-                            'photoURL': newUser.photoURL,
-                            'email': newUser.email,
-                            // 'deliveryDate': null,
-                            // 'age': null,
-                            // 'weight': null,
-                            // 'height': null
-                          };
+                          Future<bool> networkStatus =
+                              c_class.checkInternet(context);
+                          if (await networkStatus == true && newUser != null) {
+                            Map<String, dynamic> userData = {
+                              'uid': newUser.uid,
+                              'displayName': signupNameController.text.trim(),
+                              'photoURL': newUser.photoURL,
+                              'email': newUser.email,
+                              // 'deliveryDate': null,
+                              // 'age': null,
+                              // 'weight': null,
+                              // 'height': null
+                            };
 
-                          await usersCollection
-                              .doc(signupNameController.text.trim())
-                              .set(userData)
-                              .then((_) => print('Success'))
-                              .catchError((error) => print('Failed: $error'));
+                            await usersCollection
+                                .doc(signupNameController.text.trim())
+                                .set(userData)
+                                .then((_) => print('Success'))
+                                .catchError((error) => print('Failed: $error'));
 
-                          showInSnackBar(
-                              'User Created Successfully',
-                              Colors.green,
+                            showInSnackBar(
+                                'User Created Successfully',
+                                Colors.green,
+                                context,
+                                _scaffoldKey.currentContext!);
+                            Navigator.push(
                               context,
-                              _scaffoldKey.currentContext!);
-                          Navigator.push(
-                            context,
-                            prefix0.MaterialPageRoute(
-                              builder: (context) => DashboardPage(),
-                            ),
-                          );
+                              prefix0.MaterialPageRoute(
+                                builder: (context) => DashboardPage(),
+                              ),
+                            );
+                            setState(() {
+                              _loading = false;
+                            });
+                          }
+                          // here
+                        } on FirebaseAuthException catch (e) {
                           setState(() {
                             _loading = false;
                           });
-                        }
-                        // here
-                      } on FirebaseAuthException catch (e) {
-                        setState(() {
-                          _loading = false;
-                        });
-                        if (e.code == 'invalid-email') {
+                          if (e.code == 'invalid-email') {
+                            showInSnackBar(
+                                'Please provide a valid email',
+                                Colors.red,
+                                context,
+                                _scaffoldKey.currentContext!);
+                          }
+                          if (e.code == 'weak-password') {
+                            showInSnackBar(
+                                'The password provided is too weak.',
+                                Colors.red,
+                                context,
+                                _scaffoldKey.currentContext!);
+                          } else if (e.code == 'email-already-in-use') {
+                            showInSnackBar(
+                                'An account already exists for this email.',
+                                Colors.red,
+                                context,
+                                _scaffoldKey.currentContext!);
+                          }
+                        } catch (e) {
+                          setState(() {
+                            _loading = false;
+                          });
                           showInSnackBar(
-                              'Please provide a valid email',
+                              'Unexpected error occurred while signing up',
                               Colors.red,
                               context,
                               _scaffoldKey.currentContext!);
+                          print(e);
                         }
-                        if (e.code == 'weak-password') {
-                          showInSnackBar(
-                              'The password provided is too weak.',
-                              Colors.red,
-                              context,
-                              _scaffoldKey.currentContext!);
-                        } else if (e.code == 'email-already-in-use') {
-                          showInSnackBar(
-                              'An account already exists for this email.',
-                              Colors.red,
-                              context,
-                              _scaffoldKey.currentContext!);
-                        }
-                      } catch (e) {
-                        setState(() {
-                          _loading = false;
-                        });
-                        showInSnackBar(
-                            'Unexpected error occurred while signing up',
-                            Colors.red,
-                            context,
-                            _scaffoldKey.currentContext!);
-                        print(e);
                       }
-                    }
-                  },
+                    },
+                  ),
                 ),
-              ),
-            ],
-          ),
-        ],
+              ],
+            ),
+          ],
+        ),
       ),
     );
   }

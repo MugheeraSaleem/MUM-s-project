@@ -1,4 +1,3 @@
-import 'package:mum_s/pages/profile_page.dart';
 import 'package:flutter/material.dart';
 import 'package:mum_s/pages/login_page.dart';
 import 'package:mum_s/style/constants.dart';
@@ -7,13 +6,8 @@ import 'package:mum_s/utils/user_actions.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:mum_s/utils/snack_bar.dart';
 import 'package:draggable_fab/draggable_fab.dart';
-import 'package:mum_s/style/theme.dart' as Theme;
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:youtube_player_flutter/youtube_player_flutter.dart';
-import 'package:flutter/services.dart';
-import 'package:youtube_api/youtube_api.dart';
-import 'package:mum_s/utils/apiKey.dart';
-import 'package:mum_s/classes/video.dart';
 
 late User? loggedInUser;
 var usersCollection = FirebaseFirestore.instance.collection('Users');
@@ -21,21 +15,17 @@ var usersCollection = FirebaseFirestore.instance.collection('Users');
 ConnectivityClass c_class = ConnectivityClass();
 final _auth = FirebaseAuth.instance;
 
-class mediaPage extends StatefulWidget {
-  const mediaPage({Key? key}) : super(key: key);
+class VideoScreen extends StatefulWidget {
+  final String id;
+
+  VideoScreen({required this.id});
 
   @override
-  State<mediaPage> createState() => _mediaPageState();
+  _VideoScreenState createState() => _VideoScreenState();
 }
 
-class _mediaPageState extends State<mediaPage> {
-  List<Video> videos = [];
-  YoutubeAPI youtube = YoutubeAPI(apiKey, type: 'video');
+class _VideoScreenState extends State<VideoScreen> {
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
-
-  final videoURL =
-      'https://www.youtube.com/watch?v=YMx8Bbev6T4&t=1s&ab_channel=FlutterUIDev';
-
   late YoutubePlayerController _videoController;
   late TextEditingController _idController;
   late TextEditingController _seekToController;
@@ -46,19 +36,23 @@ class _mediaPageState extends State<mediaPage> {
   bool _muted = false;
   bool _isPlayerReady = false;
 
+  // static final List<String> videoQualities = [
+  //   '360p',
+  //   '480p',
+  //   '720p',
+  //   '1080p',
+  // ];
+  // String _selectedQuality = videoQualities[0];
+  // int actualQuality = 0;
+
   @override
   void initState() {
-    c_class.getConnectivity(context);
-    c_class.checkInternet(context);
-    // This function is printing the users name and its email
-    loggedInUser = getCurrentUser();
-
-    final videoId = YoutubePlayer.convertUrlToId(videoURL);
-
+    super.initState();
     _videoController = YoutubePlayerController(
-      initialVideoId: videoId!,
-      flags: const YoutubePlayerFlags(
-        mute: false,
+      initialVideoId: widget.id,
+      flags: YoutubePlayerFlags(
+        controlsVisibleAtStart: true,
+        mute: _muted,
         autoPlay: true,
         disableDragSeek: false,
         loop: false,
@@ -71,7 +65,6 @@ class _mediaPageState extends State<mediaPage> {
     _seekToController = TextEditingController();
     _videoMetaData = const YoutubeMetaData();
     _playerState = PlayerState.unknown;
-    super.initState();
   }
 
   void listener() {
@@ -101,6 +94,34 @@ class _mediaPageState extends State<mediaPage> {
   Widget build(BuildContext context) {
     return YoutubePlayerBuilder(
       player: YoutubePlayer(
+        // topActions: [
+        //   DropdownButton(
+        //       isDense: true,
+        //       value: _selectedQuality,
+        //       onChanged: (String? value) {
+        //         setState(() {
+        //           _selectedQuality = value!;
+        //           actualQuality =
+        //               videoQualities.indexOf(value); // Refresh the chart
+        //         });
+        //         _changeVideoQuality(actualQuality);
+        //       },
+        //       items: videoQualities.map((String title) {
+        //         return DropdownMenuItem(
+        //           value: title,
+        //           child: Text(title,
+        //               style: const TextStyle(
+        //                   color: Colors.blue,
+        //                   fontWeight: FontWeight.w400,
+        //                   fontSize: 14.0)),
+        //         );
+        //       }).toList())
+        // ],
+        progressColors: const ProgressBarColors(
+          playedColor: Colors.purple, // Customize the played color
+          handleColor: Colors.purpleAccent, // Customize the handle color
+          bufferedColor: Colors.grey, // Customize the buffered color
+        ),
         onEnded: (data) {
           print('here is what will get printed' + data.toString());
         },
@@ -135,52 +156,6 @@ class _mediaPageState extends State<mediaPage> {
             ),
           ),
         ),
-        appBar: AppBar(
-          elevation: 2.0,
-          backgroundColor: kAppBarColor,
-          title: const Center(
-            child: Text(
-              'My Media',
-              style: TextStyle(
-                  color: Colors.white,
-                  fontWeight: FontWeight.w700,
-                  fontSize: 30.0),
-            ),
-          ),
-          actions: <Widget>[
-            Container(
-              margin: const EdgeInsets.only(right: 8.0),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: <Widget>[
-                  MaterialButton(
-                    child: Material(
-                      color: Colors.white,
-                      shape: const CircleBorder(),
-                      child: Padding(
-                          padding: const EdgeInsets.all(3.0),
-                          child: Icon(
-                            Icons.person,
-                            color: kFloatingActionButtonColor,
-                            size: 40.0,
-                          )),
-                    ),
-                    onPressed: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => ProfilePage(),
-                        ),
-                      );
-                      c_class.checkInternet(context);
-                    },
-                  )
-                ],
-              ),
-            )
-          ],
-        ),
         body: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
@@ -188,6 +163,9 @@ class _mediaPageState extends State<mediaPage> {
               child: player,
             ),
           ],
+        ),
+        appBar: AppBar(
+          backgroundColor: Colors.black,
         ),
       ),
     );
