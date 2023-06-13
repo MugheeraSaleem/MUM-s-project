@@ -12,7 +12,10 @@ import 'package:mum_s/style/theme.dart' as Theme;
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:mum_s/pages/dashboard.dart';
 import 'package:flutter/services.dart';
-import 'package:mum_s/pages/counselingPage.dart';
+import 'package:mum_s/pages/exercises_page.dart';
+import 'package:mum_s/pages/media_page.dart';
+import 'package:mum_s/pages/counseling_page.dart';
+import 'package:mum_s/utils/user_actions.dart';
 
 late User? loggedInUser;
 var usersCollection = FirebaseFirestore.instance.collection('Users');
@@ -31,6 +34,12 @@ class _PlaylistPageState extends State<PlaylistPage> {
   @override
   void dispose() {
     super.dispose();
+  }
+
+  @override
+  void initState() {
+    loggedInUser = getCurrentUser();
+    super.initState();
   }
 
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
@@ -141,99 +150,267 @@ class _PlaylistPageState extends State<PlaylistPage> {
             ],
             children: [
               buildTile(
-                Padding(
-                  padding: const EdgeInsets.only(left: 18.0),
-                  child: Row(
-                      mainAxisAlignment: MainAxisAlignment.start,
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      children: <Widget>[
-                        CircleAvatar(
-                          radius: 70,
-                          backgroundColor: Colors.white,
-                          child: ClipOval(
-                            clipper: MClipper(),
-                            child: Image.asset(
-                              "assets/focus.jpeg",
-                              fit: BoxFit.contain,
-                            ),
-                          ),
-                        ),
-                        const Text(
-                          'My Exercises',
-                          style: TextStyle(
-                              color: Colors.black,
-                              fontWeight: FontWeight.w700,
-                              fontSize: 24.0),
-                        ),
-                      ]),
-                ),
-                onTap: () {},
-              ),
-              buildTile(
-                Padding(
-                  padding: const EdgeInsets.only(left: 18.0),
-                  child: Row(
-                      mainAxisAlignment: MainAxisAlignment.start,
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      children: <Widget>[
-                        CircleAvatar(
-                          radius: 70,
-                          backgroundColor: Colors.white,
-                          child: ClipOval(
-                            clipper: MClipper(),
-                            child: Image.asset(
-                              "assets/counseling.jpg",
-                              fit: BoxFit.contain,
-                            ),
-                          ),
-                        ),
-                        const Text(
-                          'My Counseling',
-                          style: TextStyle(
-                              color: Colors.black,
-                              fontWeight: FontWeight.w700,
-                              fontSize: 24.0),
-                        ),
-                      ]),
-                ),
+                StreamBuilder<Object>(
+                    stream: usersCollection
+                        .doc(loggedInUser!.displayName)
+                        .snapshots(),
+                    builder: (context, AsyncSnapshot snapshot) {
+                      if (snapshot.hasData &&
+                          snapshot.data!
+                              .data()!
+                              .containsKey('Exercises last watched video')) {
+                        return Padding(
+                          padding: const EdgeInsets.only(left: 18.0),
+                          child: Row(
+                              mainAxisAlignment: MainAxisAlignment.start,
+                              crossAxisAlignment: CrossAxisAlignment.center,
+                              children: <Widget>[
+                                CircleAvatar(
+                                  radius: 70,
+                                  backgroundColor: Colors.white,
+                                  child: ClipOval(
+                                    clipper: MClipper(),
+                                    child: Image.asset(
+                                      "assets/focus.jpeg",
+                                      fit: BoxFit.contain,
+                                    ),
+                                  ),
+                                ),
+                                Column(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    const Text(
+                                      'My Exercises',
+                                      style: TextStyle(
+                                          color: Colors.black,
+                                          fontWeight: FontWeight.w700,
+                                          fontSize: 24.0),
+                                    ),
+                                    Text(
+                                      'Last watching: ${snapshot.data['Exercises last watched video']}',
+                                      style: const TextStyle(
+                                          color: Colors.grey,
+                                          fontWeight: FontWeight.w700,
+                                          fontSize: 15.0),
+                                    ),
+                                  ],
+                                ),
+                              ]),
+                        );
+                      } else {
+                        return Padding(
+                          padding: const EdgeInsets.only(left: 18.0),
+                          child: Row(
+                              mainAxisAlignment: MainAxisAlignment.start,
+                              crossAxisAlignment: CrossAxisAlignment.center,
+                              children: <Widget>[
+                                CircleAvatar(
+                                  radius: 70,
+                                  backgroundColor: Colors.white,
+                                  child: ClipOval(
+                                    clipper: MClipper(),
+                                    child: Image.asset(
+                                      "assets/focus.jpeg",
+                                      fit: BoxFit.contain,
+                                    ),
+                                  ),
+                                ),
+                                const Text(
+                                  'My Exercises',
+                                  style: TextStyle(
+                                      color: Colors.black,
+                                      fontWeight: FontWeight.w700,
+                                      fontSize: 24.0),
+                                ),
+                              ]),
+                        );
+                      }
+                    }),
                 onTap: () {
                   Navigator.push(
                     context,
                     MaterialPageRoute(
-                      builder: (context) => counselingPage(),
+                      builder: (context) => const exercisesPage(),
                     ),
                   );
                   c_class.checkInternet(context);
                 },
               ),
               buildTile(
-                Padding(
-                  padding: const EdgeInsets.only(left: 18.0),
-                  child: Row(
-                      mainAxisAlignment: MainAxisAlignment.start,
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      children: <Widget>[
-                        CircleAvatar(
-                          radius: 70,
-                          backgroundColor: Colors.white,
-                          child: ClipOval(
-                            clipper: MClipper(),
-                            child: Image.asset(
-                              "assets/print.jpg",
-                              fit: BoxFit.contain,
-                            ),
-                          ),
-                        ),
-                        const Text(
-                          'My Media',
-                          style: TextStyle(
-                              color: Colors.black,
-                              fontWeight: FontWeight.w700,
-                              fontSize: 24.0),
-                        ),
-                      ]),
-                ),
-                onTap: () {},
+                StreamBuilder<Object>(
+                    stream: usersCollection
+                        .doc(loggedInUser!.displayName)
+                        .snapshots(),
+                    builder: (context, AsyncSnapshot snapshot) {
+                      if (snapshot.hasData &&
+                          snapshot.data!
+                              .data()!
+                              .containsKey('Counseling last watched video')) {
+                        return Padding(
+                          padding: const EdgeInsets.only(left: 18.0),
+                          child: Row(
+                              mainAxisAlignment: MainAxisAlignment.start,
+                              crossAxisAlignment: CrossAxisAlignment.center,
+                              children: <Widget>[
+                                CircleAvatar(
+                                  radius: 70,
+                                  backgroundColor: Colors.white,
+                                  child: ClipOval(
+                                    clipper: MClipper(),
+                                    child: Image.asset(
+                                      "assets/counseling.jpg",
+                                      fit: BoxFit.contain,
+                                    ),
+                                  ),
+                                ),
+                                Column(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    const Text(
+                                      'My Counseling',
+                                      style: TextStyle(
+                                          color: Colors.black,
+                                          fontWeight: FontWeight.w700,
+                                          fontSize: 24.0),
+                                    ),
+                                    Text(
+                                      'Last watching: ${snapshot.data['Counseling last watched video']}',
+                                      style: const TextStyle(
+                                          color: Colors.grey,
+                                          fontWeight: FontWeight.w700,
+                                          fontSize: 15.0),
+                                    ),
+                                  ],
+                                ),
+                              ]),
+                        );
+                      } else {
+                        return Padding(
+                          padding: const EdgeInsets.only(left: 18.0),
+                          child: Row(
+                              mainAxisAlignment: MainAxisAlignment.start,
+                              crossAxisAlignment: CrossAxisAlignment.center,
+                              children: <Widget>[
+                                CircleAvatar(
+                                  radius: 70,
+                                  backgroundColor: Colors.white,
+                                  child: ClipOval(
+                                    clipper: MClipper(),
+                                    child: Image.asset(
+                                      "assets/counseling.jpg",
+                                      fit: BoxFit.contain,
+                                    ),
+                                  ),
+                                ),
+                                const Text(
+                                  'My Counseling',
+                                  style: TextStyle(
+                                      color: Colors.black,
+                                      fontWeight: FontWeight.w700,
+                                      fontSize: 24.0),
+                                ),
+                              ]),
+                        );
+                      }
+                    }),
+                onTap: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => const counselingPage(),
+                    ),
+                  );
+                  c_class.checkInternet(context);
+                },
+              ),
+              buildTile(
+                StreamBuilder<Object>(
+                    stream: usersCollection
+                        .doc(loggedInUser!.displayName)
+                        .snapshots(),
+                    builder: (context, AsyncSnapshot snapshot) {
+                      if (snapshot.hasData &&
+                          snapshot.data!
+                              .data()!
+                              .containsKey('Media last watched video')) {
+                        return Padding(
+                          padding: const EdgeInsets.only(left: 18.0),
+                          child: Row(
+                              mainAxisAlignment: MainAxisAlignment.start,
+                              crossAxisAlignment: CrossAxisAlignment.center,
+                              children: <Widget>[
+                                CircleAvatar(
+                                  radius: 70,
+                                  backgroundColor: Colors.white,
+                                  child: ClipOval(
+                                    clipper: MClipper(),
+                                    child: Image.asset(
+                                      "assets/print.jpg",
+                                      fit: BoxFit.contain,
+                                    ),
+                                  ),
+                                ),
+                                Column(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: [
+                                    const Text(
+                                      'My Media',
+                                      style: TextStyle(
+                                          color: Colors.black,
+                                          fontWeight: FontWeight.w700,
+                                          fontSize: 24.0),
+                                    ),
+                                    Text(
+                                      'Last watching: ${snapshot.data['Media last watched video']}',
+                                      style: const TextStyle(
+                                          color: Colors.grey,
+                                          fontWeight: FontWeight.w700,
+                                          fontSize: 15.0),
+                                    ),
+                                  ],
+                                ),
+                              ]),
+                        );
+                      } else {
+                        return Padding(
+                          padding: const EdgeInsets.only(left: 18.0),
+                          child: Row(
+                              mainAxisAlignment: MainAxisAlignment.start,
+                              crossAxisAlignment: CrossAxisAlignment.center,
+                              children: <Widget>[
+                                CircleAvatar(
+                                  radius: 70,
+                                  backgroundColor: Colors.white,
+                                  child: ClipOval(
+                                    clipper: MClipper(),
+                                    child: Image.asset(
+                                      "assets/print.jpg",
+                                      fit: BoxFit.contain,
+                                    ),
+                                  ),
+                                ),
+                                const Text(
+                                  'My Media',
+                                  style: TextStyle(
+                                      color: Colors.black,
+                                      fontWeight: FontWeight.w700,
+                                      fontSize: 24.0),
+                                ),
+                              ]),
+                        );
+                      }
+                    }),
+                onTap: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => const mediaPage(),
+                    ),
+                  );
+                  c_class.checkInternet(context);
+                },
               ),
             ],
           ),

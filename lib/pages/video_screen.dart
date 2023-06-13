@@ -17,8 +17,16 @@ final _auth = FirebaseAuth.instance;
 
 class VideoScreen extends StatefulWidget {
   final String id;
+  final String playlist;
+  final String videoTitle;
+  final int index;
 
-  VideoScreen({required this.id});
+  VideoScreen({
+    required this.id,
+    required this.playlist,
+    required this.videoTitle,
+    required this.index,
+  });
 
   @override
   _VideoScreenState createState() => _VideoScreenState();
@@ -36,17 +44,9 @@ class _VideoScreenState extends State<VideoScreen> {
   bool _muted = false;
   bool _isPlayerReady = false;
 
-  // static final List<String> videoQualities = [
-  //   '360p',
-  //   '480p',
-  //   '720p',
-  //   '1080p',
-  // ];
-  // String _selectedQuality = videoQualities[0];
-  // int actualQuality = 0;
-
   @override
   void initState() {
+    loggedInUser = getCurrentUser();
     super.initState();
     _videoController = YoutubePlayerController(
       initialVideoId: widget.id,
@@ -76,6 +76,34 @@ class _VideoScreenState extends State<VideoScreen> {
     }
   }
 
+  Future<void> storeVideoProgress(index, videoTitle) async {
+    try {
+// Get the reference to the Firestore document
+      DocumentReference docRef = usersCollection.doc(loggedInUser!.displayName);
+
+      // Retrieve the existing map from Firestore
+      DocumentSnapshot docSnapshot = await docRef.get();
+      Map<String, dynamic>? alreadyWatchedVideos = (docSnapshot.data()
+          as Map<String, dynamic>)['${widget.playlist} videos watched'];
+
+      if (alreadyWatchedVideos != null) {
+        alreadyWatchedVideos['$index || $videoTitle'] = 'yes';
+        await docRef.set(
+            {'${widget.playlist} videos watched': alreadyWatchedVideos},
+            SetOptions(mergeFields: ['${widget.playlist} videos watched']));
+      } else {
+        Map<String, dynamic> watchedVideo = {'$index || $videoTitle': 'yes'};
+
+        // Store the video progress in Firestore
+        await usersCollection.doc(loggedInUser!.displayName).set({
+          '${widget.playlist} videos watched': watchedVideo,
+        }, SetOptions(merge: true));
+      }
+    } catch (e) {
+      print('Error storing video progress: $e');
+    }
+  }
+
   @override
   void deactivate() {
     _videoController.pause();
@@ -94,36 +122,19 @@ class _VideoScreenState extends State<VideoScreen> {
   Widget build(BuildContext context) {
     return YoutubePlayerBuilder(
       player: YoutubePlayer(
-        // topActions: [
-        //   DropdownButton(
-        //       isDense: true,
-        //       value: _selectedQuality,
-        //       onChanged: (String? value) {
-        //         setState(() {
-        //           _selectedQuality = value!;
-        //           actualQuality =
-        //               videoQualities.indexOf(value); // Refresh the chart
-        //         });
-        //         _changeVideoQuality(actualQuality);
-        //       },
-        //       items: videoQualities.map((String title) {
-        //         return DropdownMenuItem(
-        //           value: title,
-        //           child: Text(title,
-        //               style: const TextStyle(
-        //                   color: Colors.blue,
-        //                   fontWeight: FontWeight.w400,
-        //                   fontSize: 14.0)),
-        //         );
-        //       }).toList())
-        // ],
+        onReady: () async {
+          await usersCollection.doc(loggedInUser!.displayName).set({
+            '${widget.playlist} last watched video': widget.index,
+          }, SetOptions(merge: true));
+        },
         progressColors: const ProgressBarColors(
           playedColor: Colors.purple, // Customize the played color
           handleColor: Colors.purpleAccent, // Customize the handle color
           bufferedColor: Colors.grey, // Customize the buffered color
         ),
         onEnded: (data) {
-          print('here is what will get printed' + data.toString());
+          storeVideoProgress(widget.index, widget.videoTitle);
+          Navigator.pop(context);
         },
         controller: _videoController,
         showVideoProgressIndicator: true,

@@ -184,11 +184,21 @@ class _DashboardPageState extends State<DashboardPage> {
                                     .doc(loggedInUser!.displayName)
                                     .snapshots(),
                                 builder: (context, AsyncSnapshot snapshot) {
+                                  DateTime now = DateTime.now();
                                   if (snapshot.hasData &&
                                       snapshot.data!
                                           .data()!
-                                          .containsKey('deliveryDate')) {
-                                    DateTime now = DateTime.now();
+                                          .containsKey('deliveryDate') &&
+                                      (snapshot.data['deliveryDate']
+                                                  .toDate()
+                                                  .month -
+                                              now.month) >
+                                          0 &&
+                                      (snapshot.data['deliveryDate']
+                                                  .toDate()
+                                                  .day -
+                                              now.day) >
+                                          0) {
                                     return Text(
                                       '${snapshot.data['deliveryDate'].toDate().month - now.month} months/${snapshot.data['deliveryDate'].toDate().day - now.day} days',
                                       style: const TextStyle(
@@ -196,15 +206,36 @@ class _DashboardPageState extends State<DashboardPage> {
                                           fontWeight: FontWeight.w700,
                                           fontSize: 25.0),
                                     );
+                                  } else if (snapshot.hasData &&
+                                      snapshot.data!
+                                          .data()!
+                                          .containsKey('deliveryDate') &&
+                                      (snapshot.data['deliveryDate']
+                                                  .toDate()
+                                                  .month -
+                                              now.month) >
+                                          0 &&
+                                      (snapshot.data['deliveryDate']
+                                                  .toDate()
+                                                  .day -
+                                              now.day) <
+                                          0) {
+                                    return Text(
+                                      '${snapshot.data['deliveryDate'].toDate().month - now.month - 1} months/${snapshot.data['deliveryDate'].toDate().day - now.day + 30} days',
+                                      style: const TextStyle(
+                                          color: Colors.black,
+                                          fontWeight: FontWeight.w700,
+                                          fontSize: 25.0),
+                                    );
+                                  } else {
+                                    return const Text(
+                                      '00/00',
+                                      style: TextStyle(
+                                          color: Colors.black,
+                                          fontWeight: FontWeight.w700,
+                                          fontSize: 34.0),
+                                    );
                                   }
-
-                                  return const Text(
-                                    '00/00',
-                                    style: TextStyle(
-                                        color: Colors.black,
-                                        fontWeight: FontWeight.w700,
-                                        fontSize: 34.0),
-                                  );
                                 })
                           ],
                         ),

@@ -25,14 +25,14 @@ ConnectivityClass c_class = ConnectivityClass();
 final _auth = FirebaseAuth.instance;
 const int maxResults = 5; // Maximum number of results per page
 
-class counselingPage extends StatefulWidget {
-  const counselingPage({Key? key}) : super(key: key);
+class exercisesPage extends StatefulWidget {
+  const exercisesPage({Key? key}) : super(key: key);
 
   @override
-  State<counselingPage> createState() => _counselingPageState();
+  State<exercisesPage> createState() => _exercisesPageState();
 }
 
-class _counselingPageState extends State<counselingPage> {
+class _exercisesPageState extends State<exercisesPage> {
   bool _loading = true;
   List<Video> videos = [];
   String? nextPageToken;
@@ -71,7 +71,7 @@ class _counselingPageState extends State<counselingPage> {
 
   Future<void> fetchPlaylistVideos() async {
     String apiUrl =
-        'https://www.googleapis.com/youtube/v3/playlistItems?part=snippet&maxResults=$maxResults&playlistId=$counselingPlaylistId&key=$apiKey';
+        'https://www.googleapis.com/youtube/v3/playlistItems?part=snippet&maxResults=$maxResults&playlistId=$exercisesPlaylistId&key=$apiKey';
 
     try {
       final response = await http.get(Uri.parse(apiUrl));
@@ -125,7 +125,7 @@ class _counselingPageState extends State<counselingPage> {
     });
 
     String apiUrl =
-        'https://www.googleapis.com/youtube/v3/playlistItems?part=snippet&maxResults=$maxResults&playlistId=$counselingPlaylistId&key=$apiKey';
+        'https://www.googleapis.com/youtube/v3/playlistItems?part=snippet&maxResults=$maxResults&playlistId=$exercisesPlaylistId&key=$apiKey';
 
     if (nextPageToken != null) {
       apiUrl += '&pageToken=$nextPageToken';
@@ -212,7 +212,7 @@ class _counselingPageState extends State<counselingPage> {
         backgroundColor: kAppBarColor,
         title: const Center(
           child: Text(
-            'My Counseling',
+            'My Exercises',
             style: TextStyle(
                 color: Colors.white,
                 fontWeight: FontWeight.w700,
@@ -291,71 +291,84 @@ class _counselingPageState extends State<counselingPage> {
                     Navigator.push(
                       context,
                       MaterialPageRoute(
-                        builder: (_) => VideoScreen(id: video.id),
+                        builder: (_) => VideoScreen(
+                          id: video.id,
+                          playlist: 'Exercises',
+                          videoTitle: video.title,
+                          index: index + 1,
+                        ),
                       ),
                     );
                   },
-                  child: Container(
-                    width: 100,
-                    decoration: BoxDecoration(
-                      color: Colors.white,
+                  child: Padding(
+                    padding: const EdgeInsets.only(
+                        left: 8.0, right: 8, top: 4, bottom: 4),
+                    child: Material(
+                      elevation: 14,
                       borderRadius: BorderRadius.circular(28),
-                      boxShadow: const [
-                        BoxShadow(
-                          offset: Offset(0, 1),
-                          blurRadius: 4,
-                          color: Color(0x90E5D0EC),
-                        )
-                      ],
-                    ),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        ClipRRect(
-                          borderRadius: const BorderRadius.only(
-                            topLeft: Radius.circular(28),
-                            topRight: Radius.circular(28),
-                          ),
-                          child: Image.network(
-                            video.thumbnailUrl,
-                            width: MediaQuery.of(context).size.width,
-                            fit: BoxFit.cover,
-                          ),
+                      child: Container(
+                        width: 100,
+                        decoration: BoxDecoration(
+                          color: Colors.white,
+                          borderRadius: BorderRadius.circular(28),
+                          boxShadow: const [
+                            BoxShadow(
+                              offset: Offset(0, 1),
+                              blurRadius: 4,
+                              color: Color(0x90E5D0EC),
+                            )
+                          ],
                         ),
-                        const SizedBox(
-                          height: 10,
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            ClipRRect(
+                              borderRadius: const BorderRadius.only(
+                                topLeft: Radius.circular(28),
+                                topRight: Radius.circular(28),
+                              ),
+                              child: Image.network(
+                                video.thumbnailUrl,
+                                width: MediaQuery.of(context).size.width,
+                                fit: BoxFit.cover,
+                              ),
+                            ),
+                            const SizedBox(
+                              height: 5,
+                            ),
+                            Padding(
+                              padding: const EdgeInsets.only(
+                                left: 15,
+                                right: 15,
+                                bottom: 5,
+                              ),
+                              child: Text(
+                                '${index + 1} || ${video.title}',
+                                textAlign: TextAlign.left,
+                                style: const TextStyle(
+                                    fontSize: 16,
+                                    fontWeight: FontWeight.bold,
+                                    fontFamily: "Poppins"),
+                              ),
+                            ),
+                            Padding(
+                              padding: const EdgeInsets.only(
+                                left: 15,
+                                right: 15,
+                                bottom: 15,
+                              ),
+                              child: Text(
+                                video.channelName,
+                                style: const TextStyle(
+                                    fontSize: 14,
+                                    fontWeight: FontWeight.w400,
+                                    fontFamily: "Poppins"),
+                                textAlign: TextAlign.justify,
+                              ),
+                            )
+                          ],
                         ),
-                        Padding(
-                          padding: const EdgeInsets.only(
-                            left: 15,
-                            right: 15,
-                            bottom: 5,
-                          ),
-                          child: Text(
-                            video.title,
-                            textAlign: TextAlign.left,
-                            style: const TextStyle(
-                                fontSize: 16,
-                                fontWeight: FontWeight.bold,
-                                fontFamily: "Poppins"),
-                          ),
-                        ),
-                        Padding(
-                          padding: const EdgeInsets.only(
-                            left: 15,
-                            right: 15,
-                            bottom: 15,
-                          ),
-                          child: Text(
-                            video.channelName,
-                            style: const TextStyle(
-                                fontSize: 14,
-                                fontWeight: FontWeight.w400,
-                                fontFamily: "Poppins"),
-                            textAlign: TextAlign.justify,
-                          ),
-                        )
-                      ],
+                      ),
                     ),
                   ),
                 );
