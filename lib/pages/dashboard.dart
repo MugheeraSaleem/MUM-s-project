@@ -453,11 +453,11 @@ class _DashboardPageState extends State<DashboardPage> {
                     ),
                   ),
                   onTap: () {
-                    Navigator.of(context).push(
-                      MaterialPageRoute(
-                        builder: (_) => MapPage(),
-                      ),
-                    );
+                    // Navigator.of(context).push(
+                    //   MaterialPageRoute(
+                    //     builder: (_) => MapPage(),
+                    //   ),
+                    // );
                   },
                 ),
               ],
