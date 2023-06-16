@@ -155,11 +155,11 @@ class _VideoScreenState extends State<VideoScreen> {
               onPressed: () {
                 c_class.checkInternet(context);
                 _auth.signOut();
-                Navigator.push(
+                Navigator.pushNamedAndRemoveUntil(
                   context,
-                  MaterialPageRoute(
-                    builder: (context) => const LoginPage(),
-                  ),
+                  '/',
+                  (route) =>
+                      false, // This predicate ensures all previous routes are removed
                 );
                 showInSnackBar('Logged out Successfully', Colors.green, context,
                     _scaffoldKey.currentContext!);

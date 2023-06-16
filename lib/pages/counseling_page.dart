@@ -25,14 +25,14 @@ ConnectivityClass c_class = ConnectivityClass();
 final _auth = FirebaseAuth.instance;
 const int maxResults = 5; // Maximum number of results per page
 
-class counselingPage extends StatefulWidget {
-  const counselingPage({Key? key}) : super(key: key);
+class CounselingPage extends StatefulWidget {
+  const CounselingPage({Key? key}) : super(key: key);
 
   @override
-  State<counselingPage> createState() => _counselingPageState();
+  State<CounselingPage> createState() => _CounselingPageState();
 }
 
-class _counselingPageState extends State<counselingPage> {
+class _CounselingPageState extends State<CounselingPage> {
   bool _loading = true;
   List<Video> videos = [];
   String? nextPageToken;
@@ -195,11 +195,11 @@ class _counselingPageState extends State<counselingPage> {
             onPressed: () {
               c_class.checkInternet(context);
               _auth.signOut();
-              Navigator.push(
+              Navigator.pushNamedAndRemoveUntil(
                 context,
-                MaterialPageRoute(
-                  builder: (context) => const LoginPage(),
-                ),
+                '/',
+                (route) =>
+                    false, // This predicate ensures all previous routes are removed
               );
               showInSnackBar('Logged out Successfully', Colors.green, context,
                   _scaffoldKey.currentContext!);

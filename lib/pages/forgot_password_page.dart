@@ -64,7 +64,7 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
         backgroundColor: kAppBarColor,
         title: const Center(
           child: Text(
-            'Forgot Password Page',
+            'Forgot Password',
             style: TextStyle(
                 color: Colors.white,
                 fontWeight: FontWeight.w700,

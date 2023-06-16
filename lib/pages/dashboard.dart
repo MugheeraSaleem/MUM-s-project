@@ -69,11 +69,11 @@ class _DashboardPageState extends State<DashboardPage> {
               onPressed: () {
                 c_class.checkInternet(context);
                 _auth.signOut();
-                Navigator.push(
+                Navigator.pushNamedAndRemoveUntil(
                   context,
-                  MaterialPageRoute(
-                    builder: (context) => LoginPage(),
-                  ),
+                  '/',
+                  (route) =>
+                      false, // This predicate ensures all previous routes are removed
                 );
                 showInSnackBar('Logged out Successfully', Colors.green, context,
                     _scaffoldKey.currentContext!);

@@ -47,6 +47,9 @@ class ConnectivityClass {
     showDialog(
       context: context,
       builder: (context) => AlertDialog(
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
+        shadowColor: Colors.grey,
+        elevation: 14,
         title: const Text("No Internet"),
         content: const Text("Internet not detected. Please activate it."),
         actions: <Widget>[

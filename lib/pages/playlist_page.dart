@@ -61,11 +61,11 @@ class _PlaylistPageState extends State<PlaylistPage> {
             onPressed: () {
               c_class.checkInternet(context);
               _auth.signOut();
-              Navigator.push(
+              Navigator.pushNamedAndRemoveUntil(
                 context,
-                MaterialPageRoute(
-                  builder: (context) => const LoginPage(),
-                ),
+                '/',
+                (route) =>
+                    false, // This predicate ensures all previous routes are removed
               );
               showInSnackBar('Logged out Successfully', Colors.green, context,
                   _scaffoldKey.currentContext!);
@@ -231,7 +231,7 @@ class _PlaylistPageState extends State<PlaylistPage> {
                   Navigator.push(
                     context,
                     MaterialPageRoute(
-                      builder: (context) => const exercisesPage(),
+                      builder: (context) => const ExercisesPage(),
                     ),
                   );
                   c_class.checkInternet(context);
@@ -319,7 +319,7 @@ class _PlaylistPageState extends State<PlaylistPage> {
                   Navigator.push(
                     context,
                     MaterialPageRoute(
-                      builder: (context) => const counselingPage(),
+                      builder: (context) => const CounselingPage(),
                     ),
                   );
                   c_class.checkInternet(context);
@@ -406,7 +406,7 @@ class _PlaylistPageState extends State<PlaylistPage> {
                   Navigator.push(
                     context,
                     MaterialPageRoute(
-                      builder: (context) => const mediaPage(),
+                      builder: (context) => const MediaPage(),
                     ),
                   );
                   c_class.checkInternet(context);
