@@ -68,6 +68,10 @@ class MyApp extends StatelessWidget {
   }
 }
 
+// I/flutter ( 8093): this is the device width 392.72727272727275
+// I/flutter ( 8093): this is the device height 781.0909090909091
+// this is the device pixelratio is 2.75
+
 //todo: notify users when they haven't watched their weekly video.
 
 //optional TODOs.

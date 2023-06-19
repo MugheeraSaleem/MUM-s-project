@@ -73,7 +73,10 @@ class _LoginPageState extends State<LoginPage>
       body: ModalProgressHUD(
         progressIndicator: LoadingAnimationWidget.beat(
           color: Colors.pinkAccent,
-          size: 100,
+          size: ((MediaQuery.of(context).size.height /
+                      MediaQuery.of(context).size.width) *
+                  50)
+              .toDouble(),
         ),
         dismissible: true,
         inAsyncCall: _loading,
@@ -86,9 +89,12 @@ class _LoginPageState extends State<LoginPage>
             },
             child: Container(
               width: MediaQuery.of(context).size.width,
-              height: MediaQuery.of(context).size.height >= 775.0
-                  ? MediaQuery.of(context).size.height
-                  : 775.0,
+              height: MediaQuery.of(context).size.height
+              // >= 775.0
+              // ? MediaQuery.of(context).size.height
+              // : 775.0
+              // \
+              ,
               decoration: const BoxDecoration(
                 gradient: LinearGradient(
                     colors: [
@@ -422,6 +428,13 @@ class _LoginPageState extends State<LoginPage>
             padding: const EdgeInsets.only(top: 10.0),
             child: TextButton(
               onPressed: () {
+                // print(
+                //     'this is the device width ${MediaQuery.of(context).size.width}');
+                // print(
+                //     'this is the device height ${MediaQuery.of(context).size.height}');
+                // print(
+                //     'this is the device pixelratio is ${MediaQuery.of(context).devicePixelRatio}');
+
                 Navigator.push(
                   context,
                   prefix0.MaterialPageRoute(
