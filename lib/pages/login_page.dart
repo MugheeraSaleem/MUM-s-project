@@ -89,12 +89,7 @@ class _LoginPageState extends State<LoginPage>
             },
             child: Container(
               width: MediaQuery.of(context).size.width,
-              height: MediaQuery.of(context).size.height
-              // >= 775.0
-              // ? MediaQuery.of(context).size.height
-              // : 775.0
-              // \
-              ,
+              height: MediaQuery.of(context).size.height,
               decoration: const BoxDecoration(
                 gradient: LinearGradient(
                     colors: [
@@ -109,17 +104,31 @@ class _LoginPageState extends State<LoginPage>
               child: Column(
                 mainAxisSize: MainAxisSize.max,
                 children: <Widget>[
-                  const Padding(
-                    padding: EdgeInsets.only(top: 75.0),
+                  Padding(
+                    padding: EdgeInsets.only(
+                        top: ((MediaQuery.of(context).size.height /
+                                    MediaQuery.of(context).size.width) *
+                                37.5)
+                            .toDouble()),
                     child: Image(
-                      width: 250.0,
-                      height: 200.0,
+                      width: ((MediaQuery.of(context).size.height /
+                                  MediaQuery.of(context).size.width) *
+                              100)
+                          .toDouble(),
+                      height: ((MediaQuery.of(context).size.height /
+                                  MediaQuery.of(context).size.width) *
+                              75)
+                          .toDouble(),
                       fit: BoxFit.fill,
                       image: AssetImage('assets/main_img.png'),
                     ),
                   ),
                   Padding(
-                    padding: const EdgeInsets.only(top: 20.0),
+                    padding: EdgeInsets.only(
+                        top: ((MediaQuery.of(context).size.height /
+                                    MediaQuery.of(context).size.width) *
+                                10)
+                            .toDouble()),
                     child: _buildMenuBar(context),
                   ),
                   Expanded(
@@ -188,8 +197,14 @@ class _LoginPageState extends State<LoginPage>
   Widget _buildMenuBar(BuildContext context) {
     return SingleChildScrollView(
       child: Container(
-        width: 300.0,
-        height: 50.0,
+        width: ((MediaQuery.of(context).size.height /
+                    MediaQuery.of(context).size.width) *
+                150)
+            .toDouble(),
+        height: ((MediaQuery.of(context).size.height /
+                    MediaQuery.of(context).size.width) *
+                25)
+            .toDouble(),
         decoration: const BoxDecoration(
           color: Color(0x552B2B2B),
           borderRadius: BorderRadius.all(
@@ -212,12 +227,14 @@ class _LoginPageState extends State<LoginPage>
                     "Existing",
                     style: TextStyle(
                         color: left,
-                        fontSize: 16.0,
+                        fontSize: ((MediaQuery.of(context).size.height /
+                                    MediaQuery.of(context).size.width) *
+                                8)
+                            .toDouble(),
                         fontFamily: "WorkSansSemiBold"),
                   ),
                 ),
               ),
-              //Container(height: 33.0, width: 1.0, color: Colors.white),
               Expanded(
                 child: TextButton(
                   style: ButtonStyle(
@@ -229,7 +246,10 @@ class _LoginPageState extends State<LoginPage>
                     "New",
                     style: TextStyle(
                         color: right,
-                        fontSize: 16.0,
+                        fontSize: ((MediaQuery.of(context).size.height /
+                                    MediaQuery.of(context).size.width) *
+                                8)
+                            .toDouble(),
                         fontFamily: "WorkSansSemiBold"),
                   ),
                 ),
@@ -244,7 +264,11 @@ class _LoginPageState extends State<LoginPage>
   Widget _buildSignIn(BuildContext context) {
     var deviceSize = MediaQuery.of(context).size;
     return Container(
-      padding: const EdgeInsets.only(top: 23.0),
+      padding: EdgeInsets.only(
+          top: ((MediaQuery.of(context).size.height /
+                      MediaQuery.of(context).size.width) *
+                  11.5)
+              .toDouble()),
       child: Column(
         children: <Widget>[
           Stack(
@@ -260,8 +284,14 @@ class _LoginPageState extends State<LoginPage>
                   ),
                 ),
                 child: SizedBox(
-                  width: 300.0,
-                  height: 190.0,
+                  width: ((MediaQuery.of(context).size.height /
+                              MediaQuery.of(context).size.width) *
+                          150)
+                      .toDouble(),
+                  height: ((MediaQuery.of(context).size.height /
+                              MediaQuery.of(context).size.width) *
+                          95)
+                      .toDouble(),
                   child: Column(
                     children: <Widget>[
                       TextEntryWidget(
@@ -275,7 +305,10 @@ class _LoginPageState extends State<LoginPage>
                           myFocusNode: myFocusNodeEmailLogin,
                           controller: loginEmailController),
                       Container(
-                        width: 250.0,
+                        width: ((MediaQuery.of(context).size.height /
+                                    MediaQuery.of(context).size.width) *
+                                125)
+                            .toDouble(),
                         height: 1.0,
                         color: Colors.grey[400],
                       ),
@@ -290,7 +323,10 @@ class _LoginPageState extends State<LoginPage>
                             _obscureTextLogin
                                 ? FontAwesomeIcons.eye
                                 : FontAwesomeIcons.eyeSlash,
-                            size: 15.0,
+                            size: ((MediaQuery.of(context).size.height /
+                                        MediaQuery.of(context).size.width) *
+                                    7.5)
+                                .toDouble(),
                             color: Colors.black,
                           ),
                         ),
@@ -306,7 +342,11 @@ class _LoginPageState extends State<LoginPage>
               Hero(
                 tag: 'yo',
                 child: Container(
-                  margin: const EdgeInsets.only(top: 170.0),
+                  margin: EdgeInsets.only(
+                      top: ((MediaQuery.of(context).size.height /
+                                  MediaQuery.of(context).size.width) *
+                              85)
+                          .toDouble()),
                   decoration: const BoxDecoration(
                     borderRadius: BorderRadius.all(Radius.circular(5.0)),
                     boxShadow: <BoxShadow>[
@@ -339,14 +379,24 @@ class _LoginPageState extends State<LoginPage>
                         Radius.circular(5.0),
                       ),
                     ),
-                    child: const Padding(
+                    child: Padding(
                       padding: EdgeInsets.symmetric(
-                          vertical: 10.0, horizontal: 42.0),
+                          vertical: ((MediaQuery.of(context).size.height /
+                                      MediaQuery.of(context).size.width) *
+                                  5)
+                              .toDouble(),
+                          horizontal: ((MediaQuery.of(context).size.height /
+                                      MediaQuery.of(context).size.width) *
+                                  21)
+                              .toDouble()),
                       child: Text(
                         "LOGIN",
                         style: TextStyle(
                             color: Colors.white,
-                            fontSize: 25.0,
+                            fontSize: ((MediaQuery.of(context).size.height /
+                                        MediaQuery.of(context).size.width) *
+                                    12.5)
+                                .toDouble(),
                             fontFamily: "WorkSansBold"),
                       ),
                     ),
@@ -425,15 +475,19 @@ class _LoginPageState extends State<LoginPage>
             ],
           ),
           Padding(
-            padding: const EdgeInsets.only(top: 10.0),
+            padding: EdgeInsets.only(
+                top: ((MediaQuery.of(context).size.height /
+                            MediaQuery.of(context).size.width) *
+                        5)
+                    .toDouble()),
             child: TextButton(
               onPressed: () {
-                // print(
-                //     'this is the device width ${MediaQuery.of(context).size.width}');
-                // print(
-                //     'this is the device height ${MediaQuery.of(context).size.height}');
-                // print(
-                //     'this is the device pixelratio is ${MediaQuery.of(context).devicePixelRatio}');
+                print(
+                    'this is the device width ${MediaQuery.of(context).size.width}');
+                print(
+                    'this is the device height ${MediaQuery.of(context).size.height}');
+                print(
+                    'this is the device pixelratio is ${MediaQuery.of(context).devicePixelRatio}');
 
                 Navigator.push(
                   context,
@@ -442,18 +496,25 @@ class _LoginPageState extends State<LoginPage>
                   ),
                 );
               },
-              child: const Text(
+              child: Text(
                 "Forgot Password?",
                 style: TextStyle(
                     decoration: TextDecoration.underline,
                     color: Colors.white,
-                    fontSize: 16.0,
+                    fontSize: ((MediaQuery.of(context).size.height /
+                                MediaQuery.of(context).size.width) *
+                            8)
+                        .toDouble(),
                     fontFamily: "WorkSansMedium"),
               ),
             ),
           ),
           Padding(
-            padding: const EdgeInsets.only(top: 10.0),
+            padding: EdgeInsets.only(
+                top: ((MediaQuery.of(context).size.height /
+                            MediaQuery.of(context).size.width) *
+                        5)
+                    .toDouble()),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: <Widget>[
@@ -469,16 +530,30 @@ class _LoginPageState extends State<LoginPage>
                         stops: [0.0, 1.0],
                         tileMode: TileMode.clamp),
                   ),
-                  width: 100.0,
+                  width: ((MediaQuery.of(context).size.height /
+                              MediaQuery.of(context).size.width) *
+                          50)
+                      .toDouble(),
                   height: 1.0,
                 ),
-                const Padding(
-                  padding: EdgeInsets.only(left: 15.0, right: 15.0),
+                Padding(
+                  padding: EdgeInsets.only(
+                      left: ((MediaQuery.of(context).size.height /
+                                  MediaQuery.of(context).size.width) *
+                              7.5)
+                          .toDouble(),
+                      right: ((MediaQuery.of(context).size.height /
+                                  MediaQuery.of(context).size.width) *
+                              7.5)
+                          .toDouble()),
                   child: Text(
                     "Or",
                     style: TextStyle(
                         color: Colors.white,
-                        fontSize: 16.0,
+                        fontSize: ((MediaQuery.of(context).size.height /
+                                    MediaQuery.of(context).size.width) *
+                                8)
+                            .toDouble(),
                         fontFamily: "WorkSansMedium"),
                   ),
                 ),
@@ -494,107 +569,128 @@ class _LoginPageState extends State<LoginPage>
                         stops: [0.0, 1.0],
                         tileMode: TileMode.clamp),
                   ),
-                  width: 100.0,
+                  width: ((MediaQuery.of(context).size.height /
+                              MediaQuery.of(context).size.width) *
+                          50)
+                      .toDouble(),
                   height: 1.0,
                 ),
               ],
             ),
           ),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: <Widget>[
-              InkWell(
-                child: Container(
-                  width: deviceSize.width / 1.8,
-                  height: deviceSize.height / 16,
-                  margin: const EdgeInsets.only(top: 25),
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(20),
-                    color: kAppBarColor,
-                  ),
-                  child: Center(
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                      children: <Widget>[
-                        Container(
-                          height: 40.0,
-                          width: 40.0,
-                          decoration: const BoxDecoration(
-                            image: DecorationImage(
-                                image: AssetImage('assets/google.png'),
-                                fit: BoxFit.cover),
-                            shape: BoxShape.circle,
+          Flexible(
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: <Widget>[
+                InkWell(
+                  child: Container(
+                    width: deviceSize.width / 1.8,
+                    height: deviceSize.height / 16,
+                    margin: EdgeInsets.only(
+                        top: ((MediaQuery.of(context).size.height /
+                                    MediaQuery.of(context).size.width) *
+                                12.5)
+                            .toDouble()),
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(20),
+                      color: kAppBarColor,
+                    ),
+                    child: Center(
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                        children: <Widget>[
+                          Container(
+                            height: ((MediaQuery.of(context).size.height /
+                                        MediaQuery.of(context).size.width) *
+                                    20)
+                                .toDouble(),
+                            width: ((MediaQuery.of(context).size.height /
+                                        MediaQuery.of(context).size.width) *
+                                    20)
+                                .toDouble(),
+                            decoration: const BoxDecoration(
+                              image: DecorationImage(
+                                  image: AssetImage('assets/google.png'),
+                                  fit: BoxFit.cover),
+                              shape: BoxShape.circle,
+                            ),
                           ),
-                        ),
-                        const Text(
-                          'Sign in with Google',
-                          style: TextStyle(
-                              fontSize: 18.0,
-                              fontWeight: FontWeight.bold,
-                              color: Colors.white),
-                        ),
-                      ],
+                          Text(
+                            'Sign in with Google',
+                            style: TextStyle(
+                                fontSize: ((MediaQuery.of(context).size.height /
+                                            MediaQuery.of(context).size.width) *
+                                        9)
+                                    .toDouble(),
+                                fontWeight: FontWeight.bold,
+                                color: Colors.white),
+                          ),
+                        ],
+                      ),
                     ),
                   ),
-                ),
-                onTap: () async {
-                  Future<bool> networkStatus = c_class.checkInternet(context);
-                  final provider =
-                      Provider.of<GoogleSignInProvider>(context, listen: false);
+                  onTap: () async {
+                    Future<bool> networkStatus = c_class.checkInternet(context);
+                    final provider = Provider.of<GoogleSignInProvider>(context,
+                        listen: false);
 
-                  try {
-                    setState(() {
-                      _loading = true;
-                    });
+                    try {
+                      setState(() {
+                        _loading = true;
+                      });
 
-                    showInSnackBar("Google button pressed", Colors.blue,
-                        context, _scaffoldKey.currentContext!);
-
-                    UserCredential googleUser = await provider.googleLogin();
-
-                    user = googleUser.user;
-
-                    if (await networkStatus == true && user != null) {
-                      Map<String, dynamic> userData = {
-                        'uid': user!.uid,
-                        'displayName': user!.displayName,
-                        'photoURL': user!.photoURL,
-                        'email': user!.email,
-                      };
-
-                      await usersCollection
-                          .doc(user!.displayName)
-                          .set(userData, SetOptions(merge: true))
-                          .then((_) => print('Success'))
-                          .catchError((error) => print('Failed: $error'));
-
-                      showInSnackBar('Logged in Successfully', Colors.green,
+                      showInSnackBar("Google button pressed", Colors.blue,
                           context, _scaffoldKey.currentContext!);
 
-                      Navigator.push(
-                        context,
-                        prefix0.MaterialPageRoute(
-                          builder: (context) => DashboardPage(),
-                        ),
-                      );
+                      UserCredential googleUser = await provider.googleLogin();
+
+                      user = googleUser.user;
+
+                      if (await networkStatus == true && user != null) {
+                        Map<String, dynamic> userData = {
+                          'uid': user!.uid,
+                          'displayName': user!.displayName,
+                          'photoURL': user!.photoURL,
+                          'email': user!.email,
+                        };
+
+                        await usersCollection
+                            .doc(user!.displayName)
+                            .set(userData, SetOptions(merge: true))
+                            .then((_) => print('Success'))
+                            .catchError((error) => print('Failed: $error'));
+
+                        showInSnackBar('Logged in Successfully', Colors.green,
+                            context, _scaffoldKey.currentContext!);
+
+                        Navigator.push(
+                          context,
+                          prefix0.MaterialPageRoute(
+                            builder: (context) => DashboardPage(),
+                          ),
+                        );
+                        setState(() {
+                          _loading = false;
+                        });
+                      }
                       setState(() {
                         _loading = false;
                       });
+                    } catch (e) {
+                      setState(() {
+                        _loading = false;
+                      });
+                      print('here is the exception causing trouble $e');
+                      showInSnackBar(
+                          'Unexpected error occurred while logging in',
+                          Colors.red,
+                          context,
+                          _scaffoldKey.currentContext!);
                     }
-                    setState(() {
-                      _loading = false;
-                    });
-                  } catch (e) {
-                    setState(() {
-                      _loading = false;
-                    });
-                    print('here is the exception causing trouble $e');
-                    showInSnackBar('Unexpected error occurred while logging in',
-                        Colors.red, context, _scaffoldKey.currentContext!);
-                  }
-                },
-              ),
-            ],
+                  },
+                ),
+              ],
+            ),
           ),
         ],
       ),
@@ -604,7 +700,11 @@ class _LoginPageState extends State<LoginPage>
   Widget _buildSignUp(BuildContext context) {
     return SingleChildScrollView(
       child: Container(
-        padding: const EdgeInsets.only(top: 23.0),
+        padding: EdgeInsets.only(
+            top: ((MediaQuery.of(context).size.height /
+                        MediaQuery.of(context).size.width) *
+                    11.5)
+                .toDouble()),
         child: Column(
           children: <Widget>[
             Stack(
@@ -618,8 +718,14 @@ class _LoginPageState extends State<LoginPage>
                     borderRadius: BorderRadius.circular(8.0),
                   ),
                   child: SizedBox(
-                    width: 300.0,
-                    height: 360.0,
+                    width: ((MediaQuery.of(context).size.height /
+                                MediaQuery.of(context).size.width) *
+                            150)
+                        .toDouble(),
+                    height: ((MediaQuery.of(context).size.height /
+                                MediaQuery.of(context).size.width) *
+                            180)
+                        .toDouble(),
                     child: Column(
                       children: <Widget>[
                         TextEntryWidget(
@@ -633,7 +739,10 @@ class _LoginPageState extends State<LoginPage>
                             ),
                             hidetext: false),
                         Container(
-                          width: 250.0,
+                          width: ((MediaQuery.of(context).size.height /
+                                      MediaQuery.of(context).size.width) *
+                                  125)
+                              .toDouble(),
                           height: 1.0,
                           color: Colors.grey[400],
                         ),
@@ -649,7 +758,10 @@ class _LoginPageState extends State<LoginPage>
                           hidetext: false,
                         ),
                         Container(
-                          width: 250.0,
+                          width: ((MediaQuery.of(context).size.height /
+                                      MediaQuery.of(context).size.width) *
+                                  125)
+                              .toDouble(),
                           height: 1.0,
                           color: Colors.grey[400],
                         ),
@@ -663,7 +775,10 @@ class _LoginPageState extends State<LoginPage>
                                 _obscureTextSignup
                                     ? FontAwesomeIcons.eye
                                     : FontAwesomeIcons.eyeSlash,
-                                size: 15.0,
+                                size: ((MediaQuery.of(context).size.height /
+                                            MediaQuery.of(context).size.width) *
+                                        7.5)
+                                    .toDouble(),
                                 color: Colors.black,
                               ),
                             ),
@@ -673,7 +788,10 @@ class _LoginPageState extends State<LoginPage>
                             ),
                             hidetext: _obscureTextSignup),
                         Container(
-                          width: 250.0,
+                          width: ((MediaQuery.of(context).size.height /
+                                      MediaQuery.of(context).size.width) *
+                                  125)
+                              .toDouble(),
                           height: 1.0,
                           color: Colors.grey[400],
                         ),
@@ -687,7 +805,10 @@ class _LoginPageState extends State<LoginPage>
                                 _obscureTextSignupConfirm
                                     ? FontAwesomeIcons.eye
                                     : FontAwesomeIcons.eyeSlash,
-                                size: 15.0,
+                                size: ((MediaQuery.of(context).size.height /
+                                            MediaQuery.of(context).size.width) *
+                                        7.5)
+                                    .toDouble(),
                                 color: Colors.black,
                               ),
                             ),
@@ -701,7 +822,11 @@ class _LoginPageState extends State<LoginPage>
                   ),
                 ),
                 Container(
-                  margin: const EdgeInsets.only(top: 340.0),
+                  margin: EdgeInsets.only(
+                      top: ((MediaQuery.of(context).size.height /
+                                  MediaQuery.of(context).size.width) *
+                              170)
+                          .toDouble()),
                   decoration: const BoxDecoration(
                     borderRadius: BorderRadius.all(Radius.circular(5.0)),
                     boxShadow: <BoxShadow>[
@@ -730,14 +855,24 @@ class _LoginPageState extends State<LoginPage>
                     highlightColor: Colors.transparent,
                     splashColor: Theme.Colors.loginGradientEnd,
                     //shape: RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(5.0))),
-                    child: const Padding(
+                    child: Padding(
                       padding: EdgeInsets.symmetric(
-                          vertical: 10.0, horizontal: 42.0),
+                          vertical: ((MediaQuery.of(context).size.height /
+                                      MediaQuery.of(context).size.width) *
+                                  5)
+                              .toDouble(),
+                          horizontal: ((MediaQuery.of(context).size.height /
+                                      MediaQuery.of(context).size.width) *
+                                  21)
+                              .toDouble()),
                       child: Text(
                         "SIGN UP",
                         style: TextStyle(
                             color: Colors.white,
-                            fontSize: 25.0,
+                            fontSize: ((MediaQuery.of(context).size.height /
+                                        MediaQuery.of(context).size.width) *
+                                    12.5)
+                                .toDouble(),
                             fontFamily: "WorkSansBold"),
                       ),
                     ),

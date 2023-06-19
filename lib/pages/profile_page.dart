@@ -127,7 +127,7 @@ class MapScreenState extends State<ProfilePage>
         title: const Text(
           'Background Information',
           style: TextStyle(
-              color: Colors.white, fontWeight: FontWeight.w700, fontSize: 26.0),
+              color: Colors.white, fontWeight: FontWeight.w700, fontSize: 22.0),
         ),
       ),
       floatingActionButton: DraggableFab(
@@ -144,11 +144,11 @@ class MapScreenState extends State<ProfilePage>
             onPressed: () {
               c_class.checkInternet(context);
               _auth.signOut();
-              Navigator.push(
+              Navigator.pushNamedAndRemoveUntil(
                 context,
-                MaterialPageRoute(
-                  builder: (context) => const LoginPage(),
-                ),
+                '/',
+                (route) =>
+                    false, // This predicate ensures all previous routes are removed
               );
               showInSnackBar('Logged out Successfully', Colors.green, context,
                   _scaffoldKey.currentContext!);

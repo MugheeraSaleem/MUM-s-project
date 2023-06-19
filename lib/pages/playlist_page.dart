@@ -49,12 +49,21 @@ class _PlaylistPageState extends State<PlaylistPage> {
     return Scaffold(
       floatingActionButton: DraggableFab(
         child: SizedBox(
-          height: 65,
-          width: 65,
+          height: ((MediaQuery.of(context).size.height /
+                      MediaQuery.of(context).size.width) *
+                  32.5)
+              .toDouble(),
+          width: ((MediaQuery.of(context).size.height /
+                      MediaQuery.of(context).size.width) *
+                  32.5)
+              .toDouble(),
           child: FloatingActionButton(
             backgroundColor: kFloatingActionButtonColor,
-            child: const Icon(
-              size: 35,
+            child: Icon(
+              size: ((MediaQuery.of(context).size.height /
+                          MediaQuery.of(context).size.width) *
+                      17)
+                  .toDouble(),
               Icons.logout,
               color: Colors.white,
             ),
@@ -76,18 +85,25 @@ class _PlaylistPageState extends State<PlaylistPage> {
       appBar: AppBar(
         elevation: 2.0,
         backgroundColor: kAppBarColor,
-        title: const Center(
+        title: Center(
           child: Text(
             'My Playlists',
             style: TextStyle(
                 color: Colors.white,
                 fontWeight: FontWeight.w700,
-                fontSize: 30.0),
+                fontSize: ((MediaQuery.of(context).size.height /
+                            MediaQuery.of(context).size.width) *
+                        15)
+                    .toDouble()),
           ),
         ),
         actions: <Widget>[
           Container(
-            margin: const EdgeInsets.only(right: 8.0),
+            margin: EdgeInsets.only(
+                right: ((MediaQuery.of(context).size.height /
+                            MediaQuery.of(context).size.width) *
+                        4)
+                    .toDouble()),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.center,
               crossAxisAlignment: CrossAxisAlignment.center,
@@ -101,7 +117,10 @@ class _PlaylistPageState extends State<PlaylistPage> {
                         child: Icon(
                           Icons.person,
                           color: kFloatingActionButtonColor,
-                          size: 40.0,
+                          size: ((MediaQuery.of(context).size.height /
+                                      MediaQuery.of(context).size.width) *
+                                  20)
+                              .toDouble(),
                         )),
                   ),
                   onPressed: () {
@@ -123,9 +142,7 @@ class _PlaylistPageState extends State<PlaylistPage> {
         controller: playListPageController,
         child: Container(
           width: MediaQuery.of(context).size.width,
-          height: MediaQuery.of(context).size.height >= 775.0
-              ? MediaQuery.of(context).size.height
-              : 775.0,
+          height: MediaQuery.of(context).size.height,
           decoration: const BoxDecoration(
             gradient: LinearGradient(
                 colors: [
@@ -139,14 +156,42 @@ class _PlaylistPageState extends State<PlaylistPage> {
           ),
           child: StaggeredGridView.count(
             crossAxisCount: 2,
-            crossAxisSpacing: 12.0,
-            mainAxisSpacing: 12.0,
-            padding:
-                const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
-            staggeredTiles: const [
-              StaggeredTile.extent(2, 150.0),
-              StaggeredTile.extent(2, 150.0),
-              StaggeredTile.extent(2, 150.0),
+            crossAxisSpacing: ((MediaQuery.of(context).size.height /
+                        MediaQuery.of(context).size.width) *
+                    6)
+                .toDouble(),
+            mainAxisSpacing: ((MediaQuery.of(context).size.height /
+                        MediaQuery.of(context).size.width) *
+                    6)
+                .toDouble(),
+            padding: EdgeInsets.symmetric(
+                horizontal: ((MediaQuery.of(context).size.height /
+                            MediaQuery.of(context).size.width) *
+                        8)
+                    .toDouble(),
+                vertical: ((MediaQuery.of(context).size.height /
+                            MediaQuery.of(context).size.width) *
+                        4)
+                    .toDouble()),
+            staggeredTiles: [
+              StaggeredTile.extent(
+                  2,
+                  ((MediaQuery.of(context).size.height /
+                              MediaQuery.of(context).size.width) *
+                          75)
+                      .toDouble()),
+              StaggeredTile.extent(
+                  2,
+                  ((MediaQuery.of(context).size.height /
+                              MediaQuery.of(context).size.width) *
+                          75)
+                      .toDouble()),
+              StaggeredTile.extent(
+                  2,
+                  ((MediaQuery.of(context).size.height /
+                              MediaQuery.of(context).size.width) *
+                          75)
+                      .toDouble()),
             ],
             children: [
               buildTile(
@@ -160,13 +205,22 @@ class _PlaylistPageState extends State<PlaylistPage> {
                               .data()!
                               .containsKey('Exercises last watched video')) {
                         return Padding(
-                          padding: const EdgeInsets.only(left: 18.0),
+                          padding: EdgeInsets.only(
+                              left: ((MediaQuery.of(context).size.height /
+                                          MediaQuery.of(context).size.width) *
+                                      9)
+                                  .toDouble()),
                           child: Row(
                               mainAxisAlignment: MainAxisAlignment.start,
                               crossAxisAlignment: CrossAxisAlignment.center,
                               children: <Widget>[
                                 CircleAvatar(
-                                  radius: 70,
+                                  radius: ((MediaQuery.of(context).size.height /
+                                              MediaQuery.of(context)
+                                                  .size
+                                                  .width) *
+                                          35)
+                                      .toDouble(),
                                   backgroundColor: Colors.white,
                                   child: ClipOval(
                                     clipper: MClipper(),
@@ -180,19 +234,33 @@ class _PlaylistPageState extends State<PlaylistPage> {
                                   mainAxisAlignment: MainAxisAlignment.center,
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
-                                    const Text(
+                                    Text(
                                       'My Exercises',
                                       style: TextStyle(
                                           color: Colors.black,
                                           fontWeight: FontWeight.w700,
-                                          fontSize: 24.0),
+                                          fontSize: ((MediaQuery.of(context)
+                                                          .size
+                                                          .height /
+                                                      MediaQuery.of(context)
+                                                          .size
+                                                          .width) *
+                                                  12)
+                                              .toDouble()),
                                     ),
                                     Text(
                                       'Last watching: ${snapshot.data['Exercises last watched video']}',
-                                      style: const TextStyle(
+                                      style: TextStyle(
                                           color: Colors.grey,
                                           fontWeight: FontWeight.w700,
-                                          fontSize: 15.0),
+                                          fontSize: ((MediaQuery.of(context)
+                                                          .size
+                                                          .height /
+                                                      MediaQuery.of(context)
+                                                          .size
+                                                          .width) *
+                                                  7.5)
+                                              .toDouble()),
                                     ),
                                   ],
                                 ),
@@ -200,13 +268,22 @@ class _PlaylistPageState extends State<PlaylistPage> {
                         );
                       } else {
                         return Padding(
-                          padding: const EdgeInsets.only(left: 18.0),
+                          padding: EdgeInsets.only(
+                              left: ((MediaQuery.of(context).size.height /
+                                          MediaQuery.of(context).size.width) *
+                                      9)
+                                  .toDouble()),
                           child: Row(
                               mainAxisAlignment: MainAxisAlignment.start,
                               crossAxisAlignment: CrossAxisAlignment.center,
                               children: <Widget>[
                                 CircleAvatar(
-                                  radius: 70,
+                                  radius: ((MediaQuery.of(context).size.height /
+                                              MediaQuery.of(context)
+                                                  .size
+                                                  .width) *
+                                          35)
+                                      .toDouble(),
                                   backgroundColor: Colors.white,
                                   child: ClipOval(
                                     clipper: MClipper(),
@@ -216,12 +293,18 @@ class _PlaylistPageState extends State<PlaylistPage> {
                                     ),
                                   ),
                                 ),
-                                const Text(
+                                Text(
                                   'My Exercises',
                                   style: TextStyle(
                                       color: Colors.black,
                                       fontWeight: FontWeight.w700,
-                                      fontSize: 24.0),
+                                      fontSize:
+                                          ((MediaQuery.of(context).size.height /
+                                                      MediaQuery.of(context)
+                                                          .size
+                                                          .width) *
+                                                  12)
+                                              .toDouble()),
                                 ),
                               ]),
                         );
@@ -248,13 +331,22 @@ class _PlaylistPageState extends State<PlaylistPage> {
                               .data()!
                               .containsKey('Counseling last watched video')) {
                         return Padding(
-                          padding: const EdgeInsets.only(left: 18.0),
+                          padding: EdgeInsets.only(
+                              left: ((MediaQuery.of(context).size.height /
+                                          MediaQuery.of(context).size.width) *
+                                      9)
+                                  .toDouble()),
                           child: Row(
                               mainAxisAlignment: MainAxisAlignment.start,
                               crossAxisAlignment: CrossAxisAlignment.center,
                               children: <Widget>[
                                 CircleAvatar(
-                                  radius: 70,
+                                  radius: ((MediaQuery.of(context).size.height /
+                                              MediaQuery.of(context)
+                                                  .size
+                                                  .width) *
+                                          35)
+                                      .toDouble(),
                                   backgroundColor: Colors.white,
                                   child: ClipOval(
                                     clipper: MClipper(),
@@ -268,19 +360,33 @@ class _PlaylistPageState extends State<PlaylistPage> {
                                   mainAxisAlignment: MainAxisAlignment.center,
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
-                                    const Text(
+                                    Text(
                                       'My Counseling',
                                       style: TextStyle(
                                           color: Colors.black,
                                           fontWeight: FontWeight.w700,
-                                          fontSize: 24.0),
+                                          fontSize: ((MediaQuery.of(context)
+                                                          .size
+                                                          .height /
+                                                      MediaQuery.of(context)
+                                                          .size
+                                                          .width) *
+                                                  12)
+                                              .toDouble()),
                                     ),
                                     Text(
                                       'Last watching: ${snapshot.data['Counseling last watched video']}',
-                                      style: const TextStyle(
+                                      style: TextStyle(
                                           color: Colors.grey,
                                           fontWeight: FontWeight.w700,
-                                          fontSize: 15.0),
+                                          fontSize: ((MediaQuery.of(context)
+                                                          .size
+                                                          .height /
+                                                      MediaQuery.of(context)
+                                                          .size
+                                                          .width) *
+                                                  7.5)
+                                              .toDouble()),
                                     ),
                                   ],
                                 ),
@@ -288,13 +394,22 @@ class _PlaylistPageState extends State<PlaylistPage> {
                         );
                       } else {
                         return Padding(
-                          padding: const EdgeInsets.only(left: 18.0),
+                          padding: EdgeInsets.only(
+                              left: ((MediaQuery.of(context).size.height /
+                                          MediaQuery.of(context).size.width) *
+                                      9)
+                                  .toDouble()),
                           child: Row(
                               mainAxisAlignment: MainAxisAlignment.start,
                               crossAxisAlignment: CrossAxisAlignment.center,
                               children: <Widget>[
                                 CircleAvatar(
-                                  radius: 70,
+                                  radius: ((MediaQuery.of(context).size.height /
+                                              MediaQuery.of(context)
+                                                  .size
+                                                  .width) *
+                                          35)
+                                      .toDouble(),
                                   backgroundColor: Colors.white,
                                   child: ClipOval(
                                     clipper: MClipper(),
@@ -304,12 +419,18 @@ class _PlaylistPageState extends State<PlaylistPage> {
                                     ),
                                   ),
                                 ),
-                                const Text(
+                                Text(
                                   'My Counseling',
                                   style: TextStyle(
                                       color: Colors.black,
                                       fontWeight: FontWeight.w700,
-                                      fontSize: 24.0),
+                                      fontSize:
+                                          ((MediaQuery.of(context).size.height /
+                                                      MediaQuery.of(context)
+                                                          .size
+                                                          .width) *
+                                                  12)
+                                              .toDouble()),
                                 ),
                               ]),
                         );
@@ -336,13 +457,22 @@ class _PlaylistPageState extends State<PlaylistPage> {
                               .data()!
                               .containsKey('Media last watched video')) {
                         return Padding(
-                          padding: const EdgeInsets.only(left: 18.0),
+                          padding: EdgeInsets.only(
+                              left: ((MediaQuery.of(context).size.height /
+                                          MediaQuery.of(context).size.width) *
+                                      9)
+                                  .toDouble()),
                           child: Row(
                               mainAxisAlignment: MainAxisAlignment.start,
                               crossAxisAlignment: CrossAxisAlignment.center,
                               children: <Widget>[
                                 CircleAvatar(
-                                  radius: 70,
+                                  radius: ((MediaQuery.of(context).size.height /
+                                              MediaQuery.of(context)
+                                                  .size
+                                                  .width) *
+                                          35)
+                                      .toDouble(),
                                   backgroundColor: Colors.white,
                                   child: ClipOval(
                                     clipper: MClipper(),
@@ -355,19 +485,33 @@ class _PlaylistPageState extends State<PlaylistPage> {
                                 Column(
                                   mainAxisAlignment: MainAxisAlignment.center,
                                   children: [
-                                    const Text(
+                                    Text(
                                       'My Media',
                                       style: TextStyle(
                                           color: Colors.black,
                                           fontWeight: FontWeight.w700,
-                                          fontSize: 24.0),
+                                          fontSize: ((MediaQuery.of(context)
+                                                          .size
+                                                          .height /
+                                                      MediaQuery.of(context)
+                                                          .size
+                                                          .width) *
+                                                  12)
+                                              .toDouble()),
                                     ),
                                     Text(
                                       'Last watching: ${snapshot.data['Media last watched video']}',
-                                      style: const TextStyle(
+                                      style: TextStyle(
                                           color: Colors.grey,
                                           fontWeight: FontWeight.w700,
-                                          fontSize: 15.0),
+                                          fontSize: ((MediaQuery.of(context)
+                                                          .size
+                                                          .height /
+                                                      MediaQuery.of(context)
+                                                          .size
+                                                          .width) *
+                                                  7.5)
+                                              .toDouble()),
                                     ),
                                   ],
                                 ),
@@ -375,13 +519,22 @@ class _PlaylistPageState extends State<PlaylistPage> {
                         );
                       } else {
                         return Padding(
-                          padding: const EdgeInsets.only(left: 18.0),
+                          padding: EdgeInsets.only(
+                              left: ((MediaQuery.of(context).size.height /
+                                          MediaQuery.of(context).size.width) *
+                                      9)
+                                  .toDouble()),
                           child: Row(
                               mainAxisAlignment: MainAxisAlignment.start,
                               crossAxisAlignment: CrossAxisAlignment.center,
                               children: <Widget>[
                                 CircleAvatar(
-                                  radius: 70,
+                                  radius: ((MediaQuery.of(context).size.height /
+                                              MediaQuery.of(context)
+                                                  .size
+                                                  .width) *
+                                          35)
+                                      .toDouble(),
                                   backgroundColor: Colors.white,
                                   child: ClipOval(
                                     clipper: MClipper(),
@@ -391,12 +544,18 @@ class _PlaylistPageState extends State<PlaylistPage> {
                                     ),
                                   ),
                                 ),
-                                const Text(
+                                Text(
                                   'My Media',
                                   style: TextStyle(
                                       color: Colors.black,
                                       fontWeight: FontWeight.w700,
-                                      fontSize: 24.0),
+                                      fontSize:
+                                          ((MediaQuery.of(context).size.height /
+                                                      MediaQuery.of(context)
+                                                          .size
+                                                          .width) *
+                                                  12)
+                                              .toDouble()),
                                 ),
                               ]),
                         );

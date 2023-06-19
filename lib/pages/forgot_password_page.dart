@@ -44,12 +44,21 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
       key: _scaffoldKey,
       floatingActionButton: DraggableFab(
         child: SizedBox(
-          height: 65,
-          width: 65,
+          height: ((MediaQuery.of(context).size.height /
+                      MediaQuery.of(context).size.width) *
+                  32.5)
+              .toDouble(),
+          width: ((MediaQuery.of(context).size.height /
+                      MediaQuery.of(context).size.width) *
+                  32.5)
+              .toDouble(),
           child: FloatingActionButton(
             backgroundColor: kFloatingActionButtonColor,
-            child: const Icon(
-              size: 35,
+            child: Icon(
+              size: ((MediaQuery.of(context).size.height /
+                          MediaQuery.of(context).size.width) *
+                      17)
+                  .toDouble(),
               Icons.arrow_back_ios_new_rounded,
               color: Colors.white,
             ),
@@ -62,22 +71,23 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
       appBar: AppBar(
         automaticallyImplyLeading: false,
         backgroundColor: kAppBarColor,
-        title: const Center(
+        title: Center(
           child: Text(
             'Forgot Password',
             style: TextStyle(
                 color: Colors.white,
                 fontWeight: FontWeight.w700,
-                fontSize: 30.0),
+                fontSize: ((MediaQuery.of(context).size.height /
+                            MediaQuery.of(context).size.width) *
+                        15)
+                    .toDouble()),
           ),
         ),
       ),
       body: SingleChildScrollView(
         child: Container(
           width: MediaQuery.of(context).size.width,
-          height: MediaQuery.of(context).size.height >= 775.0
-              ? MediaQuery.of(context).size.height
-              : 775.0,
+          height: MediaQuery.of(context).size.height,
           decoration: const BoxDecoration(
             gradient: LinearGradient(
                 colors: [
@@ -92,25 +102,31 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              const Align(
+              Align(
                 alignment: Alignment.topCenter,
                 child: Text(
                   'Receive an email to reset',
                   style: TextStyle(
                     fontFamily: "WorkSansBold",
-                    fontSize: 22,
+                    fontSize: ((MediaQuery.of(context).size.height /
+                                MediaQuery.of(context).size.width) *
+                            11)
+                        .toDouble(),
                     color: Colors.white,
                     fontWeight: FontWeight.bold,
                   ),
                 ),
               ),
-              const Align(
+              Align(
                 alignment: Alignment.topCenter,
                 child: Text(
                   'your password',
                   style: TextStyle(
                     fontFamily: "WorkSansBold",
-                    fontSize: 22,
+                    fontSize: ((MediaQuery.of(context).size.height /
+                                MediaQuery.of(context).size.width) *
+                            11)
+                        .toDouble(),
                     color: Colors.white,
                     fontWeight: FontWeight.bold,
                   ),
@@ -119,8 +135,11 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
               Stack(
                 alignment: Alignment.topCenter,
                 children: [
-                  const SizedBox(
-                    height: 300,
+                  SizedBox(
+                    height: ((MediaQuery.of(context).size.height /
+                                MediaQuery.of(context).size.width) *
+                            150)
+                        .toDouble(),
                     width: double.infinity,
                   ),
                   Card(
@@ -132,8 +151,14 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
                       ),
                     ),
                     child: SizedBox(
-                      width: 300,
-                      height: 95,
+                      width: ((MediaQuery.of(context).size.height /
+                                  MediaQuery.of(context).size.width) *
+                              150)
+                          .toDouble(),
+                      height: ((MediaQuery.of(context).size.height /
+                                  MediaQuery.of(context).size.width) *
+                              47.5)
+                          .toDouble(),
                       child: TextEntryWidget(
                           hidetext: false,
                           simple_icon: const Icon(
@@ -147,7 +172,11 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
                     ),
                   ),
                   Padding(
-                    padding: const EdgeInsets.only(top: 70.0),
+                    padding: EdgeInsets.only(
+                        top: ((MediaQuery.of(context).size.height /
+                                    MediaQuery.of(context).size.width) *
+                                35)
+                            .toDouble()),
                     child: Hero(
                       tag: 'yo',
                       child: Container(
@@ -186,11 +215,14 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
                               Radius.circular(5.0),
                             ),
                           ),
-                          child: const Text(
+                          child: Text(
                             "     RESET \n PASSWORD",
                             style: TextStyle(
                                 color: Colors.white,
-                                fontSize: 25.0,
+                                fontSize: ((MediaQuery.of(context).size.height /
+                                            MediaQuery.of(context).size.width) *
+                                        12.5)
+                                    .toDouble(),
                                 fontFamily: "WorkSansBold"),
                           ),
                           onPressed: () async {

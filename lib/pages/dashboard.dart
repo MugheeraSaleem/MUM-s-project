@@ -57,12 +57,21 @@ class _DashboardPageState extends State<DashboardPage> {
     return Scaffold(
         floatingActionButton: DraggableFab(
           child: SizedBox(
-            height: 65,
-            width: 65,
+            height: ((MediaQuery.of(context).size.height /
+                        MediaQuery.of(context).size.width) *
+                    32.5)
+                .toDouble(),
+            width: ((MediaQuery.of(context).size.height /
+                        MediaQuery.of(context).size.width) *
+                    32.5)
+                .toDouble(),
             child: FloatingActionButton(
               backgroundColor: kFloatingActionButtonColor,
-              child: const Icon(
-                size: 35,
+              child: Icon(
+                size: ((MediaQuery.of(context).size.height /
+                            MediaQuery.of(context).size.width) *
+                        17.5)
+                    .toDouble(),
                 Icons.logout,
                 color: Colors.white,
               ),
@@ -86,19 +95,30 @@ class _DashboardPageState extends State<DashboardPage> {
           automaticallyImplyLeading: false,
           elevation: 2.0,
           backgroundColor: kAppBarColor,
-          title: const Padding(
-            padding: EdgeInsets.only(left: 105.0),
+          title: Padding(
+            padding: EdgeInsets.only(
+                left: ((MediaQuery.of(context).size.height /
+                            MediaQuery.of(context).size.width) *
+                        45)
+                    .toDouble()),
             child: Text(
               'Dashboard',
               style: TextStyle(
                   color: Colors.white,
                   fontWeight: FontWeight.w700,
-                  fontSize: 30.0),
+                  fontSize: ((MediaQuery.of(context).size.height /
+                              MediaQuery.of(context).size.width) *
+                          15)
+                      .toDouble()),
             ),
           ),
           actions: <Widget>[
             Container(
-              margin: const EdgeInsets.only(right: 8.0),
+              margin: EdgeInsets.only(
+                  right: ((MediaQuery.of(context).size.height /
+                              MediaQuery.of(context).size.width) *
+                          0)
+                      .toDouble()),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 crossAxisAlignment: CrossAxisAlignment.center,
@@ -112,7 +132,10 @@ class _DashboardPageState extends State<DashboardPage> {
                           child: Icon(
                             Icons.person,
                             color: kFloatingActionButtonColor,
-                            size: 40.0,
+                            size: ((MediaQuery.of(context).size.height /
+                                        MediaQuery.of(context).size.width) *
+                                    20)
+                                .toDouble(),
                           )),
                     ),
                     onPressed: () {
@@ -134,9 +157,7 @@ class _DashboardPageState extends State<DashboardPage> {
           controller: dashboardController,
           child: Container(
             width: MediaQuery.of(context).size.width,
-            height: MediaQuery.of(context).size.height >= 775.0
-                ? MediaQuery.of(context).size.height
-                : 775.0,
+            height: MediaQuery.of(context).size.height,
             decoration: const BoxDecoration(
               gradient: LinearGradient(
                   colors: [
@@ -150,22 +171,69 @@ class _DashboardPageState extends State<DashboardPage> {
             ),
             child: StaggeredGridView.count(
               crossAxisCount: 2,
-              crossAxisSpacing: 12.0,
-              mainAxisSpacing: 12.0,
-              padding:
-                  const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
-              staggeredTiles: const [
-                StaggeredTile.extent(2, 110.0),
-                StaggeredTile.extent(1, 180.0),
-                StaggeredTile.extent(1, 180.0),
-                StaggeredTile.extent(2, 220.0),
-                StaggeredTile.extent(2, 110.0),
-                StaggeredTile.extent(2, 110.0),
+              crossAxisSpacing: ((MediaQuery.of(context).size.height /
+                          MediaQuery.of(context).size.width) *
+                      6)
+                  .toDouble(),
+              mainAxisSpacing: ((MediaQuery.of(context).size.height /
+                          MediaQuery.of(context).size.width) *
+                      6)
+                  .toDouble(),
+              padding: EdgeInsets.symmetric(
+                  horizontal: ((MediaQuery.of(context).size.height /
+                              MediaQuery.of(context).size.width) *
+                          8)
+                      .toDouble(),
+                  vertical: ((MediaQuery.of(context).size.height /
+                              MediaQuery.of(context).size.width) *
+                          4)
+                      .toDouble()),
+              staggeredTiles: [
+                StaggeredTile.extent(
+                    2,
+                    ((MediaQuery.of(context).size.height /
+                                MediaQuery.of(context).size.width) *
+                            55)
+                        .toDouble()),
+                StaggeredTile.extent(
+                    1,
+                    ((MediaQuery.of(context).size.height /
+                                MediaQuery.of(context).size.width) *
+                            90)
+                        .toDouble()),
+                StaggeredTile.extent(
+                    1,
+                    ((MediaQuery.of(context).size.height /
+                                MediaQuery.of(context).size.width) *
+                            90)
+                        .toDouble()),
+                StaggeredTile.extent(
+                    2,
+                    ((MediaQuery.of(context).size.height /
+                                MediaQuery.of(context).size.width) *
+                            110)
+                        .toDouble()),
+                StaggeredTile.extent(
+                    2,
+                    ((MediaQuery.of(context).size.height /
+                                MediaQuery.of(context).size.width) *
+                            55)
+                        .toDouble()),
+                StaggeredTile.extent(
+                    2,
+                    ((MediaQuery.of(context).size.height /
+                                MediaQuery.of(context).size.width) *
+                            55)
+                        .toDouble()),
               ],
               children: <Widget>[
                 buildTile(
                   Padding(
-                    padding: const EdgeInsets.all(24.0),
+                    padding: EdgeInsets.all(
+                        ((MediaQuery.of(context).size.height /
+                                    MediaQuery.of(context).size.width) *
+                                12)
+                            .toDouble()),
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       crossAxisAlignment: CrossAxisAlignment.center,
@@ -174,10 +242,17 @@ class _DashboardPageState extends State<DashboardPage> {
                           mainAxisAlignment: MainAxisAlignment.center,
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: <Widget>[
-                            const Text(
+                            Text(
                               'Months and Days left',
                               style: TextStyle(
-                                  color: Colors.blueAccent, fontSize: 15),
+                                  color: Colors.blueAccent,
+                                  fontSize:
+                                      ((MediaQuery.of(context).size.height /
+                                                  MediaQuery.of(context)
+                                                      .size
+                                                      .width) *
+                                              7.5)
+                                          .toDouble()),
                             ),
                             StreamBuilder<Object>(
                                 stream: usersCollection
@@ -201,10 +276,17 @@ class _DashboardPageState extends State<DashboardPage> {
                                           0) {
                                     return Text(
                                       '${snapshot.data['deliveryDate'].toDate().month - now.month} months/${snapshot.data['deliveryDate'].toDate().day - now.day} days',
-                                      style: const TextStyle(
+                                      style: TextStyle(
                                           color: Colors.black,
                                           fontWeight: FontWeight.w700,
-                                          fontSize: 25.0),
+                                          fontSize: ((MediaQuery.of(context)
+                                                          .size
+                                                          .height /
+                                                      MediaQuery.of(context)
+                                                          .size
+                                                          .width) *
+                                                  12.5)
+                                              .toDouble()),
                                     );
                                   } else if (snapshot.hasData &&
                                       snapshot.data!
@@ -222,18 +304,32 @@ class _DashboardPageState extends State<DashboardPage> {
                                           0) {
                                     return Text(
                                       '${snapshot.data['deliveryDate'].toDate().month - now.month - 1} months/${snapshot.data['deliveryDate'].toDate().day - now.day + 30} days',
-                                      style: const TextStyle(
+                                      style: TextStyle(
                                           color: Colors.black,
                                           fontWeight: FontWeight.w700,
-                                          fontSize: 25.0),
+                                          fontSize: ((MediaQuery.of(context)
+                                                          .size
+                                                          .height /
+                                                      MediaQuery.of(context)
+                                                          .size
+                                                          .width) *
+                                                  12.5)
+                                              .toDouble()),
                                     );
                                   } else {
-                                    return const Text(
+                                    return Text(
                                       '00/00',
                                       style: TextStyle(
                                           color: Colors.black,
                                           fontWeight: FontWeight.w700,
-                                          fontSize: 34.0),
+                                          fontSize: ((MediaQuery.of(context)
+                                                          .size
+                                                          .height /
+                                                      MediaQuery.of(context)
+                                                          .size
+                                                          .width) *
+                                                  17)
+                                              .toDouble()),
                                     );
                                   }
                                 })
@@ -242,11 +338,22 @@ class _DashboardPageState extends State<DashboardPage> {
                         Material(
                           color: Colors.blue,
                           borderRadius: BorderRadius.circular(24.0),
-                          child: const Center(
+                          child: Center(
                             child: Padding(
-                              padding: EdgeInsets.all(16.0),
+                              padding: EdgeInsets.all(((MediaQuery.of(context)
+                                              .size
+                                              .height /
+                                          MediaQuery.of(context).size.width) *
+                                      8)
+                                  .toDouble()),
                               child: Icon(Icons.calendar_today,
-                                  color: Colors.white, size: 30.0),
+                                  color: Colors.white,
+                                  size: ((MediaQuery.of(context).size.height /
+                                              MediaQuery.of(context)
+                                                  .size
+                                                  .width) *
+                                          15)
+                                      .toDouble()),
                             ),
                           ),
                         )
@@ -256,58 +363,128 @@ class _DashboardPageState extends State<DashboardPage> {
                   onTap: () {},
                 ),
                 buildTile(
-                  const Padding(
-                    padding: EdgeInsets.all(24.0),
+                  Padding(
+                    padding: EdgeInsets.all(
+                        ((MediaQuery.of(context).size.height /
+                                    MediaQuery.of(context).size.width) *
+                                12)
+                            .toDouble()),
                     child: Column(
                         mainAxisAlignment: MainAxisAlignment.start,
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: <Widget>[
                           Material(
                             color: Colors.teal,
-                            shape: CircleBorder(),
+                            shape: const CircleBorder(),
                             child: Padding(
-                              padding: EdgeInsets.all(16.0),
+                              padding: EdgeInsets.all(((MediaQuery.of(context)
+                                              .size
+                                              .height /
+                                          MediaQuery.of(context).size.width) *
+                                      8)
+                                  .toDouble()),
                               child: Icon(Icons.fastfood,
-                                  color: Colors.white, size: 30.0),
+                                  color: Colors.white,
+                                  size: ((MediaQuery.of(context).size.height /
+                                              MediaQuery.of(context)
+                                                  .size
+                                                  .width) *
+                                          15)
+                                      .toDouble()),
                             ),
                           ),
-                          Padding(padding: EdgeInsets.only(bottom: 16.0)),
+                          Padding(
+                              padding: EdgeInsets.only(
+                                  bottom: ((MediaQuery.of(context).size.height /
+                                              MediaQuery.of(context)
+                                                  .size
+                                                  .width) *
+                                          8)
+                                      .toDouble())),
                           Text('Diet Chart',
                               style: TextStyle(
                                   color: Colors.black,
                                   fontWeight: FontWeight.w700,
-                                  fontSize: 24.0)),
-                          Text('Seasonal, Non-Seasonal',
+                                  fontSize:
+                                      ((MediaQuery.of(context).size.height /
+                                                  MediaQuery.of(context)
+                                                      .size
+                                                      .width) *
+                                              11)
+                                          .toDouble())),
+                          Text('Seasonal || \nNon-Seasonal',
                               style: TextStyle(
-                                  color: Colors.black45, fontSize: 10.0)),
+                                  color: Colors.black45,
+                                  fontSize:
+                                      ((MediaQuery.of(context).size.height /
+                                                  MediaQuery.of(context)
+                                                      .size
+                                                      .width) *
+                                              5)
+                                          .toDouble())),
                         ]),
                   ),
                   onTap: () {},
                 ),
                 buildTile(
-                  const Padding(
-                    padding: EdgeInsets.all(24.0),
+                  Padding(
+                    padding: EdgeInsets.all(
+                        ((MediaQuery.of(context).size.height /
+                                    MediaQuery.of(context).size.width) *
+                                12)
+                            .toDouble()),
                     child: Column(
                         mainAxisAlignment: MainAxisAlignment.start,
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: <Widget>[
                           Material(
                               color: Colors.amber,
-                              shape: CircleBorder(),
+                              shape: const CircleBorder(),
                               child: Padding(
-                                padding: EdgeInsets.all(16.0),
+                                padding: EdgeInsets.all(((MediaQuery.of(context)
+                                                .size
+                                                .height /
+                                            MediaQuery.of(context).size.width) *
+                                        8)
+                                    .toDouble()),
                                 child: Icon(Icons.notifications,
-                                    color: Colors.white, size: 30.0),
+                                    color: Colors.white,
+                                    size: ((MediaQuery.of(context).size.height /
+                                                MediaQuery.of(context)
+                                                    .size
+                                                    .width) *
+                                            15)
+                                        .toDouble()),
                               )),
-                          Padding(padding: EdgeInsets.only(bottom: 16.0)),
+                          Padding(
+                              padding: EdgeInsets.only(
+                                  bottom: ((MediaQuery.of(context).size.height /
+                                              MediaQuery.of(context)
+                                                  .size
+                                                  .width) *
+                                          8)
+                                      .toDouble())),
                           Text('Reminders',
                               style: TextStyle(
                                   color: Colors.black,
                                   fontWeight: FontWeight.w700,
-                                  fontSize: 24.0)),
-                          Text('vaccinations, Appointments',
+                                  fontSize:
+                                      ((MediaQuery.of(context).size.height /
+                                                  MediaQuery.of(context)
+                                                      .size
+                                                      .width) *
+                                              11)
+                                          .toDouble())),
+                          Text('Vaccinations || \nAppointments',
                               style: TextStyle(
-                                  color: Colors.black45, fontSize: 11.0)),
+                                  color: Colors.black45,
+                                  fontSize:
+                                      ((MediaQuery.of(context).size.height /
+                                                  MediaQuery.of(context)
+                                                      .size
+                                                      .width) *
+                                              5)
+                                          .toDouble())),
                         ]),
                   ),
                   onTap: () {
@@ -320,7 +497,11 @@ class _DashboardPageState extends State<DashboardPage> {
                 ),
                 buildTile(
                   Padding(
-                      padding: const EdgeInsets.all(24.0),
+                      padding: EdgeInsets.all(
+                          ((MediaQuery.of(context).size.height /
+                                      MediaQuery.of(context).size.width) *
+                                  12)
+                              .toDouble()),
                       child: Column(
                         mainAxisAlignment: MainAxisAlignment.start,
                         crossAxisAlignment: CrossAxisAlignment.start,
@@ -329,48 +510,98 @@ class _DashboardPageState extends State<DashboardPage> {
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: <Widget>[
-                              const Column(
+                              Column(
                                 mainAxisAlignment: MainAxisAlignment.start,
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: <Widget>[
                                   Text(
                                     'Counseling & Exercise',
                                     style: TextStyle(
-                                        color: Colors.pink, fontSize: 22.0),
+                                        color: Colors.pink,
+                                        fontSize: ((MediaQuery.of(context)
+                                                        .size
+                                                        .height /
+                                                    MediaQuery.of(context)
+                                                        .size
+                                                        .width) *
+                                                11)
+                                            .toDouble()),
                                   ),
-                                  Text('My-Playlist',
-                                      style: TextStyle(
-                                          color: Colors.black,
-                                          fontWeight: FontWeight.w700,
-                                          fontSize: 20.0)),
+                                  Row(
+                                    children: [
+                                      Text('My-Playlist',
+                                          style: TextStyle(
+                                              color: Colors.black,
+                                              fontWeight: FontWeight.w700,
+                                              fontSize: ((MediaQuery.of(context)
+                                                              .size
+                                                              .height /
+                                                          MediaQuery.of(context)
+                                                              .size
+                                                              .width) *
+                                                      10)
+                                                  .toDouble())),
+                                      Padding(
+                                        padding: EdgeInsets.only(
+                                            left: ((MediaQuery.of(context)
+                                                            .size
+                                                            .height /
+                                                        MediaQuery.of(context)
+                                                            .size
+                                                            .width) *
+                                                    6)
+                                                .toDouble()),
+                                        child: DropdownButton(
+                                            isDense: true,
+                                            value: actualDropdown,
+                                            onChanged: (String? value) {
+                                              setState(() {
+                                                actualDropdown = value!;
+                                                actualChart =
+                                                    chartDropdownItems.indexOf(
+                                                        value); // Refresh the chart
+                                              });
+                                            },
+                                            items: chartDropdownItems
+                                                .map((String title) {
+                                              return DropdownMenuItem(
+                                                value: title,
+                                                child: Text(title,
+                                                    style: TextStyle(
+                                                        color: Colors.blue,
+                                                        fontWeight:
+                                                            FontWeight.w400,
+                                                        fontSize: ((MediaQuery.of(
+                                                                            context)
+                                                                        .size
+                                                                        .height /
+                                                                    MediaQuery.of(
+                                                                            context)
+                                                                        .size
+                                                                        .width) *
+                                                                7)
+                                                            .toDouble())),
+                                              );
+                                            }).toList()),
+                                      )
+                                    ],
+                                  ),
                                 ],
                               ),
-                              DropdownButton(
-                                  isDense: true,
-                                  value: actualDropdown,
-                                  onChanged: (String? value) {
-                                    setState(() {
-                                      actualDropdown = value!;
-                                      actualChart = chartDropdownItems
-                                          .indexOf(value); // Refresh the chart
-                                    });
-                                  },
-                                  items: chartDropdownItems.map((String title) {
-                                    return DropdownMenuItem(
-                                      value: title,
-                                      child: Text(title,
-                                          style: const TextStyle(
-                                              color: Colors.blue,
-                                              fontWeight: FontWeight.w400,
-                                              fontSize: 14.0)),
-                                    );
-                                  }).toList())
                             ],
                           ),
-                          const Padding(
-                            padding: EdgeInsets.all(11.0),
+                          Padding(
+                            padding: EdgeInsets.all(
+                                ((MediaQuery.of(context).size.height /
+                                            MediaQuery.of(context).size.width) *
+                                        5.5)
+                                    .toDouble()),
                             child: Icon(Icons.library_music,
-                                color: Colors.pink, size: 99.0),
+                                color: Colors.pink,
+                                size: ((MediaQuery.of(context).size.height /
+                                            MediaQuery.of(context).size.width) *
+                                        45)
+                                    .toDouble()),
                           ),
                         ],
                       )),
@@ -420,32 +651,53 @@ class _DashboardPageState extends State<DashboardPage> {
                 // ),
                 buildTile(
                   Padding(
-                    padding: const EdgeInsets.all(24.0),
+                    padding: EdgeInsets.all(
+                        ((MediaQuery.of(context).size.height /
+                                    MediaQuery.of(context).size.width) *
+                                12)
+                            .toDouble()),
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       crossAxisAlignment: CrossAxisAlignment.center,
                       children: <Widget>[
-                        const Column(
+                        Column(
                           mainAxisAlignment: MainAxisAlignment.center,
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: <Widget>[
-                            Text('Hospitals Nearby',
+                            const Text('Hospitals Nearby',
                                 style: TextStyle(color: Colors.pinkAccent)),
                             Text('Maps',
                                 style: TextStyle(
                                     color: Colors.black,
                                     fontWeight: FontWeight.w700,
-                                    fontSize: 30.0))
+                                    fontSize:
+                                        ((MediaQuery.of(context).size.height /
+                                                    MediaQuery.of(context)
+                                                        .size
+                                                        .width) *
+                                                15)
+                                            .toDouble()))
                           ],
                         ),
                         Material(
                           color: Colors.cyan,
                           borderRadius: BorderRadius.circular(24.0),
-                          child: const Center(
+                          child: Center(
                             child: Padding(
-                              padding: EdgeInsets.all(16.0),
+                              padding: EdgeInsets.all(((MediaQuery.of(context)
+                                              .size
+                                              .height /
+                                          MediaQuery.of(context).size.width) *
+                                      8)
+                                  .toDouble()),
                               child: Icon(Icons.location_searching,
-                                  color: Colors.white, size: 30.0),
+                                  color: Colors.white,
+                                  size: ((MediaQuery.of(context).size.height /
+                                              MediaQuery.of(context)
+                                                  .size
+                                                  .width) *
+                                          15)
+                                      .toDouble()),
                             ),
                           ),
                         )

@@ -183,12 +183,21 @@ class _ExercisesPageState extends State<ExercisesPage> {
     return Scaffold(
       floatingActionButton: DraggableFab(
         child: SizedBox(
-          height: 65,
-          width: 65,
+          height: ((MediaQuery.of(context).size.height /
+                      MediaQuery.of(context).size.width) *
+                  32.5)
+              .toDouble(),
+          width: ((MediaQuery.of(context).size.height /
+                      MediaQuery.of(context).size.width) *
+                  32.5)
+              .toDouble(),
           child: FloatingActionButton(
             backgroundColor: kFloatingActionButtonColor,
-            child: const Icon(
-              size: 35,
+            child: Icon(
+              size: ((MediaQuery.of(context).size.height /
+                          MediaQuery.of(context).size.width) *
+                      17.5)
+                  .toDouble(),
               Icons.logout,
               color: Colors.white,
             ),
@@ -210,18 +219,25 @@ class _ExercisesPageState extends State<ExercisesPage> {
       appBar: AppBar(
         elevation: 2.0,
         backgroundColor: kAppBarColor,
-        title: const Center(
+        title: Center(
           child: Text(
             'My Exercises',
             style: TextStyle(
                 color: Colors.white,
                 fontWeight: FontWeight.w700,
-                fontSize: 30.0),
+                fontSize: ((MediaQuery.of(context).size.height /
+                            MediaQuery.of(context).size.width) *
+                        15)
+                    .toDouble()),
           ),
         ),
         actions: <Widget>[
           Container(
-            margin: const EdgeInsets.only(right: 8.0),
+            margin: EdgeInsets.only(
+                right: ((MediaQuery.of(context).size.height /
+                            MediaQuery.of(context).size.width) *
+                        4)
+                    .toDouble()),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.center,
               crossAxisAlignment: CrossAxisAlignment.center,
@@ -231,11 +247,14 @@ class _ExercisesPageState extends State<ExercisesPage> {
                     color: Colors.white,
                     shape: const CircleBorder(),
                     child: Padding(
-                        padding: const EdgeInsets.all(3.0),
+                        padding: EdgeInsets.all(3.0),
                         child: Icon(
                           Icons.person,
                           color: kFloatingActionButtonColor,
-                          size: 40.0,
+                          size: ((MediaQuery.of(context).size.height /
+                                      MediaQuery.of(context).size.width) *
+                                  20)
+                              .toDouble(),
                         )),
                   ),
                   onPressed: () {
@@ -255,9 +274,7 @@ class _ExercisesPageState extends State<ExercisesPage> {
       ),
       body: Container(
         width: MediaQuery.of(context).size.width,
-        height: MediaQuery.of(context).size.height >= 775.0
-            ? MediaQuery.of(context).size.height
-            : 775.0,
+        height: MediaQuery.of(context).size.height,
         decoration: const BoxDecoration(
           gradient: LinearGradient(
               colors: [
@@ -272,14 +289,20 @@ class _ExercisesPageState extends State<ExercisesPage> {
         child: ModalProgressHUD(
           progressIndicator: LoadingAnimationWidget.beat(
             color: Colors.pinkAccent,
-            size: 100,
+            size: ((MediaQuery.of(context).size.height /
+                        MediaQuery.of(context).size.width) *
+                    50)
+                .toDouble(),
           ),
           dismissible: true,
           inAsyncCall: _loading,
           child: ListView.separated(
             separatorBuilder: (context, index) {
-              return const SizedBox(
-                  height: 5.0); // Replace with your desired spacing
+              return SizedBox(
+                  height: ((MediaQuery.of(context).size.height /
+                              MediaQuery.of(context).size.width) *
+                          2.5)
+                      .toDouble()); // Replace with your desired spacing
             },
             controller: scrollController,
             itemCount: videos.length,
@@ -301,13 +324,31 @@ class _ExercisesPageState extends State<ExercisesPage> {
                     );
                   },
                   child: Padding(
-                    padding: const EdgeInsets.only(
-                        left: 8.0, right: 8, top: 4, bottom: 4),
+                    padding: EdgeInsets.only(
+                        left: ((MediaQuery.of(context).size.height /
+                                    MediaQuery.of(context).size.width) *
+                                4)
+                            .toDouble(),
+                        right: ((MediaQuery.of(context).size.height /
+                                    MediaQuery.of(context).size.width) *
+                                4)
+                            .toDouble(),
+                        top: ((MediaQuery.of(context).size.height /
+                                    MediaQuery.of(context).size.width) *
+                                2)
+                            .toDouble(),
+                        bottom: ((MediaQuery.of(context).size.height /
+                                    MediaQuery.of(context).size.width) *
+                                2)
+                            .toDouble()),
                     child: Material(
                       elevation: 14,
                       borderRadius: BorderRadius.circular(28),
                       child: Container(
-                        width: 100,
+                        width: ((MediaQuery.of(context).size.height /
+                                    MediaQuery.of(context).size.width) *
+                                50)
+                            .toDouble(),
                         decoration: BoxDecoration(
                           color: Colors.white,
                           borderRadius: BorderRadius.circular(28),
@@ -333,34 +374,67 @@ class _ExercisesPageState extends State<ExercisesPage> {
                                 fit: BoxFit.cover,
                               ),
                             ),
-                            const SizedBox(
-                              height: 5,
+                            SizedBox(
+                              height: ((MediaQuery.of(context).size.height /
+                                          MediaQuery.of(context).size.width) *
+                                      2.5)
+                                  .toDouble(),
                             ),
                             Padding(
-                              padding: const EdgeInsets.only(
-                                left: 15,
-                                right: 15,
-                                bottom: 5,
+                              padding: EdgeInsets.only(
+                                left: ((MediaQuery.of(context).size.height /
+                                            MediaQuery.of(context).size.width) *
+                                        7.5)
+                                    .toDouble(),
+                                right: ((MediaQuery.of(context).size.height /
+                                            MediaQuery.of(context).size.width) *
+                                        7.5)
+                                    .toDouble(),
+                                bottom: ((MediaQuery.of(context).size.height /
+                                            MediaQuery.of(context).size.width) *
+                                        2.5)
+                                    .toDouble(),
                               ),
                               child: Text(
                                 '${index + 1} || ${video.title}',
                                 textAlign: TextAlign.left,
-                                style: const TextStyle(
-                                    fontSize: 16,
+                                style: TextStyle(
+                                    fontSize:
+                                        ((MediaQuery.of(context).size.height /
+                                                    MediaQuery.of(context)
+                                                        .size
+                                                        .width) *
+                                                8)
+                                            .toDouble(),
                                     fontWeight: FontWeight.bold,
                                     fontFamily: "Poppins"),
                               ),
                             ),
                             Padding(
-                              padding: const EdgeInsets.only(
-                                left: 15,
-                                right: 15,
-                                bottom: 15,
+                              padding: EdgeInsets.only(
+                                left: ((MediaQuery.of(context).size.height /
+                                            MediaQuery.of(context).size.width) *
+                                        7.5)
+                                    .toDouble(),
+                                right: ((MediaQuery.of(context).size.height /
+                                            MediaQuery.of(context).size.width) *
+                                        7.5)
+                                    .toDouble(),
+                                bottom: ((MediaQuery.of(context).size.height /
+                                            MediaQuery.of(context).size.width) *
+                                        7.5)
+                                    .toDouble(),
                               ),
                               child: Text(
                                 video.channelName,
-                                style: const TextStyle(
-                                    fontSize: 14,
+                                style: TextStyle(
+                                    fontSize:
+                                        ((MediaQuery.of(context).size.height /
+                                                    MediaQuery.of(context)
+                                                        .size
+                                                        .width) *
+                                                7)
+                                            .toDouble(),
                                     fontWeight: FontWeight.w400,
                                     fontFamily: "Poppins"),
                                 textAlign: TextAlign.justify,
