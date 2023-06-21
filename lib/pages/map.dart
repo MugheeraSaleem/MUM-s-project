@@ -34,7 +34,7 @@ class MapPageState extends State<MapPage> {
         title: const Text("Islamabad"),
         actions: <Widget>[
           IconButton(
-              icon: const Icon(FontAwesomeIcons.search),
+              icon: const Icon(FontAwesomeIcons.magnifyingGlass),
               onPressed: () {
                 //
               }),

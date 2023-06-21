@@ -1,33 +1,41 @@
 {
   "project_info": {
-    "project_number": "858648636645",
-    "project_id": "mum-s-7cd6c",
-    "storage_bucket": "mum-s-7cd6c.appspot.com"
+    "project_number": "1021022988211",
+    "project_id": "mums-eac57",
+    "storage_bucket": "mums-eac57.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:858648636645:android:5ac434ac2f2217ba0a380c",
+        "mobilesdk_app_id": "1:1021022988211:android:d50c9abe73b1368a5a0dc6",
         "android_client_info": {
-          "package_name": "mum.s.mum_s"
+          "package_name": "com.nurture_nourish.mums"
         }
       },
       "oauth_client": [
         {
-          "client_id": "858648636645-mcmccb6pa3ke5dfpvqh3ca6ilnvhsqfh.apps.googleusercontent.com",
+          "client_id": "1021022988211-q9tgqaru1lj3hlkom51dsc097umsavqa.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.nurture_nourish.mums",
+            "certificate_hash": "1d5227942b6dd08e87883c2753e99ba8756939e4"
+          }
+        },
+        {
+          "client_id": "1021022988211-ltpmodulqru0c9ubac8jf99b19oeh8qu.apps.googleusercontent.com",
           "client_type": 3
         }
       ],
       "api_key": [
         {
-          "current_key": "AIzaSyAJniHnaM890tH9uhZyQ8akKRHmxGG6iZc"
+          "current_key": "AIzaSyCuTDbu381k3M2U35KWsKC2GD6c7QVGGRo"
         }
       ],
       "services": {
         "appinvite_service": {
           "other_platform_oauth_client": [
             {
-              "client_id": "858648636645-5aks48et5n4fbvb015n0a8mavb2vr362.apps.googleusercontent.com",
+              "client_id": "1021022988211-4ekaacb28oqhllr1lphscqf0snhcn6e0.apps.googleusercontent.com",
               "client_type": 3
             }
           ]

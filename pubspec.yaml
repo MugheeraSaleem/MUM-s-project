@@ -22,7 +22,7 @@ dev_dependencies:
   chart_sparkline: ^1.0.13
   flutter_staggered_grid_view: ^0.4.0
   firebase_auth: ^4.2.10
-  google_maps_flutter: ^2.2.4
+  google_maps_flutter: ^2.3.1
   sleek_circular_slider : ^2.0.1
   cloud_firestore: ^4.5.3
   firebase_core: ^2.7.1
@@ -44,6 +44,7 @@ dev_dependencies:
   youtube_api: ^1.0.4
   flutter_local_notifications: ^14.1.1
   timezone: ^0.9.2
+  firebase_messaging: ^14.6.3
 
 
 

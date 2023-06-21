@@ -6,10 +6,6 @@ import 'package:mum_s/pages/playlist_page.dart';
 import 'package:mum_s/pages/profile_page.dart';
 import 'package:mum_s/utils/google_sign_in.dart';
 import 'package:provider/provider.dart';
-import 'package:mum_s/utils/notifications.dart';
-import 'package:flutter_local_notifications/flutter_local_notifications.dart';
-import 'package:timezone/data/latest.dart' as tz;
-import 'package:timezone/timezone.dart' as tz;
 import 'package:mum_s/pages/exercises_page.dart';
 import 'package:mum_s/pages/counseling_page.dart';
 import 'package:mum_s/pages/media_page.dart';
@@ -18,18 +14,12 @@ import 'package:mum_s/pages/forum.dart';
 import 'package:mum_s/pages/map.dart';
 import 'package:mum_s/pages/post.dart';
 import 'package:mum_s/pages/reminders.dart';
-
-// Initialize the FlutterLocalNotificationsPlugin instance
-final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
-    FlutterLocalNotificationsPlugin();
+import 'package:mum_s/utils/messaging_api.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
-  // Initialize the timezone package
-  tz.initializeTimeZones();
-  await configureLocalNotifications();
-
+  await FirebaseAPi().initNotifications();
   runApp(MyApp());
 }
 

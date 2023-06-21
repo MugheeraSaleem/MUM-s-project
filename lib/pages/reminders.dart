@@ -1,5 +1,14 @@
 import 'package:flutter/material.dart';
 import 'forum.dart';
+import 'package:mum_s/pages/profile_page.dart';
+import 'package:mum_s/style/constants.dart';
+import 'package:mum_s/utils/connectivity.dart';
+import 'package:mum_s/utils/user_actions.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:mum_s/utils/snack_bar.dart';
+import 'package:draggable_fab/draggable_fab.dart';
+import 'package:mum_s/style/theme.dart' as Theme;
+import 'package:cloud_firestore/cloud_firestore.dart';
 
 class RemindersPage extends StatefulWidget {
   @override
@@ -7,71 +16,156 @@ class RemindersPage extends StatefulWidget {
 }
 
 class _RemindersPageState extends State<RemindersPage> {
+  ConnectivityClass c_class = ConnectivityClass();
+  final _auth = FirebaseAuth.instance;
+
+  final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+        floatingActionButton: DraggableFab(
+          child: SizedBox(
+            height: ((MediaQuery.of(context).size.height /
+                        MediaQuery.of(context).size.width) *
+                    32.5)
+                .toDouble(),
+            width: ((MediaQuery.of(context).size.height /
+                        MediaQuery.of(context).size.width) *
+                    32.5)
+                .toDouble(),
+            child: FloatingActionButton(
+              backgroundColor: kFloatingActionButtonColor,
+              child: Icon(
+                size: ((MediaQuery.of(context).size.height /
+                            MediaQuery.of(context).size.width) *
+                        17.5)
+                    .toDouble(),
+                Icons.logout,
+                color: Colors.white,
+              ),
+              onPressed: () {
+                c_class.checkInternet(context);
+                _auth.signOut();
+                Navigator.pushNamedAndRemoveUntil(
+                  context,
+                  '/',
+                  (route) =>
+                      false, // This predicate ensures all previous routes are removed
+                );
+                showInSnackBar('Logged out Successfully', Colors.green, context,
+                    _scaffoldKey.currentContext!);
+              },
+            ),
+          ),
+        ),
         appBar: AppBar(
-          elevation: 0.0,
-          backgroundColor: Colors.transparent,
+          elevation: 2.0,
+          backgroundColor: kAppBarColor,
           leading: IconButton(
             color: Colors.black,
             onPressed: () => Navigator.of(context).pop(),
-            icon: const Icon(Icons.arrow_back, color: Colors.black),
+            icon: const Icon(Icons.arrow_back, color: Colors.white),
           ),
-          title: const Text('Reminders',
-              style:
-                  TextStyle(color: Colors.black, fontWeight: FontWeight.w700)),
-          actions: <Widget>[
+          title: Text(
+            'Reminders',
+            style: TextStyle(
+                color: Colors.white,
+                fontWeight: FontWeight.w700,
+                fontSize: ((MediaQuery.of(context).size.height /
+                            MediaQuery.of(context).size.width) *
+                        15)
+                    .toDouble()),
+          ),
+          actions: [
             Container(
-              margin: const EdgeInsets.only(right: 8.0),
+              margin: EdgeInsets.only(
+                  right: ((MediaQuery.of(context).size.height /
+                              MediaQuery.of(context).size.width) *
+                          0)
+                      .toDouble()),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 crossAxisAlignment: CrossAxisAlignment.center,
-                children: const <Widget>[
-                  Text('beclothed.com',
-                      style: TextStyle(
-                          color: Colors.white,
-                          fontWeight: FontWeight.w700,
-                          fontSize: 14.0)),
-                  Icon(Icons.arrow_drop_down, color: Colors.black54)
+                children: <Widget>[
+                  MaterialButton(
+                    child: Material(
+                      color: Colors.white,
+                      shape: const CircleBorder(),
+                      child: Padding(
+                          padding: const EdgeInsets.all(3.0),
+                          child: Icon(
+                            Icons.person,
+                            color: kFloatingActionButtonColor,
+                            size: ((MediaQuery.of(context).size.height /
+                                        MediaQuery.of(context).size.width) *
+                                    20)
+                                .toDouble(),
+                          )),
+                    ),
+                    onPressed: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => ProfilePage(),
+                        ),
+                      );
+                      c_class.checkInternet(context);
+                    },
+                  )
                 ],
               ),
             )
           ],
         ),
-        body: ListView(
-          scrollDirection: Axis.vertical,
-          padding: const EdgeInsets.symmetric(horizontal: 16.0),
-          children: <Widget>[
-            Container(
-                margin: const EdgeInsets.symmetric(
-                    vertical: 16.0, horizontal: 54.0),
-                child: Material(
-                  elevation: 8.0,
-                  color: Colors.black,
-                  borderRadius: BorderRadius.circular(32.0),
-                  child: InkWell(
-                    onTap: () {},
-                    child: Padding(
-                      padding: const EdgeInsets.all(12.0),
-                      child: Row(
-                        mainAxisSize: MainAxisSize.min,
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        children: const <Widget>[
-                          Icon(Icons.add, color: Colors.white),
-                          Padding(padding: EdgeInsets.only(right: 16.0)),
-                          Text('ADD AN APPOINTMENT',
-                              style: TextStyle(color: Colors.white))
-                        ],
+        body: Container(
+          width: MediaQuery.of(context).size.width,
+          height: MediaQuery.of(context).size.height,
+          decoration: const BoxDecoration(
+            gradient: LinearGradient(
+                colors: [
+                  Theme.Colors.loginGradientStart,
+                  Theme.Colors.loginGradientEnd
+                ],
+                begin: FractionalOffset(0.0, 0.0),
+                end: FractionalOffset(1.0, 1.0),
+                stops: [0.0, 1.0],
+                tileMode: TileMode.clamp),
+          ),
+          child: ListView(
+            scrollDirection: Axis.vertical,
+            padding: const EdgeInsets.symmetric(horizontal: 16.0),
+            children: <Widget>[
+              Container(
+                  margin: const EdgeInsets.symmetric(
+                      vertical: 16.0, horizontal: 54.0),
+                  child: Material(
+                    elevation: 8.0,
+                    color: Colors.black,
+                    borderRadius: BorderRadius.circular(32.0),
+                    child: InkWell(
+                      onTap: () {},
+                      child: const Padding(
+                        padding: EdgeInsets.all(12.0),
+                        child: Row(
+                          mainAxisSize: MainAxisSize.min,
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          children: <Widget>[
+                            Icon(Icons.add, color: Colors.white),
+                            Padding(padding: EdgeInsets.only(right: 16.0)),
+                            Text('ADD AN APPOINTMENT',
+                                style: TextStyle(color: Colors.white))
+                          ],
+                        ),
                       ),
                     ),
-                  ),
-                )),
-            ShopItem(),
-            BadShopItem(),
-            NewShopItem()
-          ],
+                  )),
+              ShopItem(),
+              BadShopItem(),
+              NewShopItem()
+            ],
+          ),
         ));
   }
 }
@@ -103,8 +197,8 @@ class ShopItem extends StatelessWidget {
                           onTap: () => Navigator.of(context).push(
                               MaterialPageRoute(
                                   builder: (_) => ItemReviewsPage())),
-                          child: Padding(
-                            padding: const EdgeInsets.all(24.0),
+                          child: const Padding(
+                            padding: EdgeInsets.all(24.0),
                             child: Column(
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               crossAxisAlignment: CrossAxisAlignment.start,
@@ -114,7 +208,7 @@ class ShopItem extends StatelessWidget {
                                   mainAxisAlignment: MainAxisAlignment.start,
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: <Widget>[
-                                    const Text('Monthly Checkup',
+                                    Text('Monthly Checkup',
                                         style: TextStyle(
                                             color: Colors.blueAccent,
                                             fontSize: 15.0)),
@@ -123,8 +217,8 @@ class ShopItem extends StatelessWidget {
                                           MainAxisAlignment.start,
                                       crossAxisAlignment:
                                           CrossAxisAlignment.center,
-                                      children: const <Widget>[
-                                        Text('Dr. Preeti',
+                                      children: <Widget>[
+                                        Text('Dr. Uzma',
                                             style: TextStyle(
                                                 color: Colors.black,
                                                 fontWeight: FontWeight.w700,
@@ -138,7 +232,7 @@ class ShopItem extends StatelessWidget {
                                 Row(
                                   mainAxisAlignment: MainAxisAlignment.start,
                                   crossAxisAlignment: CrossAxisAlignment.center,
-                                  children: const <Widget>[
+                                  children: <Widget>[
                                     Text('Scheduled', style: TextStyle()),
                                     Padding(
                                       padding:
@@ -245,8 +339,8 @@ class BadShopItem extends StatelessWidget {
                             Color(0xFFDA4453),
                             Color(0xFF89216B)
                           ])),
-                          child: Padding(
-                            padding: const EdgeInsets.all(24.0),
+                          child: const Padding(
+                            padding: EdgeInsets.all(24.0),
                             child: Column(
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               crossAxisAlignment: CrossAxisAlignment.start,
@@ -256,14 +350,14 @@ class BadShopItem extends StatelessWidget {
                                   mainAxisAlignment: MainAxisAlignment.start,
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: <Widget>[
-                                    const Text('Vaccination',
+                                    Text('Vaccination',
                                         style: TextStyle(color: Colors.white)),
                                     Row(
                                       mainAxisAlignment:
                                           MainAxisAlignment.start,
                                       crossAxisAlignment:
                                           CrossAxisAlignment.center,
-                                      children: const <Widget>[
+                                      children: <Widget>[
                                         Text('Hepatitis B',
                                             style: TextStyle(
                                                 color: Colors.amber,
@@ -278,7 +372,7 @@ class BadShopItem extends StatelessWidget {
                                 Row(
                                   mainAxisAlignment: MainAxisAlignment.start,
                                   crossAxisAlignment: CrossAxisAlignment.center,
-                                  children: const <Widget>[
+                                  children: <Widget>[
                                     Text('Due By: 28/09/19',
                                         style: TextStyle(color: Colors.white)),
                                     Padding(
@@ -372,8 +466,8 @@ class NewShopItem extends StatelessWidget {
                     borderRadius: BorderRadius.circular(12.0),
                     shadowColor: const Color(0x802196F3),
                     color: Colors.white,
-                    child: Padding(
-                      padding: const EdgeInsets.all(24.0),
+                    child: const Padding(
+                      padding: EdgeInsets.all(24.0),
                       child: Column(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         crossAxisAlignment: CrossAxisAlignment.start,
@@ -383,12 +477,12 @@ class NewShopItem extends StatelessWidget {
                             mainAxisAlignment: MainAxisAlignment.start,
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: <Widget>[
-                              const Text('[New] Post',
+                              Text('[New] Post',
                                   style: TextStyle(color: Colors.blueAccent)),
                               Row(
                                 mainAxisAlignment: MainAxisAlignment.start,
                                 crossAxisAlignment: CrossAxisAlignment.center,
-                                children: const <Widget>[
+                                children: <Widget>[
                                   Text('Not published',
                                       style: TextStyle(
                                           color: Colors.black,
@@ -403,7 +497,7 @@ class NewShopItem extends StatelessWidget {
                           Row(
                             mainAxisAlignment: MainAxisAlignment.start,
                             crossAxisAlignment: CrossAxisAlignment.center,
-                            children: const <Widget>[
+                            children: <Widget>[
                               Text('Viewed by', style: TextStyle()),
                               Padding(
                                 padding: EdgeInsets.symmetric(horizontal: 4.0),

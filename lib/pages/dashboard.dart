@@ -4,7 +4,6 @@ import 'package:mum_s/pages/playlist_page.dart';
 import 'package:mum_s/pages/profile_page.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
-import 'package:mum_s/pages/login_page.dart';
 import 'package:mum_s/style/constants.dart';
 import 'package:mum_s/utils/connectivity.dart';
 import 'package:mum_s/utils/user_actions.dart';
@@ -13,6 +12,7 @@ import 'package:mum_s/utils/snack_bar.dart';
 import 'package:draggable_fab/draggable_fab.dart';
 import 'package:mum_s/style/theme.dart' as Theme;
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:mum_s/pages/reminders.dart';
 
 late User? loggedInUser;
 var usersCollection = FirebaseFirestore.instance.collection('Users');
@@ -264,15 +264,10 @@ class _DashboardPageState extends State<DashboardPage> {
                                       snapshot.data!
                                           .data()!
                                           .containsKey('deliveryDate') &&
-                                      (snapshot.data['deliveryDate']
-                                                  .toDate()
-                                                  .month -
+                                      (snapshot.data['deliveryDate'].toDate().month -
                                               now.month) >
                                           0 &&
-                                      (snapshot.data['deliveryDate']
-                                                  .toDate()
-                                                  .day -
-                                              now.day) >
+                                      (snapshot.data['deliveryDate'].toDate().day - now.day) >
                                           0) {
                                     return Text(
                                       '${snapshot.data['deliveryDate'].toDate().month - now.month} months/${snapshot.data['deliveryDate'].toDate().day - now.day} days',
@@ -292,14 +287,10 @@ class _DashboardPageState extends State<DashboardPage> {
                                       snapshot.data!
                                           .data()!
                                           .containsKey('deliveryDate') &&
-                                      (snapshot.data['deliveryDate']
-                                                  .toDate()
-                                                  .month -
+                                      (snapshot.data['deliveryDate'].toDate().month -
                                               now.month) >
                                           0 &&
-                                      (snapshot.data['deliveryDate']
-                                                  .toDate()
-                                                  .day -
+                                      (snapshot.data['deliveryDate'].toDate().day -
                                               now.day) <
                                           0) {
                                     return Text(
@@ -316,7 +307,54 @@ class _DashboardPageState extends State<DashboardPage> {
                                                   12.5)
                                               .toDouble()),
                                     );
+                                  } else if (snapshot.hasData &&
+                                      snapshot.data!
+                                          .data()!
+                                          .containsKey('deliveryDate') &&
+                                      (snapshot.data['deliveryDate'].toDate().month -
+                                              now.month) >
+                                          0 &&
+                                      (snapshot.data['deliveryDate'].toDate().day -
+                                              now.day) ==
+                                          0) {
+                                    return Text(
+                                      '${snapshot.data['deliveryDate'].toDate().month - now.month} months/${snapshot.data['deliveryDate'].toDate().day - now.day} days',
+                                      style: TextStyle(
+                                          color: Colors.black,
+                                          fontWeight: FontWeight.w700,
+                                          fontSize: ((MediaQuery.of(context)
+                                                          .size
+                                                          .height /
+                                                      MediaQuery.of(context)
+                                                          .size
+                                                          .width) *
+                                                  12.5)
+                                              .toDouble()),
+                                    );
+                                  } else if (snapshot.hasData &&
+                                      snapshot.data!
+                                          .data()!
+                                          .containsKey('deliveryDate') &&
+                                      (snapshot.data['deliveryDate'].toDate().month -
+                                              now.month) ==
+                                          0 &&
+                                      (snapshot.data['deliveryDate'].toDate().day - now.day) > 0) {
+                                    return Text(
+                                      '${snapshot.data['deliveryDate'].toDate().month - now.month} months/${snapshot.data['deliveryDate'].toDate().day - now.day} days',
+                                      style: TextStyle(
+                                          color: Colors.black,
+                                          fontWeight: FontWeight.w700,
+                                          fontSize: ((MediaQuery.of(context)
+                                                          .size
+                                                          .height /
+                                                      MediaQuery.of(context)
+                                                          .size
+                                                          .width) *
+                                                  12.5)
+                                              .toDouble()),
+                                    );
                                   } else {
+                                    print('here is the problem');
                                     return Text(
                                       '00/00',
                                       style: TextStyle(
