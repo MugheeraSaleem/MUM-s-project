@@ -10,7 +10,7 @@
 
 
     <application
-        android:label="mum_s"
+        android:label="Mums"
         android:name="${applicationName}"
        android:usesCleartextTraffic="true"
         android:icon="@mipmap/ic_launcher">

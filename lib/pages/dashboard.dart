@@ -13,6 +13,7 @@ import 'package:draggable_fab/draggable_fab.dart';
 import 'package:mum_s/style/theme.dart' as Theme;
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:mum_s/pages/reminders.dart';
+import 'package:mum_s/pages/diet_page.dart';
 
 late User? loggedInUser;
 var usersCollection = FirebaseFirestore.instance.collection('Users');
@@ -225,6 +226,12 @@ class _DashboardPageState extends State<DashboardPage> {
                                 MediaQuery.of(context).size.width) *
                             55)
                         .toDouble()),
+                StaggeredTile.extent(
+                    2,
+                    ((MediaQuery.of(context).size.height /
+                                MediaQuery.of(context).size.width) *
+                            55)
+                        .toDouble()),
               ],
               children: <Widget>[
                 buildTile(
@@ -354,7 +361,6 @@ class _DashboardPageState extends State<DashboardPage> {
                                               .toDouble()),
                                     );
                                   } else {
-                                    print('here is the problem');
                                     return Text(
                                       '00/00',
                                       style: TextStyle(
@@ -398,7 +404,33 @@ class _DashboardPageState extends State<DashboardPage> {
                       ],
                     ),
                   ),
-                  onTap: () {},
+                  onTap: () async {
+                    final DocumentReference<Map<String, dynamic>>
+                        documentReference = FirebaseFirestore.instance
+                            .doc('Users/${loggedInUser!.displayName}');
+
+                    try {
+                      // Fetch the data from a document
+                      DocumentSnapshot<Map<String, dynamic>> documentSnapshot =
+                          await documentReference.get();
+                      if (documentSnapshot.exists) {
+                        var data =
+                            documentSnapshot.data(); // Access the document data
+                        if (data!.containsKey('deliveryDate')) {
+                          return;
+                        } else {
+                          showInSnackBar(
+                              'Please set Expected Delivery Date',
+                              Colors.blueAccent,
+                              context,
+                              _scaffoldKey.currentContext!);
+                        }
+                      }
+                    } catch (error) {
+                      // Handle any potential errors
+                      print('Error fetching data: $error');
+                    }
+                  },
                 ),
                 buildTile(
                   Padding(
@@ -462,7 +494,13 @@ class _DashboardPageState extends State<DashboardPage> {
                                           .toDouble())),
                         ]),
                   ),
-                  onTap: () {},
+                  onTap: () {
+                    // Navigator.of(context).push(
+                    //   MaterialPageRoute(
+                    //     builder: (_) => const dietPage(),
+                    //   ),
+                    // );
+                  },
                 ),
                 buildTile(
                   Padding(
@@ -734,7 +772,7 @@ class _DashboardPageState extends State<DashboardPage> {
                                               MediaQuery.of(context)
                                                   .size
                                                   .width) *
-                                          15)
+                                          18)
                                       .toDouble()),
                             ),
                           ),
@@ -748,6 +786,87 @@ class _DashboardPageState extends State<DashboardPage> {
                     //     builder: (_) => MapPage(),
                     //   ),
                     // );
+                  },
+                ),
+                buildTile(
+                  Padding(
+                    padding: EdgeInsets.all(
+                        ((MediaQuery.of(context).size.height /
+                                    MediaQuery.of(context).size.width) *
+                                12)
+                            .toDouble()),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: <Widget>[
+                        Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: <Widget>[
+                            Text('App Info',
+                                style: TextStyle(
+                                    color: Colors.black,
+                                    fontWeight: FontWeight.w700,
+                                    fontSize:
+                                        ((MediaQuery.of(context).size.height /
+                                                    MediaQuery.of(context)
+                                                        .size
+                                                        .width) *
+                                                15)
+                                            .toDouble()))
+                          ],
+                        ),
+                        Material(
+                          color: Colors.greenAccent,
+                          borderRadius: BorderRadius.circular(24.0),
+                          child: Padding(
+                            padding: EdgeInsets.all(
+                                ((MediaQuery.of(context).size.height /
+                                            MediaQuery.of(context).size.width) *
+                                        8)
+                                    .toDouble()),
+                            child: Center(
+                              child: Icon(Icons.info_sharp,
+                                  color: Colors.white,
+                                  size: ((MediaQuery.of(context).size.height /
+                                              MediaQuery.of(context)
+                                                  .size
+                                                  .width) *
+                                          18)
+                                      .toDouble()),
+                            ),
+                          ),
+                        )
+                      ],
+                    ),
+                  ),
+                  onTap: () {
+                    showDialog(
+                      context: context,
+                      builder: (context) => AlertDialog(
+                        shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(15)),
+                        shadowColor: Colors.grey,
+                        elevation: 14,
+                        title: const Text("App Info"),
+                        content: const Text(
+                          "This is a research app made in collaboration of FMC "
+                          "with SMME, NUST. Developed in Aerial Robotics Lab.",
+                          textAlign: TextAlign.justify,
+                        ),
+                        actions: <Widget>[
+                          TextButton(
+                            onPressed: () {
+                              Navigator.pop(context, 'Ok');
+                            },
+                            child: const Text('Ok'),
+                          ),
+                        ],
+                      ),
+                      //   builder: (context) => const CustomDialog(
+                      //       message: 'This app has been made by Mugheera Saleem'),
+                      //
+                    );
                   },
                 ),
               ],
@@ -772,3 +891,37 @@ Widget buildTile(Widget child, {required Function() onTap}) {
         child: child),
   );
 }
+
+// class CustomDialog extends StatelessWidget {
+//   final String message;
+//
+//   const CustomDialog({Key? key, required this.message}) : super(key: key);
+//
+//   @override
+//   Widget build(BuildContext context) {
+//     return Dialog(
+//       shape: RoundedRectangleBorder(
+//         borderRadius: BorderRadius.circular(8.0),
+//       ),
+//       child: Padding(
+//         padding: const EdgeInsets.all(16.0),
+//         child: Column(
+//           mainAxisSize: MainAxisSize.min,
+//           children: [
+//             Text(
+//               message,
+//               style: const TextStyle(fontSize: 18),
+//             ),
+//             const SizedBox(height: 16),
+//             ElevatedButton(
+//               onPressed: () {
+//                 Navigator.of(context).pop(); // Close the dialog box
+//               },
+//               child: const Text('OK'),
+//             ),
+//           ],
+//         ),
+//       ),
+//     );
+//   }
+// }

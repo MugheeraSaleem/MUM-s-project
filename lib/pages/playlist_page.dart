@@ -192,6 +192,12 @@ class _PlaylistPageState extends State<PlaylistPage> {
                               MediaQuery.of(context).size.width) *
                           75)
                       .toDouble()),
+              StaggeredTile.extent(
+                  2,
+                  ((MediaQuery.of(context).size.height /
+                              MediaQuery.of(context).size.width) *
+                          75)
+                      .toDouble()),
             ],
             children: [
               buildTile(
@@ -441,6 +447,131 @@ class _PlaylistPageState extends State<PlaylistPage> {
                     context,
                     MaterialPageRoute(
                       builder: (context) => const CounselingPage(),
+                    ),
+                  );
+                  c_class.checkInternet(context);
+                },
+              ),
+              buildTile(
+                StreamBuilder<Object>(
+                    stream: usersCollection
+                        .doc(loggedInUser!.displayName)
+                        .snapshots(),
+                    builder: (context, AsyncSnapshot snapshot) {
+                      if (snapshot.hasData &&
+                          snapshot.data!
+                              .data()!
+                              .containsKey('Media last watched video')) {
+                        return Padding(
+                          padding: EdgeInsets.only(
+                              left: ((MediaQuery.of(context).size.height /
+                                          MediaQuery.of(context).size.width) *
+                                      9)
+                                  .toDouble()),
+                          child: Row(
+                              mainAxisAlignment: MainAxisAlignment.start,
+                              crossAxisAlignment: CrossAxisAlignment.center,
+                              children: <Widget>[
+                                CircleAvatar(
+                                  radius: ((MediaQuery.of(context).size.height /
+                                              MediaQuery.of(context)
+                                                  .size
+                                                  .width) *
+                                          35)
+                                      .toDouble(),
+                                  backgroundColor: Colors.white,
+                                  child: ClipOval(
+                                    clipper: MClipper(),
+                                    child: Image.asset(
+                                      "assets/print.jpg",
+                                      fit: BoxFit.contain,
+                                    ),
+                                  ),
+                                ),
+                                Column(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: [
+                                    Text(
+                                      'My Media',
+                                      style: TextStyle(
+                                          color: Colors.black,
+                                          fontWeight: FontWeight.w700,
+                                          fontSize: ((MediaQuery.of(context)
+                                                          .size
+                                                          .height /
+                                                      MediaQuery.of(context)
+                                                          .size
+                                                          .width) *
+                                                  12)
+                                              .toDouble()),
+                                    ),
+                                    Text(
+                                      'Last watching: ${snapshot.data['Media last watched video']}',
+                                      style: TextStyle(
+                                          color: Colors.grey,
+                                          fontWeight: FontWeight.w700,
+                                          fontSize: ((MediaQuery.of(context)
+                                                          .size
+                                                          .height /
+                                                      MediaQuery.of(context)
+                                                          .size
+                                                          .width) *
+                                                  7.5)
+                                              .toDouble()),
+                                    ),
+                                  ],
+                                ),
+                              ]),
+                        );
+                      } else {
+                        return Padding(
+                          padding: EdgeInsets.only(
+                              left: ((MediaQuery.of(context).size.height /
+                                          MediaQuery.of(context).size.width) *
+                                      9)
+                                  .toDouble()),
+                          child: Row(
+                              mainAxisAlignment: MainAxisAlignment.start,
+                              crossAxisAlignment: CrossAxisAlignment.center,
+                              children: <Widget>[
+                                CircleAvatar(
+                                  radius: ((MediaQuery.of(context).size.height /
+                                              MediaQuery.of(context)
+                                                  .size
+                                                  .width) *
+                                          35)
+                                      .toDouble(),
+                                  backgroundColor: Colors.white,
+                                  child: ClipOval(
+                                    clipper: MClipper(),
+                                    child: Image.asset(
+                                      "assets/print.jpg",
+                                      fit: BoxFit.contain,
+                                    ),
+                                  ),
+                                ),
+                                Text(
+                                  'My Media',
+                                  style: TextStyle(
+                                      color: Colors.black,
+                                      fontWeight: FontWeight.w700,
+                                      fontSize:
+                                          ((MediaQuery.of(context).size.height /
+                                                      MediaQuery.of(context)
+                                                          .size
+                                                          .width) *
+                                                  12)
+                                              .toDouble()),
+                                ),
+                              ]),
+                        );
+                      }
+                    }),
+                onTap: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => const MediaPage(),
                     ),
                   );
                   c_class.checkInternet(context);

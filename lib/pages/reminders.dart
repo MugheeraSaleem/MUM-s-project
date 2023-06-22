@@ -118,53 +118,55 @@ class _RemindersPageState extends State<RemindersPage> {
             )
           ],
         ),
-        body: Container(
-          width: MediaQuery.of(context).size.width,
-          height: MediaQuery.of(context).size.height,
-          decoration: const BoxDecoration(
-            gradient: LinearGradient(
-                colors: [
-                  Theme.Colors.loginGradientStart,
-                  Theme.Colors.loginGradientEnd
-                ],
-                begin: FractionalOffset(0.0, 0.0),
-                end: FractionalOffset(1.0, 1.0),
-                stops: [0.0, 1.0],
-                tileMode: TileMode.clamp),
-          ),
-          child: ListView(
-            scrollDirection: Axis.vertical,
-            padding: const EdgeInsets.symmetric(horizontal: 16.0),
-            children: <Widget>[
-              Container(
-                  margin: const EdgeInsets.symmetric(
-                      vertical: 16.0, horizontal: 54.0),
-                  child: Material(
-                    elevation: 8.0,
-                    color: Colors.black,
-                    borderRadius: BorderRadius.circular(32.0),
-                    child: InkWell(
-                      onTap: () {},
-                      child: const Padding(
-                        padding: EdgeInsets.all(12.0),
-                        child: Row(
-                          mainAxisSize: MainAxisSize.min,
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          children: <Widget>[
-                            Icon(Icons.add, color: Colors.white),
-                            Padding(padding: EdgeInsets.only(right: 16.0)),
-                            Text('ADD AN APPOINTMENT',
-                                style: TextStyle(color: Colors.white))
-                          ],
+        body: SingleChildScrollView(
+          child: Container(
+            width: MediaQuery.of(context).size.width,
+            height: MediaQuery.of(context).size.height,
+            decoration: const BoxDecoration(
+              gradient: LinearGradient(
+                  colors: [
+                    Theme.Colors.loginGradientStart,
+                    Theme.Colors.loginGradientEnd
+                  ],
+                  begin: FractionalOffset(0.0, 0.0),
+                  end: FractionalOffset(1.0, 1.0),
+                  stops: [0.0, 1.0],
+                  tileMode: TileMode.clamp),
+            ),
+            child: ListView(
+              scrollDirection: Axis.vertical,
+              padding: const EdgeInsets.symmetric(horizontal: 16.0),
+              children: <Widget>[
+                Container(
+                    margin: const EdgeInsets.symmetric(
+                        vertical: 16.0, horizontal: 54.0),
+                    child: Material(
+                      elevation: 8.0,
+                      color: Colors.black,
+                      borderRadius: BorderRadius.circular(32.0),
+                      child: InkWell(
+                        onTap: () {},
+                        child: const Padding(
+                          padding: EdgeInsets.all(12.0),
+                          child: Row(
+                            mainAxisSize: MainAxisSize.min,
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            children: <Widget>[
+                              Icon(Icons.add, color: Colors.white),
+                              Padding(padding: EdgeInsets.only(right: 16.0)),
+                              Text('ADD AN APPOINTMENT',
+                                  style: TextStyle(color: Colors.white))
+                            ],
+                          ),
                         ),
                       ),
-                    ),
-                  )),
-              ShopItem(),
-              BadShopItem(),
-              NewShopItem()
-            ],
+                    )),
+                ShopItem(),
+                BadShopItem(),
+                NewShopItem()
+              ],
+            ),
           ),
         ));
   }

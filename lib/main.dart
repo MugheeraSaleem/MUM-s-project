@@ -15,6 +15,7 @@ import 'package:mum_s/pages/map.dart';
 import 'package:mum_s/pages/post.dart';
 import 'package:mum_s/pages/reminders.dart';
 import 'package:mum_s/utils/messaging_api.dart';
+import 'package:localization/localization.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();

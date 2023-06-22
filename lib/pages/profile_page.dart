@@ -1,7 +1,6 @@
 import 'package:mum_s/pages/dashboard.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
-import 'package:mum_s/pages/login_page.dart';
 import 'package:mum_s/utils/user_actions.dart';
 import 'package:draggable_fab/draggable_fab.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -15,7 +14,6 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:mum_s/style/constants.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:intl/intl.dart';
-import 'package:mum_s/pages/playlist_page.dart';
 
 var usersCollection = FirebaseFirestore.instance.collection('Users');
 
@@ -25,6 +23,7 @@ late int? height;
 late int? weight;
 late var photoURL;
 late var parsedDate;
+late String husbandName;
 
 class ProfilePage extends StatefulWidget {
   @override
@@ -39,14 +38,14 @@ class MapScreenState extends State<ProfilePage>
 
   final FocusNode myFocusNodeDeliveryDate = FocusNode();
   final FocusNode myFocusNodeAge = FocusNode();
-  // final FocusNode myFocusNodeMobileNumber = FocusNode();
+  final FocusNode myFocusNodeHusbandName = FocusNode();
   // final FocusNode myFocusNodeCity = FocusNode();
   final FocusNode myFocusNodeHeight = FocusNode();
   final FocusNode myFocusNodeWeight = FocusNode();
 
   TextEditingController deliveryDateController = TextEditingController();
   TextEditingController ageController = TextEditingController();
-  // TextEditingController mobileNumberController = TextEditingController();
+  TextEditingController husbandNameController = TextEditingController();
   // TextEditingController cityController = TextEditingController();
   TextEditingController heightController = TextEditingController();
   TextEditingController weightController = TextEditingController();
@@ -64,13 +63,13 @@ class MapScreenState extends State<ProfilePage>
     // Clean up the controller when the Widget is disposed
     myFocusNodeDeliveryDate.dispose();
     myFocusNodeAge.dispose();
-    // myFocusNodeCity.dispose();
+    myFocusNodeHusbandName.dispose();
     myFocusNodeHeight.dispose();
     myFocusNodeWeight.dispose();
 
     deliveryDateController.dispose();
     ageController.dispose();
-    // cityController.dispose();
+    husbandNameController.dispose();
     heightController.dispose();
     weightController.dispose();
     // mobileNumberController.dispose();
@@ -493,45 +492,83 @@ class MapScreenState extends State<ProfilePage>
                           ],
                         ),
                       ),
+                      const Padding(
+                        padding:
+                            EdgeInsets.only(left: 25.0, right: 25.0, top: 25.0),
+                        child: Row(
+                          mainAxisSize: MainAxisSize.max,
+                          children: <Widget>[
+                            Column(
+                              mainAxisAlignment: MainAxisAlignment.start,
+                              mainAxisSize: MainAxisSize.min,
+                              children: <Widget>[
+                                Text(
+                                  'Husband Name',
+                                  style: TextStyle(
+                                      fontSize: 16.0,
+                                      fontWeight: FontWeight.bold),
+                                ),
+                              ],
+                            ),
+                          ],
+                        ),
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.only(
+                            left: 25.0, right: 25.0, top: 2.0),
+                        child: Row(
+                          mainAxisSize: MainAxisSize.max,
+                          children: <Widget>[
+                            Flexible(
+                              child: StreamBuilder<Object>(
+                                  stream: usersCollection
+                                      .doc(loggedInUser!.displayName)
+                                      .snapshots(),
+                                  builder: (context, AsyncSnapshot snapshot) {
+                                    if (snapshot.hasData &&
+                                        snapshot.data!
+                                            .data()!
+                                            .containsKey('husbandName') &&
+                                        _status) {
+                                      var husbandName =
+                                          snapshot.data['husbandName'];
+                                      return Padding(
+                                        padding:
+                                            const EdgeInsets.only(top: 15.0),
+                                        child: Container(
+                                          decoration: const BoxDecoration(
+                                            color: Color(0xFFEAE9EE),
+                                            borderRadius: BorderRadius.all(
+                                              Radius.circular(10.0),
+                                            ),
+                                          ),
+                                          width: 400,
+                                          height: 30,
+                                          child: Center(
+                                            child: Text(
+                                              "$husbandName",
+                                              style: const TextStyle(
+                                                  fontWeight: FontWeight.bold),
+                                            ),
+                                          ),
+                                        ),
+                                      );
+                                    } else {
+                                      return TextField(
+                                        controller: husbandNameController,
+                                        focusNode: myFocusNodeHusbandName,
+                                        decoration: const InputDecoration(
+                                            hintText:
+                                                "Enter your husband\'s name"),
+                                        enabled: !_status,
+                                      );
+                                    }
+                                  }),
+                            ),
+                          ],
+                        ),
+                      ),
                       // const Padding(
-                      //   padding: EdgeInsets.only(
-                      //       left: 25.0, right: 25.0, top: 25.0),
-                      //   child: Row(
-                      //     mainAxisSize: MainAxisSize.max,
-                      //     children: <Widget>[
-                      //       Column(
-                      //         mainAxisAlignment: MainAxisAlignment.start,
-                      //         mainAxisSize: MainAxisSize.min,
-                      //         children: <Widget>[
-                      //           Text(
-                      //             'Mobile',
-                      //             style: TextStyle(
-                      //                 fontSize: 16.0,
-                      //                 fontWeight: FontWeight.bold),
-                      //           ),
-                      //         ],
-                      //       ),
-                      //     ],
-                      //   ),
-                      // ),
-                      // Padding(
-                      //     padding: const EdgeInsets.only(
-                      //         left: 25.0, right: 25.0, top: 2.0),
-                      //     child: Row(
-                      //       mainAxisSize: MainAxisSize.max,
-                      //       children: <Widget>[
-                      //         Flexible(
-                      //           child: TextField(
-                      //             controller: mobileNumberController,
-                      //             focusNode: myFocusNodeMobileNumber,
-                      //             decoration: const InputDecoration(
-                      //                 hintText: "Enter Mobile Number"),
-                      //             enabled: !_status,
-                      //           ),
-                      //         ),
-                      //       ],
-                      //     )),
-                      // // const Padding(
                       //   padding: EdgeInsets.only(
                       //       left: 25.0, right: 25.0, top: 25.0),
                       //   child: Row(
@@ -680,7 +717,7 @@ class MapScreenState extends State<ProfilePage>
                                           height: 30,
                                           child: Center(
                                             child: Text(
-                                              "${userWeight} kgs",
+                                              "${userWeight} Kgs",
                                               style: const TextStyle(
                                                   fontWeight: FontWeight.bold),
                                             ),
@@ -741,20 +778,21 @@ class MapScreenState extends State<ProfilePage>
                   if (deliveryDateController.text.trim().isEmpty ||
                       ageController.text.trim().isEmpty ||
                       heightController.text.trim().isEmpty ||
-                      weightController.text.trim().isEmpty) {
+                      weightController.text.trim().isEmpty ||
+                      husbandNameController.text.trim().isEmpty) {
                     showInSnackBar(
-                        'Please provide all the information for best experience.',
+                        'Please provide all the information for best experience',
                         Colors.red,
                         context,
                         _scaffoldKey.currentContext);
                   } else {
                     DateTime currentDate = DateTime.now();
 
-                    var entredDate =
+                    var enteredDate =
                         deliveryDateController.text.trim().toString();
 
                     try {
-                      parsedDate = DateFormat('dd-MM-yyyy').parse(entredDate);
+                      parsedDate = DateFormat('dd-MM-yyyy').parse(enteredDate);
                     } catch (e) {
                       print(e);
                       parsedDate = null;
@@ -804,14 +842,13 @@ class MapScreenState extends State<ProfilePage>
                         height! < 201 &&
                         weight! >= 35 &&
                         weight! < 116) {
-                      print(
-                          'here comes all the conditions so after data can be added to the database');
-
                       Map<String, dynamic> userData = {
                         'deliveryDate': parsedDate,
                         'age': age,
                         'weight': weight,
-                        'height': height
+                        'height': height,
+                        'husbandName':
+                            husbandNameController.text.trim().toString()
                       };
 
                       UpdateData().updateData(userData);

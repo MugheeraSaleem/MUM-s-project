@@ -55,7 +55,7 @@ class MapPageState extends State<MapPage> {
     return Align(
       alignment: Alignment.topLeft,
       child: IconButton(
-          icon: const Icon(FontAwesomeIcons.searchMinus,
+          icon: const Icon(FontAwesomeIcons.magnifyingGlassMinus,
               color: Color(0xff6200ee)),
           onPressed: () {
             zoomVal--;
@@ -102,19 +102,19 @@ class MapPageState extends State<MapPage> {
             Padding(
               padding: const EdgeInsets.all(8.0),
               child: _boxes(
-                  "https://content3.jdmagicbox.com/comp/delhi/g3/011pxx11.xx11.140222141957.a9g3/catalogue/dr-kameshwar-prasad-aiims-hospital--ansari-nagar-aiims-delhi-neurologists-989c2.jpg",
+                  'https://datacell.banjaiga.com/assets/Projects/Cover/1426/656302894_81877814_483833347_jpg',
                   28.568180,
                   77.212570,
-                  "AIIMS"),
+                  "PAF Hospital"),
             ),
             const SizedBox(width: 10.0),
             Padding(
               padding: const EdgeInsets.all(8.0),
               child: _boxes(
-                  "https://akm-img-a-in.tosshub.com/indiatoday/images/story/201808/safdarjung.jpeg?Zov73a9ziy5NgsT7ZsidrSXC3dHIpMxL",
+                  "https://upload.wikimedia.org/wikipedia/commons/b/b6/Pims.jpg",
                   28.595370,
                   77.205820,
-                  "Safdarjung Hospital"),
+                  "PIMS Hospital"),
             ),
           ],
         ),
@@ -137,7 +137,7 @@ class MapPageState extends State<MapPage> {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: <Widget>[
                 SizedBox(
-                  width: 180,
+                  width: 250,
                   height: 200,
                   child: ClipRRect(
                     borderRadius: BorderRadius.circular(24.0),
