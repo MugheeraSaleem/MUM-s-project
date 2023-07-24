@@ -123,10 +123,15 @@ class MapScreenState extends State<ProfilePage>
       key: _scaffoldKey,
       appBar: AppBar(
         backgroundColor: kAppBarColor,
-        title: const Text(
-          'Background Information',
+        title: Text(
+          'My Profile',
           style: TextStyle(
-              color: Colors.white, fontWeight: FontWeight.w700, fontSize: 22.0),
+              color: Colors.white,
+              fontWeight: FontWeight.w700,
+              fontSize: ((MediaQuery.of(context).size.height /
+                          MediaQuery.of(context).size.width) *
+                      12)
+                  .toDouble()),
         ),
       ),
       floatingActionButton: DraggableFab(

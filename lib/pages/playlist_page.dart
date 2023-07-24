@@ -93,7 +93,7 @@ class _PlaylistPageState extends State<PlaylistPage> {
                 fontWeight: FontWeight.w700,
                 fontSize: ((MediaQuery.of(context).size.height /
                             MediaQuery.of(context).size.width) *
-                        15)
+                        12)
                     .toDouble()),
           ),
         ),

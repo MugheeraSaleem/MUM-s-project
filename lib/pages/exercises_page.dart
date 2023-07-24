@@ -227,7 +227,7 @@ class _ExercisesPageState extends State<ExercisesPage> {
                 fontWeight: FontWeight.w700,
                 fontSize: ((MediaQuery.of(context).size.height /
                             MediaQuery.of(context).size.width) *
-                        15)
+                        12)
                     .toDouble()),
           ),
         ),

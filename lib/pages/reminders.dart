@@ -146,7 +146,7 @@ class _RemindersPageState extends State<RemindersPage> {
                       borderRadius: BorderRadius.circular(32.0),
                       child: InkWell(
                         onTap: () {},
-                        child: const Padding(
+                        child: Padding(
                           padding: EdgeInsets.all(12.0),
                           child: Row(
                             mainAxisSize: MainAxisSize.min,
@@ -199,7 +199,7 @@ class ShopItem extends StatelessWidget {
                           onTap: () => Navigator.of(context).push(
                               MaterialPageRoute(
                                   builder: (_) => ItemReviewsPage())),
-                          child: const Padding(
+                          child: Padding(
                             padding: EdgeInsets.all(24.0),
                             child: Column(
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -341,7 +341,7 @@ class BadShopItem extends StatelessWidget {
                             Color(0xFFDA4453),
                             Color(0xFF89216B)
                           ])),
-                          child: const Padding(
+                          child: Padding(
                             padding: EdgeInsets.all(24.0),
                             child: Column(
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -468,7 +468,7 @@ class NewShopItem extends StatelessWidget {
                     borderRadius: BorderRadius.circular(12.0),
                     shadowColor: const Color(0x802196F3),
                     color: Colors.white,
-                    child: const Padding(
+                    child: Padding(
                       padding: EdgeInsets.all(24.0),
                       child: Column(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,

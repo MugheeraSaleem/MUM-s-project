@@ -109,7 +109,7 @@ class _DashboardPageState extends State<DashboardPage> {
                   fontWeight: FontWeight.w700,
                   fontSize: ((MediaQuery.of(context).size.height /
                               MediaQuery.of(context).size.width) *
-                          15)
+                          12)
                       .toDouble()),
             ),
           ),
@@ -287,7 +287,7 @@ class _DashboardPageState extends State<DashboardPage> {
                                                       MediaQuery.of(context)
                                                           .size
                                                           .width) *
-                                                  12.5)
+                                                  10)
                                               .toDouble()),
                                     );
                                   } else if (snapshot.hasData &&
@@ -311,7 +311,7 @@ class _DashboardPageState extends State<DashboardPage> {
                                                       MediaQuery.of(context)
                                                           .size
                                                           .width) *
-                                                  12.5)
+                                                  10)
                                               .toDouble()),
                                     );
                                   } else if (snapshot.hasData &&
@@ -335,7 +335,7 @@ class _DashboardPageState extends State<DashboardPage> {
                                                       MediaQuery.of(context)
                                                           .size
                                                           .width) *
-                                                  12.5)
+                                                  10)
                                               .toDouble()),
                                     );
                                   } else if (snapshot.hasData &&
@@ -357,7 +357,7 @@ class _DashboardPageState extends State<DashboardPage> {
                                                       MediaQuery.of(context)
                                                           .size
                                                           .width) *
-                                                  12.5)
+                                                  10)
                                               .toDouble()),
                                     );
                                   } else {
@@ -372,7 +372,7 @@ class _DashboardPageState extends State<DashboardPage> {
                                                       MediaQuery.of(context)
                                                           .size
                                                           .width) *
-                                                  17)
+                                                  12)
                                               .toDouble()),
                                     );
                                   }
@@ -480,7 +480,7 @@ class _DashboardPageState extends State<DashboardPage> {
                                                   MediaQuery.of(context)
                                                       .size
                                                       .width) *
-                                              11)
+                                              10)
                                           .toDouble())),
                           Text('Seasonal || \nNon-Seasonal',
                               style: TextStyle(
@@ -490,7 +490,7 @@ class _DashboardPageState extends State<DashboardPage> {
                                                   MediaQuery.of(context)
                                                       .size
                                                       .width) *
-                                              5)
+                                              6)
                                           .toDouble())),
                         ]),
                   ),
@@ -549,7 +549,7 @@ class _DashboardPageState extends State<DashboardPage> {
                                                   MediaQuery.of(context)
                                                       .size
                                                       .width) *
-                                              11)
+                                              10)
                                           .toDouble())),
                           Text('Vaccinations || \nAppointments',
                               style: TextStyle(
@@ -559,7 +559,7 @@ class _DashboardPageState extends State<DashboardPage> {
                                                   MediaQuery.of(context)
                                                       .size
                                                       .width) *
-                                              5)
+                                              6)
                                           .toDouble())),
                         ]),
                   ),
@@ -600,7 +600,7 @@ class _DashboardPageState extends State<DashboardPage> {
                                                     MediaQuery.of(context)
                                                         .size
                                                         .width) *
-                                                11)
+                                                12)
                                             .toDouble()),
                                   ),
                                   Row(
@@ -740,8 +740,16 @@ class _DashboardPageState extends State<DashboardPage> {
                           mainAxisAlignment: MainAxisAlignment.center,
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: <Widget>[
-                            const Text('Hospitals Nearby',
-                                style: TextStyle(color: Colors.pinkAccent)),
+                            Text('Hospitals Nearby',
+                                style: TextStyle(
+                                    color: Colors.pinkAccent,
+                                    fontSize:
+                                        ((MediaQuery.of(context).size.height /
+                                                    MediaQuery.of(context)
+                                                        .size
+                                                        .width) *
+                                                11)
+                                            .toDouble())),
                             Text('Maps',
                                 style: TextStyle(
                                     color: Colors.black,
@@ -751,7 +759,7 @@ class _DashboardPageState extends State<DashboardPage> {
                                                     MediaQuery.of(context)
                                                         .size
                                                         .width) *
-                                                15)
+                                                12)
                                             .toDouble()))
                           ],
                         ),

@@ -30,7 +30,7 @@ class MyApp extends StatelessWidget {
     return ChangeNotifierProvider(
       create: (context) => GoogleSignInProvider(),
       child: MaterialApp(
-        debugShowCheckedModeBanner: false,
+        // debugShowCheckedModeBanner: false,
         debugShowMaterialGrid: false,
         title: "MUM's",
         theme: ThemeData(

@@ -98,7 +98,7 @@ class _MusicHomeState extends State<MusicHome> {
               const SizedBox(
                 height: 25.0,
               ),
-              const Column(
+              Column(
                 children: <Widget>[
                   Text(
                     "Deep Relaxing Music",
