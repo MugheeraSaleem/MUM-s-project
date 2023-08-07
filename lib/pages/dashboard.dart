@@ -14,6 +14,7 @@ import 'package:mum_s/style/theme.dart' as Theme;
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:mum_s/pages/reminders.dart';
 import 'package:mum_s/pages/diet_page.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 late User? loggedInUser;
 var usersCollection = FirebaseFirestore.instance.collection('Users');
@@ -76,8 +77,9 @@ class _DashboardPageState extends State<DashboardPage> {
                 Icons.logout,
                 color: Colors.white,
               ),
-              onPressed: () {
+              onPressed: () async {
                 c_class.checkInternet(context);
+
                 _auth.signOut();
                 Navigator.pushNamedAndRemoveUntil(
                   context,
@@ -87,6 +89,8 @@ class _DashboardPageState extends State<DashboardPage> {
                 );
                 showInSnackBar('Logged out Successfully', Colors.green, context,
                     _scaffoldKey.currentContext!);
+                SharedPreferences prefs = await SharedPreferences.getInstance();
+                prefs.remove('user_id');
               },
             ),
           ),
@@ -495,6 +499,30 @@ class _DashboardPageState extends State<DashboardPage> {
                         ]),
                   ),
                   onTap: () {
+                    showDialog(
+                      context: context,
+                      builder: (context) => AlertDialog(
+                        shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(15)),
+                        shadowColor: Colors.grey,
+                        elevation: 14,
+                        title: const Text("App Info"),
+                        content: const Text(
+                          "This feature is unavailable in "
+                          "the beta version.",
+                          textAlign: TextAlign.justify,
+                        ),
+                        actions: <Widget>[
+                          TextButton(
+                            onPressed: () {
+                              Navigator.pop(context, 'Ok');
+                            },
+                            child: const Text('Ok'),
+                          ),
+                        ],
+                      ),
+                    );
+
                     // Navigator.of(context).push(
                     //   MaterialPageRoute(
                     //     builder: (_) => const dietPage(),
@@ -564,6 +592,30 @@ class _DashboardPageState extends State<DashboardPage> {
                         ]),
                   ),
                   onTap: () {
+                    showDialog(
+                      context: context,
+                      builder: (context) => AlertDialog(
+                        shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(15)),
+                        shadowColor: Colors.grey,
+                        elevation: 14,
+                        title: const Text("App Info"),
+                        content: const Text(
+                          "This feature is unavailable in "
+                          "the beta version.",
+                          textAlign: TextAlign.justify,
+                        ),
+                        actions: <Widget>[
+                          TextButton(
+                            onPressed: () {
+                              Navigator.pop(context, 'Ok');
+                            },
+                            child: const Text('Ok'),
+                          ),
+                        ],
+                      ),
+                    );
+
                     // Navigator.of(context).push(
                     //   MaterialPageRoute(
                     //     builder: (_) => RemindersPage(),
@@ -789,6 +841,29 @@ class _DashboardPageState extends State<DashboardPage> {
                     ),
                   ),
                   onTap: () {
+                    showDialog(
+                      context: context,
+                      builder: (context) => AlertDialog(
+                        shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(15)),
+                        shadowColor: Colors.grey,
+                        elevation: 14,
+                        title: const Text("App Info"),
+                        content: const Text(
+                          "This feature is unavailable in "
+                          "the beta version.",
+                          textAlign: TextAlign.justify,
+                        ),
+                        actions: <Widget>[
+                          TextButton(
+                            onPressed: () {
+                              Navigator.pop(context, 'Ok');
+                            },
+                            child: const Text('Ok'),
+                          ),
+                        ],
+                      ),
+                    );
                     // Navigator.of(context).push(
                     //   MaterialPageRoute(
                     //     builder: (_) => MapPage(),
@@ -871,9 +946,6 @@ class _DashboardPageState extends State<DashboardPage> {
                           ),
                         ],
                       ),
-                      //   builder: (context) => const CustomDialog(
-                      //       message: 'This app has been made by Mugheera Saleem'),
-                      //
                     );
                   },
                 ),

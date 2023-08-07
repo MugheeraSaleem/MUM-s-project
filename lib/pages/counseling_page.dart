@@ -17,6 +17,7 @@ import 'dart:convert';
 import 'package:modal_progress_hud_nsn/modal_progress_hud_nsn.dart';
 import 'package:loading_animation_widget/loading_animation_widget.dart';
 import 'package:mum_s/pages/video_screen.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 late User? loggedInUser;
 var usersCollection = FirebaseFirestore.instance.collection('Users');
@@ -71,7 +72,7 @@ class _CounselingPageState extends State<CounselingPage> {
 
   Future<void> fetchPlaylistVideos() async {
     String apiUrl =
-        'https://www.googleapis.com/youtube/v3/playlistItems?part=snippet&maxResults=$maxResults&playlistId=$counselingPlaylistId&key=$apiKey';
+        'https://www.googleapis.com/youtube/v3/playlistItems?part=snippet&maxResults=$maxResults&playlistId=$psychoEducationPlaylistId&key=$apiKey';
 
     try {
       final response = await http.get(Uri.parse(apiUrl));
@@ -125,7 +126,7 @@ class _CounselingPageState extends State<CounselingPage> {
     });
 
     String apiUrl =
-        'https://www.googleapis.com/youtube/v3/playlistItems?part=snippet&maxResults=$maxResults&playlistId=$counselingPlaylistId&key=$apiKey';
+        'https://www.googleapis.com/youtube/v3/playlistItems?part=snippet&maxResults=$maxResults&playlistId=$psychoEducationPlaylistId&key=$apiKey';
 
     if (nextPageToken != null) {
       apiUrl += '&pageToken=$nextPageToken';
@@ -201,7 +202,7 @@ class _CounselingPageState extends State<CounselingPage> {
               Icons.logout,
               color: Colors.white,
             ),
-            onPressed: () {
+            onPressed: () async {
               c_class.checkInternet(context);
               _auth.signOut();
               Navigator.pushNamedAndRemoveUntil(
@@ -212,6 +213,8 @@ class _CounselingPageState extends State<CounselingPage> {
               );
               showInSnackBar('Logged out Successfully', Colors.green, context,
                   _scaffoldKey.currentContext!);
+              SharedPreferences prefs = await SharedPreferences.getInstance();
+              prefs.remove('user_id');
             },
           ),
         ),

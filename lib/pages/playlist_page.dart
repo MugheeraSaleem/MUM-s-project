@@ -16,6 +16,8 @@ import 'package:mum_s/pages/exercises_page.dart';
 import 'package:mum_s/pages/media_page.dart';
 import 'package:mum_s/pages/counseling_page.dart';
 import 'package:mum_s/utils/user_actions.dart';
+import 'package:mum_s/pages/care_page.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 late User? loggedInUser;
 var usersCollection = FirebaseFirestore.instance.collection('Users');
@@ -67,7 +69,7 @@ class _PlaylistPageState extends State<PlaylistPage> {
               Icons.logout,
               color: Colors.white,
             ),
-            onPressed: () {
+            onPressed: () async {
               c_class.checkInternet(context);
               _auth.signOut();
               Navigator.pushNamedAndRemoveUntil(
@@ -78,6 +80,8 @@ class _PlaylistPageState extends State<PlaylistPage> {
               );
               showInSnackBar('Logged out Successfully', Colors.green, context,
                   _scaffoldKey.currentContext!);
+              SharedPreferences prefs = await SharedPreferences.getInstance();
+              prefs.remove('user_id');
             },
           ),
         ),
@@ -209,7 +213,7 @@ class _PlaylistPageState extends State<PlaylistPage> {
                       if (snapshot.hasData &&
                           snapshot.data!
                               .data()!
-                              .containsKey('Exercises last watched video')) {
+                              .containsKey('Care last watched video')) {
                         return Padding(
                           padding: EdgeInsets.only(
                               left: ((MediaQuery.of(context).size.height /
@@ -231,17 +235,16 @@ class _PlaylistPageState extends State<PlaylistPage> {
                                   child: ClipOval(
                                     clipper: MClipper(),
                                     child: Image.asset(
-                                      "assets/focus.jpeg",
+                                      "assets/care.jpg",
                                       fit: BoxFit.contain,
                                     ),
                                   ),
                                 ),
                                 Column(
                                   mainAxisAlignment: MainAxisAlignment.center,
-                                  crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
                                     Text(
-                                      'My Exercises',
+                                      'My Care',
                                       style: TextStyle(
                                           color: Colors.black,
                                           fontWeight: FontWeight.w700,
@@ -255,7 +258,7 @@ class _PlaylistPageState extends State<PlaylistPage> {
                                               .toDouble()),
                                     ),
                                     Text(
-                                      'Last watching: ${snapshot.data['Exercises last watched video']}',
+                                      'Last watching: ${snapshot.data['Care last watched video']}',
                                       style: TextStyle(
                                           color: Colors.grey,
                                           fontWeight: FontWeight.w700,
@@ -294,13 +297,13 @@ class _PlaylistPageState extends State<PlaylistPage> {
                                   child: ClipOval(
                                     clipper: MClipper(),
                                     child: Image.asset(
-                                      "assets/focus.jpeg",
+                                      "assets/care.jpg",
                                       fit: BoxFit.contain,
                                     ),
                                   ),
                                 ),
                                 Text(
-                                  'My Exercises',
+                                  'My Care',
                                   style: TextStyle(
                                       color: Colors.black,
                                       fontWeight: FontWeight.w700,
@@ -320,7 +323,7 @@ class _PlaylistPageState extends State<PlaylistPage> {
                   Navigator.push(
                     context,
                     MaterialPageRoute(
-                      builder: (context) => const ExercisesPage(),
+                      builder: (context) => const CarePage(),
                     ),
                   );
                   c_class.checkInternet(context);
@@ -461,7 +464,7 @@ class _PlaylistPageState extends State<PlaylistPage> {
                       if (snapshot.hasData &&
                           snapshot.data!
                               .data()!
-                              .containsKey('Media last watched video')) {
+                              .containsKey('Exercises last watched video')) {
                         return Padding(
                           padding: EdgeInsets.only(
                               left: ((MediaQuery.of(context).size.height /
@@ -483,16 +486,17 @@ class _PlaylistPageState extends State<PlaylistPage> {
                                   child: ClipOval(
                                     clipper: MClipper(),
                                     child: Image.asset(
-                                      "assets/print.jpg",
+                                      "assets/focus.jpeg",
                                       fit: BoxFit.contain,
                                     ),
                                   ),
                                 ),
                                 Column(
                                   mainAxisAlignment: MainAxisAlignment.center,
+                                  crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
                                     Text(
-                                      'My Media',
+                                      'My Exercises',
                                       style: TextStyle(
                                           color: Colors.black,
                                           fontWeight: FontWeight.w700,
@@ -506,7 +510,7 @@ class _PlaylistPageState extends State<PlaylistPage> {
                                               .toDouble()),
                                     ),
                                     Text(
-                                      'Last watching: ${snapshot.data['Media last watched video']}',
+                                      'Last watching: ${snapshot.data['Exercises last watched video']}',
                                       style: TextStyle(
                                           color: Colors.grey,
                                           fontWeight: FontWeight.w700,
@@ -545,13 +549,13 @@ class _PlaylistPageState extends State<PlaylistPage> {
                                   child: ClipOval(
                                     clipper: MClipper(),
                                     child: Image.asset(
-                                      "assets/print.jpg",
+                                      "assets/focus.jpeg",
                                       fit: BoxFit.contain,
                                     ),
                                   ),
                                 ),
                                 Text(
-                                  'My Media',
+                                  'My Exercises',
                                   style: TextStyle(
                                       color: Colors.black,
                                       fontWeight: FontWeight.w700,
@@ -571,7 +575,7 @@ class _PlaylistPageState extends State<PlaylistPage> {
                   Navigator.push(
                     context,
                     MaterialPageRoute(
-                      builder: (context) => const MediaPage(),
+                      builder: (context) => const ExercisesPage(),
                     ),
                   );
                   c_class.checkInternet(context);
@@ -608,7 +612,7 @@ class _PlaylistPageState extends State<PlaylistPage> {
                                   child: ClipOval(
                                     clipper: MClipper(),
                                     child: Image.asset(
-                                      "assets/print.jpg",
+                                      "assets/media.jpg",
                                       fit: BoxFit.contain,
                                     ),
                                   ),
@@ -670,7 +674,7 @@ class _PlaylistPageState extends State<PlaylistPage> {
                                   child: ClipOval(
                                     clipper: MClipper(),
                                     child: Image.asset(
-                                      "assets/print.jpg",
+                                      "assets/media.jpg",
                                       fit: BoxFit.contain,
                                     ),
                                   ),

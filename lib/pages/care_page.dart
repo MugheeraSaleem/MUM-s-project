@@ -1,6 +1,5 @@
 import 'package:mum_s/pages/profile_page.dart';
 import 'package:flutter/material.dart';
-import 'package:mum_s/pages/login_page.dart';
 import 'package:mum_s/style/constants.dart';
 import 'package:mum_s/utils/connectivity.dart';
 import 'package:mum_s/utils/user_actions.dart';
@@ -26,14 +25,14 @@ ConnectivityClass c_class = ConnectivityClass();
 final _auth = FirebaseAuth.instance;
 const int maxResults = 5; // Maximum number of results per page
 
-class MediaPage extends StatefulWidget {
-  const MediaPage({Key? key}) : super(key: key);
+class CarePage extends StatefulWidget {
+  const CarePage({Key? key}) : super(key: key);
 
   @override
-  State<MediaPage> createState() => _MediaPageState();
+  State<CarePage> createState() => _CarePageState();
 }
 
-class _MediaPageState extends State<MediaPage> {
+class _CarePageState extends State<CarePage> {
   bool _loading = true;
   List<Video> videos = [];
   String? nextPageToken;
@@ -72,7 +71,7 @@ class _MediaPageState extends State<MediaPage> {
 
   Future<void> fetchPlaylistVideos() async {
     String apiUrl =
-        'https://www.googleapis.com/youtube/v3/playlistItems?part=snippet&maxResults=$maxResults&playlistId=$mediaPlaylistId&key=$apiKey';
+        'https://www.googleapis.com/youtube/v3/playlistItems?part=snippet&maxResults=$maxResults&playlistId=$antenatalCarePlaylistId&key=$apiKey';
 
     try {
       final response = await http.get(Uri.parse(apiUrl));
@@ -126,7 +125,7 @@ class _MediaPageState extends State<MediaPage> {
     });
 
     String apiUrl =
-        'https://www.googleapis.com/youtube/v3/playlistItems?part=snippet&maxResults=$maxResults&playlistId=$mediaPlaylistId&key=$apiKey';
+        'https://www.googleapis.com/youtube/v3/playlistItems?part=snippet&maxResults=$maxResults&playlistId=$psychoEducationPlaylistId&key=$apiKey';
 
     if (nextPageToken != null) {
       apiUrl += '&pageToken=$nextPageToken';
@@ -224,7 +223,7 @@ class _MediaPageState extends State<MediaPage> {
         backgroundColor: kAppBarColor,
         title: Center(
           child: Text(
-            'My Media',
+            'My Care',
             style: TextStyle(
                 color: Colors.white,
                 fontWeight: FontWeight.w700,
@@ -254,7 +253,10 @@ class _MediaPageState extends State<MediaPage> {
                         child: Icon(
                           Icons.person,
                           color: kFloatingActionButtonColor,
-                          size: 40.0,
+                          size: ((MediaQuery.of(context).size.height /
+                                      MediaQuery.of(context).size.width) *
+                                  20)
+                              .toDouble(),
                         )),
                   ),
                   onPressed: () {
@@ -301,7 +303,7 @@ class _MediaPageState extends State<MediaPage> {
               return SizedBox(
                   height: ((MediaQuery.of(context).size.height /
                               MediaQuery.of(context).size.width) *
-                          2.5)
+                          3)
                       .toDouble()); // Replace with your desired spacing
             },
             controller: scrollController,
@@ -316,7 +318,7 @@ class _MediaPageState extends State<MediaPage> {
                       MaterialPageRoute(
                         builder: (_) => VideoScreen(
                           id: video.id,
-                          playlist: 'Media',
+                          playlist: 'Care',
                           videoTitle: video.title,
                           index: index + 1,
                         ),

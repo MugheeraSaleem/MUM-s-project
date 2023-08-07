@@ -14,6 +14,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:mum_s/style/constants.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:intl/intl.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 var usersCollection = FirebaseFirestore.instance.collection('Users');
 
@@ -145,7 +146,7 @@ class MapScreenState extends State<ProfilePage>
               Icons.logout,
               color: Colors.white,
             ),
-            onPressed: () {
+            onPressed: () async {
               c_class.checkInternet(context);
               _auth.signOut();
               Navigator.pushNamedAndRemoveUntil(
@@ -156,6 +157,8 @@ class MapScreenState extends State<ProfilePage>
               );
               showInSnackBar('Logged out Successfully', Colors.green, context,
                   _scaffoldKey.currentContext!);
+              SharedPreferences prefs = await SharedPreferences.getInstance();
+              prefs.remove('user_id');
             },
           ),
         ),

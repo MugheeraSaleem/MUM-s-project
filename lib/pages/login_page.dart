@@ -22,6 +22,7 @@ import 'package:flutter/foundation.dart';
 import 'package:provider/provider.dart';
 import 'package:mum_s/pages/forgot_password_page.dart';
 import 'package:mum_s/style/constants.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 var usersCollection = FirebaseFirestore.instance.collection('Users');
 late User? user;
@@ -65,6 +66,16 @@ class _LoginPageState extends State<LoginPage>
 
   Color left = Colors.black;
   Color right = Colors.white;
+
+  Future<void> checkLoggedInStatus() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    String? userId = prefs.getString('user_id');
+
+    if (userId != null) {
+      // Navigate to the HomeScreen or any other authenticated screen
+      Navigator.pushReplacementNamed(context, '/Dashboard');
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -172,6 +183,7 @@ class _LoginPageState extends State<LoginPage>
   @override
   void initState() {
     super.initState();
+    checkLoggedInStatus();
     c_class.getConnectivity(context);
     SystemChrome.setPreferredOrientations([
       DeviceOrientation.portraitUp,
@@ -419,6 +431,9 @@ class _LoginPageState extends State<LoginPage>
                         if (await networkStatus == true && user != null) {
                           showInSnackBar('Logged in Successfully', Colors.green,
                               context, _scaffoldKey.currentContext!);
+                          SharedPreferences prefs =
+                              await SharedPreferences.getInstance();
+                          prefs.setString('user_id', user!.uid);
                           Navigator.push(
                             context,
                             prefix0.MaterialPageRoute(
@@ -487,7 +502,7 @@ class _LoginPageState extends State<LoginPage>
                 print(
                     'this is the device height ${MediaQuery.of(context).size.height}');
                 print(
-                    'this is the device pixelratio is ${MediaQuery.of(context).devicePixelRatio}');
+                    'this is the device pixelratio ${MediaQuery.of(context).devicePixelRatio}');
 
                 Navigator.push(
                   context,
@@ -662,6 +677,10 @@ class _LoginPageState extends State<LoginPage>
 
                         showInSnackBar('Logged in Successfully', Colors.green,
                             context, _scaffoldKey.currentContext!);
+
+                        SharedPreferences prefs =
+                            await SharedPreferences.getInstance();
+                        prefs.setString('user_id', user!.uid);
 
                         Navigator.push(
                           context,
@@ -918,6 +937,10 @@ class _LoginPageState extends State<LoginPage>
                                 .set(userData)
                                 .then((_) => print('Success'))
                                 .catchError((error) => print('Failed: $error'));
+
+                            SharedPreferences prefs =
+                                await SharedPreferences.getInstance();
+                            prefs.setString('user_id', newUser.uid);
 
                             showInSnackBar(
                                 'User Created Successfully',

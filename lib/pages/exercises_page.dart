@@ -17,6 +17,7 @@ import 'dart:convert';
 import 'package:modal_progress_hud_nsn/modal_progress_hud_nsn.dart';
 import 'package:loading_animation_widget/loading_animation_widget.dart';
 import 'package:mum_s/pages/video_screen.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 late User? loggedInUser;
 var usersCollection = FirebaseFirestore.instance.collection('Users');
@@ -201,7 +202,7 @@ class _ExercisesPageState extends State<ExercisesPage> {
               Icons.logout,
               color: Colors.white,
             ),
-            onPressed: () {
+            onPressed: () async {
               c_class.checkInternet(context);
               _auth.signOut();
               Navigator.pushNamedAndRemoveUntil(
@@ -212,6 +213,8 @@ class _ExercisesPageState extends State<ExercisesPage> {
               );
               showInSnackBar('Logged out Successfully', Colors.green, context,
                   _scaffoldKey.currentContext!);
+              SharedPreferences prefs = await SharedPreferences.getInstance();
+              prefs.remove('user_id');
             },
           ),
         ),
