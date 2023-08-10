@@ -5,10 +5,10 @@
 // 'flutter create' template.
 
 // The application's name. By default this is also the title of the Flutter window.
-PRODUCT_NAME = mum_s
+PRODUCT_NAME = Mums App;
 
 // The application's bundle identifier
-PRODUCT_BUNDLE_IDENTIFIER = mum.s.mums
+PRODUCT_BUNDLE_IDENTIFIER = com.mums_app.mums;
 
 // The copyright displayed in application information
 PRODUCT_COPYRIGHT = Copyright © 2023 mum.s. All rights reserved.

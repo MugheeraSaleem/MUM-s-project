@@ -90,12 +90,12 @@ BEGIN
         BLOCK "040904e4"
         BEGIN
             VALUE "CompanyName", "mum.s" "\0"
-            VALUE "FileDescription", "mum_s" "\0"
+            VALUE "FileDescription", "Mums App" "\0"
             VALUE "FileVersion", VERSION_AS_STRING "\0"
-            VALUE "InternalName", "mum_s" "\0"
+            VALUE "InternalName", "Mums App" "\0"
             VALUE "LegalCopyright", "Copyright (C) 2023 mum.s. All rights reserved." "\0"
             VALUE "OriginalFilename", "mum_s.exe" "\0"
-            VALUE "ProductName", "mum_s" "\0"
+            VALUE "ProductName", "Mums App" "\0"
             VALUE "ProductVersion", VERSION_AS_STRING "\0"
         END
     END

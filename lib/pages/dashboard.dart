@@ -933,8 +933,8 @@ class _DashboardPageState extends State<DashboardPage> {
                         elevation: 14,
                         title: const Text("App Info"),
                         content: const Text(
-                          "This is an A/B testing Npn-commercial version of "
-                          "a research app made in collaboration of FMC with "
+                          "This is an A/B testing, Non-commercial version of "
+                          "Mums app made in collaboration of FMC with "
                           "SMME, NUST. Developed in Aerial Robotics Lab.",
                           textAlign: TextAlign.justify,
                         ),

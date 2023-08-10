@@ -24,7 +24,7 @@ late int? height;
 late int? weight;
 late var photoURL;
 late var parsedDate;
-late String husbandName;
+late String spouseName;
 
 class ProfilePage extends StatefulWidget {
   @override
@@ -39,14 +39,14 @@ class MapScreenState extends State<ProfilePage>
 
   final FocusNode myFocusNodeDeliveryDate = FocusNode();
   final FocusNode myFocusNodeAge = FocusNode();
-  final FocusNode myFocusNodeHusbandName = FocusNode();
+  final FocusNode myFocusNodeSpouseName = FocusNode();
   // final FocusNode myFocusNodeCity = FocusNode();
   final FocusNode myFocusNodeHeight = FocusNode();
   final FocusNode myFocusNodeWeight = FocusNode();
 
   TextEditingController deliveryDateController = TextEditingController();
   TextEditingController ageController = TextEditingController();
-  TextEditingController husbandNameController = TextEditingController();
+  TextEditingController spouseNameController = TextEditingController();
   // TextEditingController cityController = TextEditingController();
   TextEditingController heightController = TextEditingController();
   TextEditingController weightController = TextEditingController();
@@ -64,13 +64,13 @@ class MapScreenState extends State<ProfilePage>
     // Clean up the controller when the Widget is disposed
     myFocusNodeDeliveryDate.dispose();
     myFocusNodeAge.dispose();
-    myFocusNodeHusbandName.dispose();
+    myFocusNodeSpouseName.dispose();
     myFocusNodeHeight.dispose();
     myFocusNodeWeight.dispose();
 
     deliveryDateController.dispose();
     ageController.dispose();
-    husbandNameController.dispose();
+    spouseNameController.dispose();
     heightController.dispose();
     weightController.dispose();
     // mobileNumberController.dispose();
@@ -511,7 +511,7 @@ class MapScreenState extends State<ProfilePage>
                               mainAxisSize: MainAxisSize.min,
                               children: <Widget>[
                                 Text(
-                                  'Husband Name',
+                                  'Spouse Name',
                                   style: TextStyle(
                                       fontSize: 16.0,
                                       fontWeight: FontWeight.bold),
@@ -536,10 +536,10 @@ class MapScreenState extends State<ProfilePage>
                                     if (snapshot.hasData &&
                                         snapshot.data!
                                             .data()!
-                                            .containsKey('husbandName') &&
+                                            .containsKey('spouseName') &&
                                         _status) {
-                                      var husbandName =
-                                          snapshot.data['husbandName'];
+                                      var spouseName =
+                                          snapshot.data['spouseName'];
                                       return Padding(
                                         padding:
                                             const EdgeInsets.only(top: 15.0),
@@ -554,7 +554,7 @@ class MapScreenState extends State<ProfilePage>
                                           height: 30,
                                           child: Center(
                                             child: Text(
-                                              "$husbandName",
+                                              "$spouseName",
                                               style: const TextStyle(
                                                   fontWeight: FontWeight.bold),
                                             ),
@@ -563,11 +563,11 @@ class MapScreenState extends State<ProfilePage>
                                       );
                                     } else {
                                       return TextField(
-                                        controller: husbandNameController,
-                                        focusNode: myFocusNodeHusbandName,
+                                        controller: spouseNameController,
+                                        focusNode: myFocusNodeSpouseName,
                                         decoration: const InputDecoration(
                                             hintText:
-                                                "Enter your husband\'s name"),
+                                                "Enter your husband\'s/ wife\'s name"),
                                         enabled: !_status,
                                       );
                                     }
@@ -787,7 +787,7 @@ class MapScreenState extends State<ProfilePage>
                       ageController.text.trim().isEmpty ||
                       heightController.text.trim().isEmpty ||
                       weightController.text.trim().isEmpty ||
-                      husbandNameController.text.trim().isEmpty) {
+                      spouseNameController.text.trim().isEmpty) {
                     showInSnackBar(
                         'Please provide all the information for best experience',
                         Colors.red,
@@ -855,8 +855,8 @@ class MapScreenState extends State<ProfilePage>
                         'age': age,
                         'weight': weight,
                         'height': height,
-                        'husbandName':
-                            husbandNameController.text.trim().toString()
+                        'spouseName':
+                            spouseNameController.text.trim().toString()
                       };
 
                       UpdateData().updateData(userData);
