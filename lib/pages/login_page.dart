@@ -667,6 +667,10 @@ class _LoginPageState extends State<LoginPage>
                           'displayName': user!.displayName,
                           'photoURL': user!.photoURL,
                           'email': user!.email,
+                          'deliveryDate': DateTime.now(),
+                          'deliveryDateInfo':
+                              'Delivery date of the user is not yet set '
+                                  'and the date visible is the account creation date'
                         };
 
                         await usersCollection
@@ -926,7 +930,10 @@ class _LoginPageState extends State<LoginPage>
                               'displayName': signupNameController.text.trim(),
                               'photoURL': newUser.photoURL,
                               'email': newUser.email,
-                              // 'deliveryDate': DateTime.now(),
+                              'deliveryDate': DateTime.now(),
+                              'deliveryDateInfo':
+                                  'Delivery date of the user is not yet set '
+                                      'and the date visible is the account creation date'
                               // 'age': null,
                               // 'weight': null,
                               // 'height': null

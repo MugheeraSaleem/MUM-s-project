@@ -271,6 +271,18 @@ class _DashboardPageState extends State<DashboardPage> {
                                     .snapshots(),
                                 builder: (context, AsyncSnapshot snapshot) {
                                   DateTime now = DateTime.now();
+                                  if (snapshot.connectionState ==
+                                      ConnectionState.waiting) {
+                                    return const CircularProgressIndicator(); // Show loading indicator
+                                  }
+                                  if (snapshot.hasError) {
+                                    return Text('Error: ${snapshot.error}');
+                                  }
+                                  if (!snapshot.hasData ||
+                                      snapshot.data == null) {
+                                    return Text(
+                                        'No data available'); // Handle null data
+                                  }
                                   if (snapshot.hasData &&
                                       snapshot.data!
                                           .data()!
@@ -499,35 +511,35 @@ class _DashboardPageState extends State<DashboardPage> {
                         ]),
                   ),
                   onTap: () {
-                    showDialog(
-                      context: context,
-                      builder: (context) => AlertDialog(
-                        shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(15)),
-                        shadowColor: Colors.grey,
-                        elevation: 14,
-                        title: const Text("App Info"),
-                        content: const Text(
-                          "This feature is unavailable in "
-                          "the beta version.",
-                          textAlign: TextAlign.justify,
-                        ),
-                        actions: <Widget>[
-                          TextButton(
-                            onPressed: () {
-                              Navigator.pop(context, 'Ok');
-                            },
-                            child: const Text('Ok'),
-                          ),
-                        ],
-                      ),
-                    );
-
-                    // Navigator.of(context).push(
-                    //   MaterialPageRoute(
-                    //     builder: (_) => const dietPage(),
+                    // showDialog(
+                    //   context: context,
+                    //   builder: (context) => AlertDialog(
+                    //     shape: RoundedRectangleBorder(
+                    //         borderRadius: BorderRadius.circular(15)),
+                    //     shadowColor: Colors.grey,
+                    //     elevation: 14,
+                    //     title: const Text("App Info"),
+                    //     content: const Text(
+                    //       "This feature is unavailable in "
+                    //       "the beta version.",
+                    //       textAlign: TextAlign.justify,
+                    //     ),
+                    //     actions: <Widget>[
+                    //       TextButton(
+                    //         onPressed: () {
+                    //           Navigator.pop(context, 'Ok');
+                    //         },
+                    //         child: const Text('Ok'),
+                    //       ),
+                    //     ],
                     //   ),
                     // );
+
+                    Navigator.of(context).push(
+                      MaterialPageRoute(
+                        builder: (_) => const dietPage(),
+                      ),
+                    );
                   },
                 ),
                 buildTile(

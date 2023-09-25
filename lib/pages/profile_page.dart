@@ -1,6 +1,7 @@
 import 'package:mum_s/pages/dashboard.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:mum_s/pages/login_page.dart';
 import 'package:mum_s/utils/user_actions.dart';
 import 'package:draggable_fab/draggable_fab.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -15,6 +16,7 @@ import 'package:mum_s/style/constants.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:intl/intl.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:google_sign_in/google_sign_in.dart';
 
 var usersCollection = FirebaseFirestore.instance.collection('Users');
 
@@ -35,6 +37,7 @@ class MapScreenState extends State<ProfilePage>
     with SingleTickerProviderStateMixin {
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
   bool _status = true;
+
   final _auth = FirebaseAuth.instance;
 
   final FocusNode myFocusNodeDeliveryDate = FocusNode();
@@ -52,6 +55,7 @@ class MapScreenState extends State<ProfilePage>
   TextEditingController weightController = TextEditingController();
 
   ConnectivityClass c_class = ConnectivityClass();
+  final GoogleSignIn _googleSignIn = GoogleSignIn();
 
   @override
   void initState() {
@@ -118,21 +122,233 @@ class MapScreenState extends State<ProfilePage>
     }
   }
 
+  void _showDeleteDialog() {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: const Text('Confirm Deletion'),
+          content: const Text(
+            'Your entire data from the database will be deleted. '
+            'Are you sure you want to proceed?',
+            textAlign: TextAlign.justify,
+          ),
+          actions: <Widget>[
+            TextButton(
+              child: const Text('Cancel'),
+              onPressed: () {
+                Navigator.pop(context); // Close the dialog
+              },
+            ),
+            TextButton(
+              child: const Text('Yes'),
+              onPressed: () {
+                Navigator.pop(context); // Close the dialog
+                _showAuthenticationDialog();
+              },
+            ),
+          ],
+        );
+      },
+    );
+  }
+
+  void _showAuthenticationDialog() {
+    String password = '';
+
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        if (_auth.currentUser!.providerData
+            .any((userInfo) => userInfo.providerId == 'google.com')) {
+          return AlertDialog(
+            title: const Text('Are you sure?'),
+            content: TextFormField(
+              onChanged: (value) {
+                password = value;
+              },
+              decoration: const InputDecoration(labelText: 'Type Yes'),
+            ),
+            actions: <Widget>[
+              TextButton(
+                child: const Text('Cancel'),
+                onPressed: () {
+                  Navigator.pop(context); // Close the dialog
+                },
+              ),
+              TextButton(
+                child: const Text('Authenticate'),
+                onPressed: () async {
+                  Navigator.pop(context); // Close the dialog
+                  // idhar krna hai google email verification
+                  if (password == 'Yes') {
+                    _deleteUserData();
+                  } else {
+                    showInSnackBar('Authentication failed', Colors.red, context,
+                        _scaffoldKey.currentContext!);
+                  }
+                },
+              ),
+            ],
+          );
+        } else {
+          return AlertDialog(
+            title: const Text('Authenticate'),
+            content: TextFormField(
+              onChanged: (value) {
+                password = value;
+              },
+              obscureText: true,
+              decoration: const InputDecoration(labelText: 'Password'),
+            ),
+            actions: <Widget>[
+              TextButton(
+                child: const Text('Cancel'),
+                onPressed: () {
+                  Navigator.pop(context); // Close the dialog
+                },
+              ),
+              TextButton(
+                child: const Text('Authenticate'),
+                onPressed: () async {
+                  Navigator.pop(context); // Close the dialog
+                  if (await _authenticateUser(password)) {
+                    _deleteUserData();
+                  } else {
+                    showInSnackBar('Authentication failed', Colors.red, context,
+                        _scaffoldKey.currentContext!);
+                  }
+                },
+              ),
+            ],
+          );
+        }
+      },
+    );
+  }
+
+  Future<bool> _authenticateUser(String password) async {
+    try {
+      if (_auth.currentUser!.providerData
+          .any((userInfo) => userInfo.providerId == 'google.com')) {
+        final googleSignInAccount = await _googleSignIn.signInSilently();
+        final googleSignInAuthentication =
+            await googleSignInAccount!.authentication;
+        final googleAuthCredential = GoogleAuthProvider.credential(
+          accessToken: googleSignInAuthentication.accessToken,
+          idToken: googleSignInAuthentication.idToken,
+        );
+
+        await _auth.currentUser!
+            .reauthenticateWithCredential(googleAuthCredential);
+        return true;
+      } else {
+        // Reauthenticate the user with their password
+        AuthCredential credential = EmailAuthProvider.credential(
+          email: _auth.currentUser!.email!,
+          password: password,
+        );
+        await _auth.currentUser!.reauthenticateWithCredential(credential);
+        return true;
+      }
+    } catch (error) {
+      return false;
+    }
+  }
+
+  void _deleteUserData() async {
+    try {
+      // Delete user's data
+      // ...
+
+      _deleteDocument(loggedInUser!.displayName);
+      print('user data deleted');
+      // Sign out user
+      // if (_auth.currentUser!.providerData
+      //     .any((userInfo) => userInfo.providerId == 'google.com')) {
+      //   await _googleSignIn.disconnect(); // Disconnect Google Sign-In
+      // }
+
+      try {
+        await FirebaseAuth.instance.currentUser!.delete();
+      } on FirebaseAuthException catch (e) {
+        if (e.code == 'requires-recent-login') {
+          print(
+              'The user must re-authenticate before this operation can be executed.');
+        }
+      }
+    } catch (error) {
+      showInSnackBar('Error deleting data', Colors.red, context,
+          _scaffoldKey.currentContext!);
+    }
+  }
+
+  Future<void> _deleteDocument(String? documentId) async {
+    try {
+      if (!context.mounted) return;
+      c_class.checkInternet(context);
+
+      Navigator.pushNamedAndRemoveUntil(
+        context,
+        '/',
+        (route) =>
+            false, // This predicate ensures all previous routes are removed
+      );
+      showInSnackBar('Data deleted successfully', Colors.green, context,
+          _scaffoldKey.currentContext!);
+      SharedPreferences prefs = await SharedPreferences.getInstance();
+      prefs.remove('user_id');
+      await usersCollection.doc(documentId).delete();
+      _auth.signOut();
+      print('Document deleted successfully');
+    } catch (error) {
+      print('Error deleting document: $error');
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       key: _scaffoldKey,
       appBar: AppBar(
         backgroundColor: kAppBarColor,
-        title: Text(
-          'My Profile',
-          style: TextStyle(
-              color: Colors.white,
-              fontWeight: FontWeight.w700,
-              fontSize: ((MediaQuery.of(context).size.height /
-                          MediaQuery.of(context).size.width) *
-                      12)
-                  .toDouble()),
+        title: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Text(
+              'My Profile',
+              style: TextStyle(
+                  color: Colors.white,
+                  fontWeight: FontWeight.w700,
+                  fontSize: ((MediaQuery.of(context).size.height /
+                              MediaQuery.of(context).size.width) *
+                          12)
+                      .toDouble()),
+            ),
+            Padding(
+              padding: const EdgeInsets.only(left: 95),
+              child: MaterialButton(
+                child: Material(
+                  color: Colors.white,
+                  shape: const CircleBorder(),
+                  child: Padding(
+                      padding: const EdgeInsets.all(3.0),
+                      child: Icon(
+                        Icons.delete,
+                        color: kFloatingActionButtonColor,
+                        size: ((MediaQuery.of(context).size.height /
+                                    MediaQuery.of(context).size.width) *
+                                20)
+                            .toDouble(),
+                      )),
+                ),
+                onPressed: () {
+                  c_class.checkInternet(context);
+                  _showDeleteDialog();
+                },
+              ),
+            )
+          ],
         ),
       ),
       floatingActionButton: DraggableFab(
@@ -384,7 +600,10 @@ class MapScreenState extends State<ProfilePage>
                                           snapshot.data!
                                               .data()!
                                               .containsKey('deliveryDate') &&
-                                          _status) {
+                                          _status &&
+                                          snapshot.data['deliveryDate']
+                                              .toDate()
+                                              .isAfter(DateTime.now())) {
                                         var date = snapshot.data['deliveryDate']
                                             .toDate();
                                         return Padding(
@@ -567,7 +786,7 @@ class MapScreenState extends State<ProfilePage>
                                         focusNode: myFocusNodeSpouseName,
                                         decoration: const InputDecoration(
                                             hintText:
-                                                "Enter your husband\'s/ wife\'s name"),
+                                                "Enter your husband\'s/wife\'s name"),
                                         enabled: !_status,
                                       );
                                     }
@@ -856,7 +1075,8 @@ class MapScreenState extends State<ProfilePage>
                         'weight': weight,
                         'height': height,
                         'spouseName':
-                            spouseNameController.text.trim().toString()
+                            spouseNameController.text.trim().toString(),
+                        'deliveryDateInfo': 'Delivery date set.'
                       };
 
                       UpdateData().updateData(userData);

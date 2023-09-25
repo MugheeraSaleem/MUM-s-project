@@ -14,42 +14,13 @@
       },
       "oauth_client": [
         {
-          "client_id": "293870755083-9sl3i0urp1573eg3qsag1eno2n38efa8.apps.googleusercontent.com",
+          "client_id": "293870755083-am0hf40hvijc37d8mr738aldrr42rrtn.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
             "package_name": "com.mums_app.mums",
-            "certificate_hash": "1d5227942b6dd08e87883c2753e99ba8756939e4"
+            "certificate_hash": "b05f57d1c7297c44de3b62a3662c0b868de8189a"
           }
         },
-        {
-          "client_id": "293870755083-u47ikmlt1s4fgrg0tl1ri5apshffnk3n.apps.googleusercontent.com",
-          "client_type": 3
-        }
-      ],
-      "api_key": [
-        {
-          "current_key": "AIzaSyC0gRnl-n1NdieH8FHtS8iILAgJtYaH4so"
-        }
-      ],
-      "services": {
-        "appinvite_service": {
-          "other_platform_oauth_client": [
-            {
-              "client_id": "293870755083-eb91rbp2h59jg2emh4qthe4qnem0gfgu.apps.googleusercontent.com",
-              "client_type": 3
-            }
-          ]
-        }
-      }
-    },
-    {
-      "client_info": {
-        "mobilesdk_app_id": "1:293870755083:android:cd299deada033a3575d60e",
-        "android_client_info": {
-          "package_name": "com.nurture_nourish.mums"
-        }
-      },
-      "oauth_client": [
         {
           "client_id": "293870755083-u47ikmlt1s4fgrg0tl1ri5apshffnk3n.apps.googleusercontent.com",
           "client_type": 3
